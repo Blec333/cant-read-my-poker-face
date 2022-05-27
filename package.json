@@ -1,0 +1,35 @@
+{
+  "name": "cant-read-my-poker-face",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js",
+    "dev": "nodemon index",
+    "seed": "node utils/seed",
+    "heroku-postbuild": "node utils/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.3",
+    "moment": "^2.29.3",
+    "mongoose": "^6.0.13",
+    "socket.io": "^3.0.4",
+    "ws": "^7.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blec333/cant-read-my-poker-face.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Blec333/cant-read-my-poker-face/issues"
+  },
+  "homepage": "https://github.com/Blec333/cant-read-my-poker-face#readme"
+}
