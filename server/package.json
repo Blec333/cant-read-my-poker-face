@@ -1,5 +1,5 @@
 {
-  "name": "28-Stu_Mini-Project",
+  "name": "cant-read-my-poker-face",
   "version": "1.0.1",
   "description": "Mongoose back-end project - Develop",
   "main": "index.js",
@@ -13,7 +13,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "moment": "^2.29.3",
-    "mongoose": "^6.0.13"
+    "mongoose": "^6.0.13",
+    "socket.io": "^3.0.4",
+    "ws": "^7.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.9"
