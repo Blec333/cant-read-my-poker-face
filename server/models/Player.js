@@ -9,11 +9,11 @@ const playerSchema = new Schema(
       required: true,
       trim: true,
     },
-    email: {
+    password: {
       type: String,
       required: true,
       unique: true,
-      match: [/.+@.+\..+/]
+       minlength: 8,
     },
     thoughts: [
       {

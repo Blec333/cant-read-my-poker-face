@@ -2,18 +2,18 @@ const { Schema, model } = require('mongoose');
 const moment = require('moment');
 const reactionSchema = require('./Reaction');
 
-const thoughtSchema = new Schema(
+const gameSchema = new Schema(
   {
-    thoughtText: {
+    winner: {
       type: String,
       required: true,
       minlength: 1,
       maxlength: 280,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a'),
+    limit: {
+      type: Number,
+      // default: Date.now,
+      // get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a'),
     },
     playername: {
       type: String,
@@ -30,7 +30,7 @@ const thoughtSchema = new Schema(
   }
 );
 
-thoughtSchema
+gameSchema
   .virtual('reactionCount')
   // Getter
   .get(function () {
@@ -38,6 +38,7 @@ thoughtSchema
   })
 
 
-const Thought = model('Thought', thoughtSchema);
+const Game = model('Game', gameSchema);
 
-module.exports = Thought;
+module.exports = Game;
+

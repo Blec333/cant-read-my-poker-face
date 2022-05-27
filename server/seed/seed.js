@@ -1,6 +1,6 @@
 const e = require('express');
 const connection = require('../config/connection');
-const { Thought, Player } = require('../models');
+const { Game, Player } = require('../models');
 const { getRandomName, getRandomArrItem, appThoughts, appReactions } = require('./data');
 
 connection.on('error', (err) => err);
