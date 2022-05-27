@@ -1,0 +1,44 @@
+<!-- <!DOCTYPE html> -->
+<html lang="en" data-theme="">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adventure Quest</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.14.3/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="shortcut icon" href="#" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" /> 
+  </head>
+
+
+  <body> 
+    
+  <header class="text-primary">
+    <div class="navbar bg-warning">
+      <div class="flex-1">
+        <a class="btn btn-ghost normal-case text-xl" href="/">Mum Mum Mum Mah</a>
+      </div>
+      <div class="flex-none justify-center align-center text-center">
+        <ul class="menu menu-horizontal p-0 justify-center align-center text-center">
+          <li><a href="/pokertable">Poker Table</a></li>
+          {{#if logged_in}}
+            <li><a href="/api/player/logout">LOG OUT</a></li>
+          {{else}}
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+  </header>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+  {{{body}}}
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+
+</html>
