@@ -119,4 +119,4 @@ const getRandomName = () =>
 // };
 
 // Export the functions for use in seed.js
-module.exports = { getRandomName, getRandomArrItem, appThoughts, appReactions };
+module.exports = { getRandomName, getRandomArrItem , locations };

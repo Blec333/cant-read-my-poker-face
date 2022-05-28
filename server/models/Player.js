@@ -15,10 +15,10 @@ const playerSchema = new Schema(
       unique: true,
        minlength: 8,
     },
-    thoughts: [
+    games: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Thought',
+        ref: 'Game',
       },
     ],
     friends: [

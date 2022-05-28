@@ -1,7 +1,7 @@
 const e = require('express');
 const connection = require('../config/connection');
-const { Game, Player } = require('../models');
-const { getRandomName, getRandomArrItem, appThoughts, appReactions } = require('./data');
+const { Game, Player, Location } = require('../models');
+const { getRandomName, getRandomArrItem, locations } = require('./data');
 
 connection.on('error', (err) => err);
 
@@ -9,7 +9,7 @@ connection.once('open', async () => {
   console.log('connected');
 
   // Drop existing thoughts
-  await Thought.deleteMany({});
+  await Location.deleteMany({});
 
   // Drop existing players
   await Player.deleteMany({});
@@ -52,73 +52,11 @@ for (let i = 0; i < 20; i++) {
   addUniquePlayer();
 }
 
-
-
-
-
-// THOUGHTS ------------------------------------------------------------------------------------
-
-
-// Function to generate random thoughts that we can add to player object.
-const getRandomThoughts = (int, passedInPlayer) => {
-  const results = [];
-  for (let i = 0; i < int; i++) {
-    results.push({
-      thoughtText: getRandomArrItem(appThoughts),
-      playername: passedInPlayer,
-      // reactions: getRandomReactions(3),
-    });
-  }
-  return results;
-};
-
-// Create empty array to hold the thoughts
-const thoughts = [];
-players.forEach((el) => {
-  if (el) {
-    const thoughtsToPush = getRandomThoughts(2, el.playername);
-    thoughtsToPush.forEach((el) => {
-      thoughts.push(el);
-    });
-  }
-});
-
-
-
-// REACTIONS ------------------------------------------------------------------------------------
-
-// Function to generate random reactions that we can add to player object.
-const getRandomReactions = (int) => {
-  const results = [];
-  for (let i = 0; i < int; i++) {
-    results.push({
-      reactionBody: getRandomArrItem(appReactions),
-      playername: getRandomArrItem(players).playername,
-    });
-  }
-  return results;
-};
-
-// // Create empty array to hold the reactions
-// const reactions = [];
-// thoughts.forEach((el) => {
-//   if (el) {
-//     const reactionsToPush = getRandomReactions(3);
-//     reactionsToPush.forEach((el) => {
-//       reactions.push(el);
-//     });
-//   }
-// });
-
-
-
-
-
 // Add players to the collection and await the results
 await Player.collection.insertMany(players);
 
 // Add thoughts to the collection and await the results
-await Thought.collection.insertMany(thoughts);
+await Location.collection.insertMany(locations);
 
 // Log out the seed data to indicate what should appear in the database
 console.table(players);
