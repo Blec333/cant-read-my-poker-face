@@ -7,24 +7,18 @@ const {
   deleteGame,
 } = require('../../controllers/gameController.js');
 
-// /api/Thoughts
+// /api/Games
 router.route('/')
   .get(getGame)
   .post(createGame);
 
-// /api/Thoughts/:ThoughtId
-router.route('/:thoughtId')
+// /api/Games/:GameId
+router.route('/:gameId')
   .get(getSingleGame)
   .put(updateGame)
   .delete(deleteGame);
 
-// // /api/players/:thoughtId/reactions
-// router.route('/:thoughtId/reactions')
-//   .post(addReaction);
 
-// // /api/players/:thoughtId/reactions/:reactionId
-// router.route('/:thoughtId/reactions/:reactionId')
-//   .delete(removeReaction);
 
 
 
