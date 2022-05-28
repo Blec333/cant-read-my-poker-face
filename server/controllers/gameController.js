@@ -22,7 +22,7 @@ module.exports = {
       .select('-__v')
       .then((game) => {
         !game
-          ? res.status(404).json({ message: 'No thought with that ID' })
+          ? res.status(404).json({ message: 'No game with that ID' })
           : res.json(game)
       })
       .catch((err) => res.status(500).json(err));
