@@ -1,4 +1,4 @@
-const { Player, Thought } = require('../models');
+const { Player, Game } = require('../models');
 
 
 

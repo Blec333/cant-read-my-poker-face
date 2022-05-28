@@ -1,9 +1,9 @@
-const path = require("path");
+// const path = require("path");
 const express = require('express');
 const db = require('./config/connection');
-const session = require("express-session");
+// const session = require("express-session");
 // const exphbs = require("express-handlebars");
-// const routes = require("./controllers");
+const routes = require('./routes');
 
 // const MongodbStore = require("connect-mongodb-session")(session.Store);
 
@@ -37,7 +37,7 @@ const activity = cwd.includes('01-Activities')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(routes);
+app.use(routes);
 
 db.once('open', () => {
   app.listen(PORT, () => {
