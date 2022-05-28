@@ -1,25 +1,21 @@
 const { Schema, model } = require('mongoose');
-const moment = require('moment');
-const reactionSchema = require('./Reaction');
+const playerSchema = require('./Player');
 
 const gameSchema = new Schema(
   {
     winner: {
       type: String,
-      required: true,
-      minlength: 1,
-      maxlength: 280,
+      unique: true,
     },
     limit: {
       type: Number,
-      // default: Date.now,
-      // get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a'),
     },
-    playername: {
-      type: String,
-      required: true,
-    },
-    reactions: [reactionSchema],
+    players: [
+      {
+        type: String,
+        unique: true,      
+      },
+    ],
   },
   {
     toJSON: {
@@ -31,10 +27,10 @@ const gameSchema = new Schema(
 );
 
 gameSchema
-  .virtual('reactionCount')
+  .virtual('playerCount')
   // Getter
   .get(function () {
-    return this.reactions.length;
+    return this.players.length;
   })
 
 

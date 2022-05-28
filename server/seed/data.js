@@ -93,30 +93,5 @@ const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const getRandomName = () =>
   `${getRandomArrItem(playernames)}`;
 
-// // Function to generate random reactions that we can add to player object.
-// const getRandomReactions = (int) => {
-//   const results = [];
-//   for (let i = 0; i < int; i++) {
-//     results.push({
-//       playername: getRandomArrItem(playernames),
-//       reactionName: getRandomArrItem(appReactions),
-//     });
-//   }
-//   return results;
-// };
-
-// // Function to generate random thoughts that we can add to player object.
-// const getRandomThoughts = (int) => {
-//   const results = [];
-//   for (let i = 0; i < int; i++) {
-//     results.push({
-//       thoughtText: getRandomArrItem(appThoughts),
-//       playername: getRandomArrItem(playernames),
-//       reactions: getRandomReactions(3),
-//     });
-//   }
-//   return results;
-// };
-
 // Export the functions for use in seed.js
-module.exports = { getRandomName, getRandomArrItem, appThoughts, appReactions };
+module.exports = { getRandomName, getRandomArrItem , locations };
