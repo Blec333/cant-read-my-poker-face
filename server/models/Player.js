@@ -12,7 +12,6 @@ const playerSchema = new Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
        minlength: 8,
     },
     games: [
