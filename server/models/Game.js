@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const playerSchema = require('./Player');
-const moment = require('moment');
+const dayjs = require('dayjs');
 
 const gameSchema = new Schema(
   {
@@ -10,6 +10,11 @@ const gameSchema = new Schema(
     },
     limit: {
       type: Number,
+    },
+    createdAt:{
+      type: Date,
+      default: Date.now,
+      get: createdAtVal => dayjs(createdAtVal).format('MMM DD, YYYY [at] hh:mm:a')
     },
     players: [
       {
