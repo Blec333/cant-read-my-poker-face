@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import NavTabs from './NavTabs';
-import Home from './pages/Home';
-import About from './pages/About';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
+import React, { useState } from "react";
+import NavTabs from "./NavTabs";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Blog from "./pages/Blog";
+import Profile from "./pages/Profile";
 
 export default function PortfolioContainer() {
-  const [currentPage, setCurrentPage] = useState('Home');
+  const [currentPage, setCurrentPage] = useState("Home");
 
   // TODO: Add a comment describing the functionality of this method
   const renderPage = () => {
-    if (currentPage === 'Home') {
+    if (currentPage === "Home") {
       return <Home />;
     }
-    if (currentPage === 'About') {
-      return <About />;
+    if (currentPage === "Login") {
+      return <Login />;
     }
-    if (currentPage === 'Blog') {
+    if (currentPage === "Blog") {
       return <Blog />;
     }
-    return <Contact />;
+    return <Profile />;
   };
 
   const handlePageChange = (page) => setCurrentPage(page);
