@@ -29,24 +29,52 @@ function NavTabs({ currentPage, handlePageChange }) {
       </li>
       <li className="nav-item">
         <a
-          href="#blog"
-          onClick={() => handlePageChange("Blog")}
+          href="#landingpage"
+          onClick={() => handlePageChange("LandingPage")}
           //  TODO: Add a comment explaining what this logic is doing
 
-          className={currentPage === "Blog" ? "nav-link active" : "nav-link"}
+          className={
+            currentPage === "LandingPage" ? "nav-link active" : "nav-link"
+          }
         >
-          Blog
+          Landing Page
         </a>
       </li>
       <li className="nav-item">
         <a
-          href="#profile"
+          href="#playerboard"
           //  TODO: Add a comment explaining what this logic is doing
 
-          onClick={() => handlePageChange("Profile")}
-          className={currentPage === "Profile" ? "nav-link active" : "nav-link"}
+          onClick={() => handlePageChange("PlayerBoard")}
+          className={
+            currentPage === "PlayerBoard" ? "nav-link active" : "nav-link"
+          }
         >
-          Profile
+          Player Board
+        </a>
+      </li>
+      <li className="nav-item">
+        <a
+          href="#pokertable"
+          //  TODO: Add a comment explaining what this logic is doing
+
+          onClick={() => handlePageChange("PokerTable")}
+          className={
+            currentPage === "PokerTable" ? "nav-link active" : "nav-link"
+          }
+        >
+          Poker Table
+        </a>
+      </li>
+      <li className="nav-item">
+        <a
+          href="#signup"
+          //  TODO: Add a comment explaining what this logic is doing
+
+          onClick={() => handlePageChange("SignUp")}
+          className={currentPage === "SignUp" ? "nav-link active" : "nav-link"}
+        >
+          Sign Up
         </a>
       </li>
     </ul>

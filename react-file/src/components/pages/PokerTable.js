@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Profile() {
+export default function PokerTable() {
   return (
     <div>
-      <h1>Profile Page</h1>
+      <h1>Poker Table</h1>
       <p></p>
     </div>
   );

@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import NavTabs from "./NavTabs";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Blog from "./pages/Blog";
-import Profile from "./pages/Profile";
+import LandingPage from "./pages/LandingPage";
+import PlayerBoard from "./pages/PlayerBoard";
+import PokerTable from "./pages/PokerTable";
+import SignUp from "./pages/SignUp";
 
 export default function PortfolioContainer() {
   const [currentPage, setCurrentPage] = useState("Home");
@@ -16,10 +18,16 @@ export default function PortfolioContainer() {
     if (currentPage === "Login") {
       return <Login />;
     }
-    if (currentPage === "Blog") {
-      return <Blog />;
+    if (currentPage === "LandingPage") {
+      return <LandingPage />;
     }
-    return <Profile />;
+    if (currentPage === "PokerTable") {
+      return <PokerTable />;
+    }
+    if (currentPage === "SignUp") {
+      return <SignUp />;
+    }
+    return <PlayerBoard />;
   };
 
   const handlePageChange = (page) => setCurrentPage(page);
