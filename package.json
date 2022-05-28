@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "dayjs": "^1.11.2",
     "express": "^4.17.1",
     "express-session": "^1.17.3",
-    "moment": "^2.29.3",
     "mongoose": "^6.0.13",
     "socket.io": "^3.0.4",
     "ws": "^7.4.1"
