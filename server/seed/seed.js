@@ -58,7 +58,6 @@ for(let i =0; i<locations.length; i++){
 for (let i = 0; i < 20; i++) {
   addUniquePlayer();
 }
-  console.log(players)
 
 // Add players to the collection and await the results
 await Player.collection.insertMany(players);
