@@ -14,7 +14,8 @@ module.exports ={
     },
 
     getSingleLocation(req, res){
-        Location.findOne({_id: req.parama.gameid})
+        Location.findOne({_id: req.params.locationid})
+        .lean()
         .select('-__v')
         .then((location)=>{
             !location
