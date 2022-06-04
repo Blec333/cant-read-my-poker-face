@@ -4,24 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/server.js",
-    "dev": "nodemon index",
-    "seed": "cd server && node seed/seed",
-    "heroku-postbuild": "node utils/seed.js"
-  },
-  "dependencies": {
-    "axios": "^0.27.2",
-    "dayjs": "^1.11.2",
-    "express": "^4.17.1",
-    "express-session": "^1.17.3",
-    "mongoose": "^6.0.13",
-    "socket.io": "^3.0.4",
-    "ws": "^7.4.1"
+    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
   },
   "devDependencies": {
-    "nodemon": "^2.0.9",
-    "tailwindcss": "^3.0.24"
+    "concurrently": "^5.1.0"
   },
   "repository": {
     "type": "git",
