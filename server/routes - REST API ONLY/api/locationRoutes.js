@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {
     getLocation,
     getSingleLocation
-} = require('../../controllers/locationController.js')
+} = require('../../controllers - REST API ONLY/locationController.js')
 
 // /api/locations
 router.route('/')

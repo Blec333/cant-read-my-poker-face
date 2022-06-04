@@ -7,7 +7,7 @@ const {
   deletePlayer,
   addFriend,
   deleteFriend,
-} = require('../../controllers/playerController');
+} = require('../../controllers - REST API ONLY/playerController');
 
 // /api/players
 router.route('/')

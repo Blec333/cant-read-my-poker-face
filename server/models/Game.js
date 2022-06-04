@@ -8,8 +8,11 @@ const gameSchema = new Schema(
       type: String,
       unique: true,
     },
-    limit: {
+    playerLimit: {
       type: Number,
+    },
+    type: {
+      type: String,
     },
     createdAt:{
       type: Date,

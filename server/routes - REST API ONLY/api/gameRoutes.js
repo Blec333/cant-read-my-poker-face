@@ -5,7 +5,7 @@ const {
   createGame,
   updateGame,
   deleteGame,
-} = require('../../controllers/gameController.js');
+} = require('../../controllers - REST API ONLY/gameController.js');
 
 // /api/Games
 router.route('/')
