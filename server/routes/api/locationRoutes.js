@@ -10,7 +10,7 @@ router.route('/')
 
 
 // /api/locations/:LocationId
-router.route('/locationId')
+router.route('/:locationId')
     .get(getSingleLocation);
 
 module.exports = router;
