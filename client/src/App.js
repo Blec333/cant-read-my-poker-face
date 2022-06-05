@@ -3,10 +3,11 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import LandingPage from './components/pages/LandingPage';
-import PlayerProfile from './components/pages/PlayerProfile';
+import PlayerProfile from './components/PlayerProfile';
 import GameContainer from './components/GameContainer';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import './index.css'
 
 const client = new ApolloClient({
   uri: '/graphql',
@@ -23,6 +24,9 @@ return (
     <div className="flex-column justify-flex-start min-100-vh">
       <Header />
       <div className="container">
+      <h1 className="text-3xl font-bold underline">
+      Hello world!
+      </h1>
         <Routes>
           {/* Define routes to render different page components at different paths */}
           <Route 
