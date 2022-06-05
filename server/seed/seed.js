@@ -43,16 +43,6 @@ const checkUniquePlayer = () => {
 }
 
 // STEP 4: Once determined unique, push into players array
-// const addUniquePlayer = () => {
-//   players.push(player);
-//   const player = checkUniquePlayer();
-//   for (let i = 0; i < 20; i++) {
-//   addUniquePlayer();
-//     console.log(players, 'players')
-
-//   }
-// }
-
 const addUniquePlayer = (num) =>{
   if(num > 0){
     const player = checkUniquePlayer();
@@ -76,13 +66,13 @@ for(let i =0; i<locations.length; i++){
 
 // Add players to the collection and await the results
 await Player.collection.insertMany(players);
+console.table(players);
 
 // Add thoughts to the collection and await the results
 await Location.collection.insertMany(locationName);
 console.table(locationName)
 
 // Log out the seed data to indicate what should appear in the database
-console.table(players);
 console.info('Seeding complete! 🌱');
 process.exit(0);
 });
