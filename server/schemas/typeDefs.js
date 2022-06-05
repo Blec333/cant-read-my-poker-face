@@ -22,8 +22,8 @@ const typeDefs = gql`
 
   type Mutation {
     # Set up mutations to handle creating a player or logging into a player and return Auth type
-    addplayer(playername: String!, password: String!): Auth
-    login(email: String!, password: String!): Auth
+    addplayer(playerName: String!, password: String!): Auth
+    login(playerName: String!, password: String!): Auth
 
     addGame( game: String!, playerLimit: Number!, type: String!, players: ID!): Game
     removePlayer(playerId: ID!): Player

@@ -22,9 +22,11 @@ const players = [];
 
 // STEP 2: Construct player data object
 const constructPlayerData = () => {
-  const playername = getRandomName();
-  const password = 'password'
-  let singlePlayer = { playername, password }
+  const playerName = getRandomName();
+  // const playerName = 'testName';
+
+  const password = 'password';
+  let singlePlayer = { playerName, password }
   return singlePlayer;
 }
 
@@ -33,7 +35,7 @@ var currentPlayer;
 const checkUniquePlayer = () => {
   currentPlayer = constructPlayerData();
   players.forEach((el) => {
-    if (el && currentPlayer.playername === el.playername) {
+    if (el && currentPlayer.playerName === el.playerName) {
       checkUniquePlayer();
     }
   });
@@ -41,11 +43,27 @@ const checkUniquePlayer = () => {
 }
 
 // STEP 4: Once determined unique, push into players array
-const addUniquePlayer = () => {
-  let player = checkUniquePlayer();
-  players.push(player);
+// const addUniquePlayer = () => {
+//   players.push(player);
+//   const player = checkUniquePlayer();
+//   for (let i = 0; i < 20; i++) {
+//   addUniquePlayer();
+//     console.log(players, 'players')
 
+//   }
+// }
+
+const addUniquePlayer = (num) =>{
+  if(num > 0){
+    const player = checkUniquePlayer();
+    players.push(player);
+    return addUniquePlayer(num -1);
+  }else{
+    return num;
+  }
 }
+addUniquePlayer(20);
+
 const locationName= []
 for(let i =0; i<locations.length; i++){
   let location =  locations[i]; 
@@ -55,9 +73,6 @@ for(let i =0; i<locations.length; i++){
 }
 
 // Initialize steps above and loop 20 times -- adding only unique players to the players array
-for (let i = 0; i < 20; i++) {
-  addUniquePlayer();
-}
 
 // Add players to the collection and await the results
 await Player.collection.insertMany(players);
@@ -65,6 +80,7 @@ await Player.collection.insertMany(players);
 // Add thoughts to the collection and await the results
 await Location.collection.insertMany(locationName);
 console.table(locationName)
+
 // Log out the seed data to indicate what should appear in the database
 console.table(players);
 console.info('Seeding complete! 🌱');

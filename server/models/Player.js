@@ -5,13 +5,13 @@ const playerSchema = new Schema(
   {
     playerName: {
       type: String,
-      unique: true,
+      // unique: true,
       required: true,
       trim: true,
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
        minlength: 8,
     },
     games: [

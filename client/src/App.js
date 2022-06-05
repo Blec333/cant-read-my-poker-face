@@ -2,8 +2,8 @@ import React from "react";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import LandingPage from './pages/LandingPage';
-import PlayerProfile from './pages/PlayerProfile';
+import LandingPage from './components/pages/LandingPage';
+import PlayerProfile from './components/pages/PlayerProfile';
 import GameContainer from './components/GameContainer';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -45,9 +45,9 @@ return (
   </Router>
 </ApolloProvider>
 
-)
+  )
+};
 
-}
 
 
 export default App;
