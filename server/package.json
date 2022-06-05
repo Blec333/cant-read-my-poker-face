@@ -1,17 +1,20 @@
 {
-  "name": "cant-read-my-poker-face",
+  "name": "casino-server",
   "version": "1.0.1",
-  "description": "Mongoose back-end project - Develop",
-  "main": "index.js",
+  "description": "",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon index",
-    "seed": "node seed/seed",
-    "heroku-postbuild": "node utils/seed.js"
+    "watch": "nodemon",
+    "seed": "node seed/seed.js",
+    "heroku-postbuild": "node seed/seed.js"
   },
   "dependencies": {
+    "apollo-server-express": "^3.6.2",
+    "dayjs": "^1.11.2",
     "express": "^4.17.1",
+    "graphql": "^16.3.0",
     "mongoose": "^6.0.13",
     "socket.io": "^3.0.4",
     "ws": "^7.4.1"

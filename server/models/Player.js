@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 // Schema to create playername model
 const playerSchema = new Schema(
   {
-    playername: {
+    playerName: {
       type: String,
       unique: true,
       required: true,
