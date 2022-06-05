@@ -14,6 +14,9 @@ const playerSchema = new Schema(
       // required: true,
        minlength: 8,
     },
+    account: {
+      type: Number,
+    },
     games: [
       {
         type: Schema.Types.ObjectId,
