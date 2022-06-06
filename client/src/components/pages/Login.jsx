@@ -84,11 +84,11 @@ const Login = (props) => {
                 <button class="my-3 py-1 w-full rounded bg-blue-600 text-blue-200">
                     Submit
                 </button>
-                <p class="text-xs text-gray-500">
+                {/* <p class="text-xs text-gray-500">
                     Forgot password ? 
                         <a href="#" class="font-bold text-gray-700">Click here</a> 
                         to reset your password.
-                </p>
+                </p> */}
             </div>
         </form>
     </div>
