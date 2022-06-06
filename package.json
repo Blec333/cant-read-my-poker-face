@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/Blec333/cant-read-my-poker-face/issues"
   },
-  "homepage": "https://github.com/Blec333/cant-read-my-poker-face#readme"
+  "homepage": "https://github.com/Blec333/cant-read-my-poker-face#readme",
+  "dependencies": {
+    "socket.io-client": "^4.5.1"
+  }
 }
