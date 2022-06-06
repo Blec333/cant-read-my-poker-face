@@ -38,7 +38,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    login(email: String!, password: String!): Auth
+    login(playerName: String!, password: String!): Auth
 
     addPlayer(playerName: String!, password: String!, account: Int): Auth
     removePlayer(playerId: ID!): Player
@@ -53,5 +53,6 @@ const typeDefs = gql`
     removeGameFromPlayer(playerId: ID!, gameId: String): Player
   }
 `;
+
 
 module.exports = typeDefs;
