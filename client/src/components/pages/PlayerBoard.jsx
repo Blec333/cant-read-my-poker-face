@@ -1,10 +1,18 @@
 import React from "react";
+import { useQuery } from '@apollo/client';
+import { QUERY_PLAYERS } from "../../../utils/queries";
 
 export default function PlayerBoard() {
+  const { loading, data }= useQuery(QUERY_PLAYERS);
+  const players = data?.player || [];
+
   return (
-    <div>
-      <h1>Player Board</h1>
-      <p></p>
-    </div>
+    <main>
+      <div>
+        <div>
+        
+        </div>
+      </div>
+    </main>
   );
 }
