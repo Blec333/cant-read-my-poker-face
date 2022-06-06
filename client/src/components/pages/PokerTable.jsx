@@ -8,7 +8,7 @@ import sixPlayers from '../../assets/img/six-players.jpg'
 import sevenPlayers from '../../assets/img/seven-players.jpg'
 import eightPlayers from '../../assets/img/eight-players.jpg'
 
-// export default function PokerTable() {
+export default function PokerTable() {
   
   const axios = require('axios');
   let bgPoker = onePlayer
@@ -118,8 +118,8 @@ getBackground();
 
 
 
-//   return (
-//     <>
+  return (
+    <>
 
 
 <div className="container w-100 hero bg-cover bg-center bg-no-repeat h-full" style={{ backgroundImage:`url(${bgPoker})`, minWidth: '100%', minHeight: 800 }} >
@@ -150,7 +150,7 @@ place bet
         <p></p>
       </div> */}
 
-//       {/* <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script> */}
-//     </>
-//   );
-// }
+      {/* <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script> */}
+     </>
+  );
+ }
