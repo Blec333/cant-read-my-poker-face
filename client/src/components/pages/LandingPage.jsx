@@ -1,9 +1,6 @@
 import React from "react";
 
-export default function LandingPage() {
+
   return (
-    <>
-    
-    </>
+<div style="background-image: url(https://i.gifer.com/F1lS.gif)"></div>
   );
-}

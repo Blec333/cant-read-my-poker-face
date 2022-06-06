@@ -16,7 +16,11 @@
     "daisyui": "^2.15.2",
     "web-vitals": "^2.1.4",
     "socket.io": "^3.0.4",
-    "ws": "^7.4.1"
+    "ws": "^7.4.1",
+    "name": "my-app",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": "https://myusername.github.io/my-app"
   },
   "scripts": {
     "start": "react-scripts start",
