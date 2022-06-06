@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import LandingPage from './components/pages/LandingPage';
+import PokerTable from './components/pages/PokerTable';
 import PlayerProfile from './components/PlayerProfile';
 import GameContainer from './components/GameContainer';
 import Header from './components/Header';
@@ -41,6 +42,10 @@ return (
           <Route 
             path="/game/:gameId/" 
             element={<GameContainer />} 
+          />
+          <Route 
+            path="/game/" 
+            element={<PokerTable />} 
           />
         </Routes>
       </div>
