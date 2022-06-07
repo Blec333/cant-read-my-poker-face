@@ -16,6 +16,7 @@ const playerSchema = new Schema(
     },
     account: {
       type: Number,
+      default: 1000000,
     },
     games: [
       {
