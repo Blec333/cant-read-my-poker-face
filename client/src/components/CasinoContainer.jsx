@@ -6,7 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import PlayerBoard from "./pages/PlayerBoard";
 import SignUp from "./pages/SignUp";
 
-export default function PortfolioContainer() {
+export default function CasinoContainer() {
   const [currentPage, setCurrentPage] = useState("LandingPage");
 
   const renderPage = () => {

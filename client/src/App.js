@@ -2,7 +2,7 @@ import React from "react";
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import LandingPage from './components/pages/LandingPage';
+import CasinoContainer from './components/CasinoContainer';
 import PokerTable from './components/pages/PokerTable';
 import PlayerProfile from './components/PlayerProfile';
 import GameContainer from './components/GameContainer';
@@ -32,7 +32,7 @@ return (
           {/* Define routes to render different page components at different paths */}
           <Route 
             path="/" 
-            element={<LandingPage />} 
+            element={<CasinoContainer />} 
           />
           {/* Define a route that will take in variable data */}
           <Route 
