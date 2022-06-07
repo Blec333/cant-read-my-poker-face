@@ -23,21 +23,21 @@ export default function PokerTable() {
   const { players } = state;
   const { data: playerData } = useQuery(QUERY_PLAYERS);
 
-  useEffect(() => {
-    if (playerData) {
-      dispatch({
-        type: UPDATE_PLAYERS,
-        categories: playerData.players,
-      });
-    }
-  }, [playerData, dispatch]);
+  // useEffect(() => {
+  //   if (playerData) {
+  //     dispatch({
+  //       type: UPDATE_PLAYERS,
+  //       categories: playerData.players,
+  //     });
+  //   }
+  // }, [playerData, dispatch]);
 
-  const handleClick = (id) => {
-    dispatch({
-      type: UPDATE_CURRENT_PLAYER,
-      currentPlayer: id,
-    });
-  };
+  // const handleClick = (id) => {
+  //   dispatch({
+  //     type: UPDATE_CURRENT_PLAYER,
+  //     currentPlayer: id,
+  //   });
+  // };
 
 
 
