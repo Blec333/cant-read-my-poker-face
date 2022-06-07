@@ -1,21 +1,22 @@
 import React, { createContext, useContext } from "react";
-import { useProductReducer } from './reducers'
+import { useGameReducer } from './reducers'
 
-const StoreContext = createContext();
-const { Provider } = StoreContext;
+const CasinoContext = createContext();
+const { Provider } = CasinoContext;
 
-const StoreProvider = ({ value = [], ...props }) => {
-  const [state, dispatch] = useProductReducer({
-    products: [],
-    categories: [],
-    currentCategory: '',
+const CasinoProvider = ({ value = [], ...props }) => {
+  const [state, dispatch] = useGameReducer({
+    players: [],
+    games: [],
+    currentPlayer: '',
+    currentGame: '',
   });
 
   return <Provider value={[state, dispatch]} {...props} />;
 };
 
-const useStoreContext = () => {
-  return useContext(StoreContext);
+const useCasinoContext = () => {
+  return useContext(CasinoContext);
 };
 
-export { StoreProvider, useStoreContext };
+export { CasinoProvider, useCasinoContext };

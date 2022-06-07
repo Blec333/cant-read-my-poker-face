@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import onePlayer from '../../assets/img/one-player.jpg';
 import twoPlayers from '../../assets/img/two-players.jpg';
 import threePlayers from '../../assets/img/three-players.jpg';
@@ -7,10 +7,40 @@ import fivePlayers from '../../assets/img/five-players.jpg';
 import sixPlayers from '../../assets/img/six-players.jpg';
 import sevenPlayers from '../../assets/img/seven-players.jpg';
 import eightPlayers from '../../assets/img/eight-players.jpg';
+import { useQuery } from '@apollo/client';
+import { useCasinoContext } from '../../utils/GlobalState';
+import {
+  UPDATE_PLAYERS,
+  UPDATE_CURRENT_PLAYER,
+} from '../../utils/actions';
+import { QUERY_PLAYERS } from '../../utils/queries';
 
 export default function PokerTable() {
-  
   const axios = require('axios');
+
+  const [state, dispatch] = useCasinoContext();
+  
+  const { players } = state;
+  const { data: playerData } = useQuery(QUERY_PLAYERS);
+
+  // useEffect(() => {
+  //   if (playerData) {
+  //     dispatch({
+  //       type: UPDATE_PLAYERS,
+  //       categories: playerData.players,
+  //     });
+  //   }
+  // }, [playerData, dispatch]);
+
+  // const handleClick = (id) => {
+  //   dispatch({
+  //     type: UPDATE_CURRENT_PLAYER,
+  //     currentPlayer: id,
+  //   });
+  // };
+
+
+
   let bgPoker = onePlayer
   let numberOfPlayers = 8;
   let deckCount = 1;
