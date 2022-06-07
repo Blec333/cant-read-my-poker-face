@@ -66,7 +66,7 @@ const Signup = () => {
                     className="form-input"
                     placeholder="Your player playerName"
                     name="playerName"
-                    type="playerName"
+                    type="text"
                     value={formState.playerName}
                     onChange={handleChange}/>
             </div>

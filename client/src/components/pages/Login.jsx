@@ -55,22 +55,51 @@ const Login = (props) => {
             <div class="flex flex-col my-2">
                 <label class="text-xs text-gray-400">Player Name</label>
                 <div class="text-xs text-red-400 flex justify-between items-center">
-                    {/* <span>
+                <div class="mb-3 xl:w-96">
+      <label for="exampleFormControlInpu3" class="form-label inline-block mb-2 text-gray-700"
+        >Default input</label
+      >
+      <input
+        type="text"
+        className="
+          form-control
+          block
+          w-full
+          px-3
+          py-1.5
+          text-base
+          font-normal
+          text-gray-700
+          bg-white bg-clip-padding
+          border border-solid border-gray-300
+          rounded
+          transition
+          ease-in-out
+          m-0
+          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+        "
+        id="exampleFormControlInput3"
+        placeholder="Default input"
+      />
+    </div>
+                    <span>
                     <b>Error: </b>
                     wrong playerName
-                    </span> */}
+                    </span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <input 
                     class="border rounded px-3 py-1 mt-2"
-                    className="form-input"
-                    placeholder="Your player name"
-                    name="playerName"
-                    type="playerName"
+                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="Username"
+                    type="text"
+                    id="exampleFormControlInput2"
                     value={formState.playerName}
                     onChange={handleChange}/>
+
+                    
             </div>
             <div class="flex flex-col my-2">
                 <label class="text-xs text-gray-400">Password</label>
@@ -85,14 +114,14 @@ const Login = (props) => {
                 <button class="my-3 py-1 w-full rounded bg-blue-600 text-blue-200">
                     Submit
                 </button>
-                {/* <p class="text-xs text-gray-500">
+                <p class="text-xs text-gray-500">
                     Forgot password ? 
                         <a href="#" class="font-bold text-gray-700">Click here</a> 
                         to reset your password.
-                </p> */}
+                </p>
             </div>
             <div>Don't have an account?</div>
-            <Link className="text-blue-400" to={SignUp}>Sign Up</Link>
+            <Link className="text-blue-400" to="./SignUp">Sign Up</Link>
         </form>
     </div>
 </div>

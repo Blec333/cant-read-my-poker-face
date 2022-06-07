@@ -17,7 +17,6 @@ import GameContainer from "./components/GameContainer";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./components/pages/Login";
-import NavTabs from "./components/NavTabs";
 import "./index.css";
 
 global.Buffer = Buffer;
