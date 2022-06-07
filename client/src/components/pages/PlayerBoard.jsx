@@ -1,17 +1,16 @@
 import React from "react";
 import { useQuery } from '@apollo/client';
-import { QUERY_PLAYERS } from "../../../utils/queries";
+import { QUERY_PLAYERS } from '../../utils/queries';
 
 export default function PlayerBoard() {
-  const { loading, data }= useQuery(QUERY_PLAYERS);
-  const players = data?.player || [];
+  const { loading, data }=  useQuery(QUERY_PLAYERS);
+  const players = data?.players || [];
+  console.log(players)
 
   return (
     <main>
       <div>
-        <div>
-        
-        </div>
+        {/* <span>${players[1].account}</span> */}
       </div>
     </main>
   );

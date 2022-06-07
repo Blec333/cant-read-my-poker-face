@@ -4,9 +4,10 @@ export const QUERY_PLAYERS = gql`
   query allplayers {
     players {
       _id
-      name
-      games
+      playerName
+      password
       account
+
     }
   }
 `;
