@@ -1,6 +1,13 @@
-import React from "react";
+import React from 'react';
 
+import Header from '../Header';
+import Footer from '../Footer';
 
-//   return (
-// {/* <div style="background-image: url(https://i.gifer.com/F1lS.gif)"></div> */}
-//   );
+  return (
+    <div class="bg-[url('/img/hero-pattern.svg')]">
+</div>
+  );
+};
+
+export default Home;
+
