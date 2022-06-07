@@ -89,6 +89,7 @@ const Signup = () => {
                         to reset your password.
                 </p> */}
             </div>
+            <Link to="/">back to the homepage.</Link>
         </form>
     </div>
 </div>
