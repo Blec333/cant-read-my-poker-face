@@ -10,8 +10,8 @@ const expiration = "2h";
 
 // 🔑 Next, we add a signToken() function to combine the payload, secret, and string and return our token as a string:
 module.exports = {
-  signToken: function ({ name, _id }) {
-    const payload = { name, _id };
+  signToken: function ({ playerName, _id }) {
+    const payload = { playerName, _id };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
 };
