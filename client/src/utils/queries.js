@@ -7,6 +7,9 @@ export const QUERY_PLAYERS = gql`
       playerName
       password
       account
+      games {
+        _id
+      }
 
     }
   }
