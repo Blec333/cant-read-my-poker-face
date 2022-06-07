@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../../utils/mutations';
+import SignUp from './SignUp';
 
 import Auth from '../../utils/auth';
 
@@ -54,10 +55,10 @@ const Login = (props) => {
             <div class="flex flex-col my-2">
                 <label class="text-xs text-gray-400">Player Name</label>
                 <div class="text-xs text-red-400 flex justify-between items-center">
-                    <span>
+                    {/* <span>
                     <b>Error: </b>
                     wrong playerName
-                    </span>
+                    </span> */}
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -90,7 +91,8 @@ const Login = (props) => {
                         to reset your password.
                 </p> */}
             </div>
-            <Link to="/">back to the homepage.</Link>
+            <div>Don't have an account?</div>
+            <Link className="text-blue-400" to={SignUp}>Sign Up</Link>
         </form>
     </div>
 </div>
