@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
-import { ADD_PROFILE } from '../utils/mutations';
+import { ADD_PLAYER } from '../../utils/mutations';
 
-import Auth from '../utils/auth';
+import Auth from '../../utils/auth';
 
 const Signup = () => {
   const [formState, setFormState] = useState({
-    name: '',
+    playerName: '',
     password: '',
   });
-  const [addProfile, { error, data }] = useMutation(ADD_PROFILE);
+  const [addPlayer, { error, data }] = useMutation(ADD_PLAYER);
 
   // update state based on form input changes
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { playerName, value } = event.target;
 
     setFormState({
       ...formState,
-      [name]: value,
+      [playerName]: value,
     });
   };
 
@@ -29,11 +29,11 @@ const Signup = () => {
     console.log(formState);
 
     try {
-      const { data } = await addProfile({
+      const { data } = await addPlayer({
         variables: { ...formState },
       });
 
-      Auth.login(data.addProfile.token);
+      Auth.login(data.addPlayer.token);
     } catch (e) {
       console.error(e);
     }
@@ -49,13 +49,13 @@ const Signup = () => {
             <h2 class="text-2xl font-bold">Login</h2>
         </div>
         <form onSubmit={handleFormSubmit}>
-            {/* username */}
+            {/* playerName */}
             <div class="flex flex-col my-2">
-                <label class="text-xs text-gray-400">Create a Username</label>
+                <label class="text-xs text-gray-400">Create a playerName</label>
                 <div class="text-xs text-red-400 flex justify-between items-center">
                     {/* <span>
                     <b>Error: </b>
-                    wrong username
+                    wrong playerName
                     </span> */}
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -64,7 +64,7 @@ const Signup = () => {
                 <input 
                     class="border rounded px-3 py-1 mt-2"
                     className="form-input"
-                    placeholder="Your player name"
+                    placeholder="Your player playerName"
                     name="playerName"
                     type="playerName"
                     value={formState.playerName}
@@ -109,16 +109,16 @@ const Signup = () => {
       //           <form onSubmit={handleFormSubmit}>
       //             <input
       //               className="form-input"
-      //               placeholder="Your username"
-      //               name="name"
+      //               placeholder="Your userplayerName"
+      //               playerName="playerName"
       //               type="text"
-      //               value={formState.name}
+      //               value={formState.playerName}
       //               onChange={handleChange}
       //             />
       //             <input
       //               className="form-input"
       //               placeholder="Your email"
-      //               name="email"
+      //               playerName="email"
       //               type="email"
       //               value={formState.email}
       //               onChange={handleChange}
@@ -126,7 +126,7 @@ const Signup = () => {
       //             <input
       //               className="form-input"
       //               placeholder="******"
-      //               name="password"
+      //               playerName="password"
       //               type="password"
       //               value={formState.password}
       //               onChange={handleChange}
