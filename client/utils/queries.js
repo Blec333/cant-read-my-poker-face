@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const QUERY_PLAYERS = gql`
   query allplayers {
@@ -12,8 +12,8 @@ export const QUERY_PLAYERS = gql`
 `;
 
 export const QUERY_SINGLE_PLAYER = gql`
-  query singlePlayer($playerID: ID!){
-    player(playerId: $playerId){
+  query singlePlayer($playerID: ID!) {
+    player(playerId: $playerId) {
       _id
       name
       games
@@ -23,8 +23,8 @@ export const QUERY_SINGLE_PLAYER = gql`
 `;
 
 export const QUERY_ME = gql`
-  query me{
-    me{
+  query me {
+    me {
       _id
       name
       games
@@ -34,8 +34,8 @@ export const QUERY_ME = gql`
 `;
 
 export const QUERY_LOCATIONS = gql`
-  query locatons{
-    locations{
+  query locatons {
+    locations {
       _id
       location
       difficulty
@@ -44,9 +44,9 @@ export const QUERY_LOCATIONS = gql`
 `;
 
 export const QUERY_SINGLE_LOCATION = gql`
-  query location{
-    location{
-      _id 
+  query location {
+    location {
+      _id
       location
       difficult
     }
@@ -54,8 +54,8 @@ export const QUERY_SINGLE_LOCATION = gql`
 `;
 
 export const QUERY_GAMES = gql`
-  query games{
-    games{
+  query games {
+    games {
       _id
       winner
       playerLimit
@@ -67,8 +67,8 @@ export const QUERY_GAMES = gql`
 `;
 
 export const QUERY_SINGLE_GAME = gql`
-  query game{
-    game{
+  query game {
+    game {
       _id
       winner
       playerLimit
@@ -78,5 +78,3 @@ export const QUERY_SINGLE_GAME = gql`
     }
   }
 `;
-
-
