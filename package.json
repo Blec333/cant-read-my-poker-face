@@ -13,6 +13,9 @@
   "devDependencies": {
     "concurrently": "^5.1.0"
   },
+  "browser": {
+    "crypto": false
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Blec333/cant-read-my-poker-face.git"
@@ -25,6 +28,12 @@
   },
   "homepage": "https://github.com/Blec333/cant-read-my-poker-face#readme",
   "dependencies": {
-    "socket.io-client": "^4.5.1"
+    "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
+    "crypto-js": "^3.1.9-1",
+    "jsonwebtoken": "^8.5.1",
+    "jwa": "^2.0.0",
+    "socket.io-client": "^4.5.1",
+    "util": "^0.12.4"
   }
 }
