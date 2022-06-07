@@ -27,7 +27,7 @@ export default function PokerTable() {
     if (playerData) {
       dispatch({
         type: UPDATE_PLAYERS,
-        categories: playerData.categories,
+        categories: playerData.players,
       });
     }
   }, [playerData, dispatch]);

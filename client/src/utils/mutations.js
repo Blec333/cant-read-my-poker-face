@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const ADD_PLAYER = gql`
-  mutation addPlayer($name: String!, password: String!) {
+  mutation addPlayer($name: String!, $password: String!) {
     addPlayer(name: $name, password: $password) {
       token
       player{
@@ -22,7 +22,7 @@ export const REMOVE_PLAYER = gql`
 `;
 
 export const LOGIN_USER = gql`
-  mutation login($playerName: String!, password: String!) {
+  mutation login($playerName: String!, $password: String!) {
     login(playerName: $playerName, password: $password){
       token
         player{
@@ -45,7 +45,7 @@ export const ADD_GAME = gql`
 `;
 
 export const REMOVE_GAME = gql`
-  mutation removeGame(_id: ID!){
+  mutation removeGame($_id: ID!){
     removeGame(_id: $gameId){
       _id
  
@@ -54,7 +54,7 @@ export const REMOVE_GAME = gql`
 `;
 
 export const ADD_PLAYER_TO_GAME = gql`
-  mutation addPlayerToGame(_id: ID!, playerId: String!){
+  mutation addPlayerToGame($_id: ID!, $playerId: String!){
     addPlayerToGame(_id: $gameId, playerId: $playerId){
       _id
       name
@@ -72,7 +72,7 @@ export const ADD_PLAYER_TO_GAME = gql`
 
 export const ADD_GAME_TO_PLAYER = gql`
 // input data type
-  mutation addGameToPlayer(_id: ID!, gameId: String!){
+  mutation addGameToPlayer($_id: ID!, $gameId: String!){
     // variable association to keys
     addGameToPlayer(_id: $playerId, gameId: $gameId){
       // return of updated object
@@ -92,7 +92,7 @@ export const ADD_GAME_TO_PLAYER = gql`
 
 
 export const REMOVE_PLAYER_FROM_GAME = gql`
-  mutations removePlayerFromGame(_id: ID!, gameId: String!){
+  mutations removePlayerFromGame($_id: ID!, $gameId: String!){
     removePlayerFromGame(_id: $playerId, gameId: $gameId){
       gameId
       name
