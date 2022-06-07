@@ -24,11 +24,11 @@ export default function CasinoContainer() {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  // return (
-  //   <div>
-  //     <Header currentPage={currentPage} handlePageChange={handlePageChange} />
-  //     {renderPage()}
-  //     <Footer />
-  //   </div>
-  // );
+  return (
+    <div>
+      <Header currentPage={currentPage} handlePageChange={handlePageChange} />
+      {renderPage()}
+      <Footer />
+    </div>
+  );
 }
