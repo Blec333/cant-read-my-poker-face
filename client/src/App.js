@@ -1,4 +1,5 @@
 import React from "react";
+import { Buffer } from 'buffer';
 import {
   ApolloClient,
   InMemoryCache,
@@ -17,6 +18,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import './index.css'
 
+global.Buffer = Buffer;
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
