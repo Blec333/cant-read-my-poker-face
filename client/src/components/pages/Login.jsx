@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { LOGIN_USER } from '../utils/mutations';
+import { LOGIN_USER } from '../../utils/mutations';
 
-import Auth from '../utils/auth';
+import Auth from '../../utils/auth';
 
 const Login = (props) => {
-  const [formState, setFormState] = useState({ username: '', password: '' });
+  const [formState, setFormState] = useState({ playerName: '', password: '' });
   const [login, { error, data }] = useMutation(LOGIN_USER);
 
   // update state based on form input changes
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { playerName, value } = event.target;
 
     setFormState({
       ...formState,
-      [name]: value,
+      [playerName]: value,
     });
   };
 
@@ -35,7 +35,7 @@ const Login = (props) => {
 
     // clear form values
     setFormState({
-      username: '',
+      playerName: '',
       password: '',
     });
   };
@@ -50,13 +50,13 @@ const Login = (props) => {
             <h2 class="text-2xl font-bold">Login</h2>
         </div>
         <form onSubmit={handleFormSubmit}>
-            {/* username */}
+            {/* playerName */}
             <div class="flex flex-col my-2">
-                <label class="text-xs text-gray-400">Username</label>
+                <label class="text-xs text-gray-400">Player Name</label>
                 <div class="text-xs text-red-400 flex justify-between items-center">
                     <span>
                     <b>Error: </b>
-                    wrong username
+                    wrong playerName
                     </span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />

@@ -10,6 +10,7 @@ import { setContext } from '@apollo/client/link/context';
 
 import PlayerBoard from "./components/pages/PlayerBoard";
 import LandingPage from './components/pages/LandingPage';
+import CasinoContainer from './components/CasinoContainer';
 import PokerTable from './components/pages/PokerTable';
 import PlayerProfile from './components/PlayerProfile';
 import GameContainer from './components/GameContainer';
@@ -57,7 +58,7 @@ return (
           {/* Define routes to render different page components at different paths */}
           <Route 
             path="/" 
-            element={<LandingPage />} 
+            element={<CasinoContainer />} 
           />
           {/* Define a route that will take in variable data */}
           <Route 
