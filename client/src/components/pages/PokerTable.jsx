@@ -1,12 +1,12 @@
 import React from "react";
-import onePlayer from '../../assets/img/one-player.jpg'
-import twoPlayers from '../../assets/img/two-players.jpg'
-import threePlayers from '../../assets/img/three-players.jpg'
-import fourPlayers from '../../assets/img/four-players.jpg'
-import fivePlayers from '../../assets/img/five-players.jpg'
-import sixPlayers from '../../assets/img/six-players.jpg'
-import sevenPlayers from '../../assets/img/seven-players.jpg'
-import eightPlayers from '../../assets/img/eight-players.jpg'
+import onePlayer from '../../assets/img/one-player.jpg';
+import twoPlayers from '../../assets/img/two-players.jpg';
+import threePlayers from '../../assets/img/three-players.jpg';
+import fourPlayers from '../../assets/img/four-players.jpg';
+import fivePlayers from '../../assets/img/five-players.jpg';
+import sixPlayers from '../../assets/img/six-players.jpg';
+import sevenPlayers from '../../assets/img/seven-players.jpg';
+import eightPlayers from '../../assets/img/eight-players.jpg';
 
 export default function PokerTable() {
   
