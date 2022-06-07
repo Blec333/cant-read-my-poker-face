@@ -1,17 +1,48 @@
-// 🔑 To generate a token in our apps, we start by adding a auth.js file to our server's utils directory
-// and requiring the jsonwebtoken library to provide the functionality to check the validity of
-// the token using a secret and expiration:
-const jwt = require("jsonwebtoken");
+// 🔑 The library that we use to decode the token's expiration time is jwt-decode.
+// We see that the library has been successfully imported:
+import decode from "jwt-decode";
 
-// 🔑 We then assign values for both a secret and expiration. The secret is a private key that signs the token and enables the server to verify whether the token is valid.
-// The expiration is the length of time the token remains valid before expiring:
-const secret = "mysecretssshhhhhhh";
-const expiration = "2h";
+class AuthService {
+  getProfile() {
+    return decode(this.getToken());
+  }
 
-// 🔑 Next, we add a signToken() function to combine the payload, secret, and string and return our token as a string:
-module.exports = {
-  signToken: function ({  name, _id }) {
-    const payload = { name, _id };
-    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
-  },
-};
+  loggedIn() {
+    const token = this.getToken();
+    // If there is a token and it's not expired, return `true`
+    return token && !this.isTokenExpired(token) ? true : false;
+  }
+  // Once a valid comparison is made, the user will be prevented from immediately logging out.
+  isTokenExpired(token) {
+    // Decode the token to get its expiration time that was set by the server
+    // 🔑 We also need to apply the jwt library's decode() method to our token.
+    // It looks like the expiration time, as set by the server, is being retrieved and stored in a variable decoded:
+    const decoded = decode(token);
+    // If the expiration time is less than the current time (in seconds), the token is expired and we return `true`
+    // 🔑 Next, we look at the code used to compare the expiration date to the current time. For the comparison to work, the time units we use must be the same.
+    // Because decoded.exp is in seconds and the Date.now() method returns a value in milliseconds, we divide the value that Date.now() returns by 1000.
+    // Then a valid comparison can be made:
+    if (decoded.exp < Date.now() / 1000) {
+      localStorage.removeItem("id_token");
+      return true;
+    }
+    // If token hasn't passed its expiration time, return `false`
+    return false;
+  }
+
+  getToken() {
+    return localStorage.getItem("id_token");
+  }
+
+  login(idToken) {
+    localStorage.setItem("id_token", idToken);
+    window.location.assign("/");
+  }
+
+  logout() {
+    localStorage.removeItem("id_token");
+    window.location.reload();
+  }
+}
+
+export default new AuthService();
