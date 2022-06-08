@@ -55,19 +55,23 @@ const Login = (props) => {
             ) : (
               <form onSubmit={handleFormSubmit}>
                 <input
-                  className="form-input"
+                  className={
+                    "border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
+                  }
                   placeholder="Your player name"
-                  name="playerName"
-                  type="playerName"
-                  value={formState.username}
+                  // name="playerName"
+                  // type="playerName"
+                  // value={formState.username}
                   onChange={handleChange}
                 />
                 <input
-                  className="form-input"
+                  className={
+                    "border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
+                  }
                   placeholder="******"
-                  name="password"
-                  type="password"
-                  value={formState.password}
+                  // name="password"
+                  // type="password"
+                  // value={formState.password}
                   onChange={handleChange}
                 />
                 <button
