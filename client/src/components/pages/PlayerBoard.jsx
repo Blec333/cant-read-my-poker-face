@@ -3,14 +3,17 @@ import { useCasinoContext } from "../../utils/GlobalState";
 import { useQuery } from '@apollo/client';
 import { QUERY_PLAYERS } from "../../utils/queries";
 import { UPDATE_PLAYERS} from "../../utils/actions";
+import JoinGame from "../JoinGame";
 import PlayerInfo from "../../components/playerInfo";
-
+import ATM from "../ATM";
 export default function PlayerBoard() {
   const { loading, data } =  useQuery(QUERY_PLAYERS);
   const [state, dispatch] = useCasinoContext();
   const { currentPlayers } = state;
-  const players = data?.players || [];
-  console.log(players)
+  // const players = data?.players || [];
+  // console.log(players)
+
+
 
   useEffect(()=>{
     if(data){
@@ -30,12 +33,17 @@ export default function PlayerBoard() {
   return (
     <main>
       <div>
-        {showPlayer().map((player)=>(
+        {/* {showPlayer().map((player)=>(
           <PlayerInfo
           key = {player._id}
           player = {player}
           />
-        ))}
+        ))} */}
+        <ATM />
+        
+      </div>
+      <div className="align-items-end">
+        <JoinGame />
       </div>
     </main>
   );
