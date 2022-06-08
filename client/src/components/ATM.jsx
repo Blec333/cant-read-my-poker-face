@@ -1,31 +1,29 @@
-import React, { useState, useEffect }from "react";
+import React, { useState }from "react";
 import { getAccount } from "./helpers/playerInfoHelper";
+
+
 export default function ATM(players) {
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [amount, setAmount ] = useState(0);
 
-  function handleModal(e){
-      e.stopPropagation();
-      if(e.target.id === 'price'){
-     e.target.value = '';
-     }
-        // if(showModal === true){
-        //     setShowModal (false);
-        // } else if( showModal === false){
-        //     setShowModal (true);
-        // } 
-     console.log(e.target)
-  }
-
+    function resetval(){
+        if(showModal === true){
+            setAmount(0)
+            setShowModal(false);
+            
+        }else if(showModal === false){
+            setShowModal(true);
+        }
+    }
   const handleIncrease = (num) =>{
-    setAmount(amount + num)
+    setAmount(amount + num);
   };
   return (
     <>
       <button
         className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
-        onClick={(e) => handleModal(e)}
+        onClick={() => resetval()}
       >
         ATM
       </button>
@@ -53,6 +51,7 @@ export default function ATM(players) {
                         </div>
                         <input
                         type="text"
+                        name="price"
                         readOnly
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                         placeholder= '1000000'
@@ -60,7 +59,6 @@ export default function ATM(players) {
                     </div>
                 </div>    
                     <br/>
-                    <form>
                     <label htmlFor="price" className="block text-sm text-left font-medium text-gray-700">
                         Amount to Withdraw
                     </label>
@@ -74,7 +72,7 @@ export default function ATM(players) {
                         id="price"
                         step='20'
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                        placeholder= {amount}
+                        value= {amount}
                         />
                     </div>
                 
@@ -131,12 +129,13 @@ export default function ATM(players) {
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    onClick={(e) => handleModal(e)}
+                    type="button"
+                    id="reset"
+                    onClick={() => resetval()}
                   >
                     Withdraw
                   </button>
                 </div>
-                </form>
               </div>
             </div>
           </div>

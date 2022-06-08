@@ -10,11 +10,10 @@ export default function PlayerBoard() {
   const { loading, data } =  useQuery(QUERY_PLAYERS);
   const [state, dispatch] = useCasinoContext();
   const { currentPlayers } = state;
-  const players = data?.players || [];
+  // const players = data?.players || [];
   // console.log(players)
 
-  const [showModal, setShowModal] = React.useState(false);
-  const [showForum , setForum ] = React.useState(false);
+
 
   useEffect(()=>{
     if(data){
@@ -41,7 +40,10 @@ export default function PlayerBoard() {
           />
         ))} */}
         <ATM />
-        <JoinGame  className='items-end' />
+        
+      </div>
+      <div className="align-items-end">
+        <JoinGame />
       </div>
     </main>
   );
