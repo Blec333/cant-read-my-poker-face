@@ -8,19 +8,28 @@ import Auth from "../../utils/auth";
 
 const Signup = () => {
   const [formState, setFormState] = useState({
-    playername: "",
+    playerName: "",
     password: "",
   });
   const [addPlayer, { error, data }] = useMutation(ADD_PLAYER);
 
   // update state based on form input changes
-  const handleChange = (event) => {
-    const { playername, value } = event.target;
-
+  const handlePlayerNameChange = (event) => {
+    const { value } = event.target;
     setFormState({
       ...formState,
-      [playername]: value,
+      playerName: value,
     });
+    console.log(value);
+  };
+
+  const handlePasswordChange = (event) => {
+    const { value } = event.target;
+    setFormState({
+      ...formState,
+      password: value,
+    });
+    console.log(value);
   };
 
   // submit form
@@ -56,18 +65,18 @@ const Signup = () => {
                 "border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
               }
               placeholder="Your username"
-              name="playerName"
-              type="text"
-              value={formState.playername}
-              onChange={handleChange}
+              // name="playername"
+              // type="text"
+              // value={formState.playername}
+              onChange={handlePlayerNameChange}
             />
             <input
-              className="form-input"
+              className="border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
               placeholder="******"
-              playerName="password"
-              type="password"
-              value={formState.password}
-              onChange={handleChange}
+              // name="password"
+              // type="password"
+              // value={formState.password}
+              onChange={handlePasswordChange}
             />
             <button
               className="btn btn-block btn-info"
