@@ -11,7 +11,7 @@ export default function PlayerBoard() {
   const [state, dispatch] = useCasinoContext();
   const { currentPlayers } = state;
   const players = data?.players || [];
-  console.log(players)
+  // console.log(players)
 
   const [showModal, setShowModal] = React.useState(false);
   const [showForum , setForum ] = React.useState(false);

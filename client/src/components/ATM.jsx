@@ -4,22 +4,17 @@ export default function ATM(players) {
   const [showModal, setShowModal] = React.useState(false);
   const [amount, setAmount ] = useState(0);
 
-  useEffect(()=>{
-
-    console.log(amount)
-  });
-
   function handleModal(e){
       e.stopPropagation();
       if(e.target.id === 'price'){
      e.target.value = '';
      }
-        if(showModal === true){
-            setShowModal (false);
-        } else if( showModal === false){
-            setShowModal (true);
-        } 
-     
+        // if(showModal === true){
+        //     setShowModal (false);
+        // } else if( showModal === false){
+        //     setShowModal (true);
+        // } 
+     console.log(e.target)
   }
 
   const handleIncrease = (num) =>{
