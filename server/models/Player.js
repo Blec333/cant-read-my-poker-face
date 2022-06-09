@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
+const bcrypt = require("bcrypt");
 
 // Schema to create playername model
 const playerSchema = new Schema(
@@ -21,13 +22,13 @@ const playerSchema = new Schema(
     games: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Game',
+        ref: "Game",
       },
     ],
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Player',
+        ref: "Player",
       },
     ],
   },
@@ -36,12 +37,25 @@ const playerSchema = new Schema(
       // getters: true,
       virtuals: true,
     },
-    id: false,//don't return the id of the element(s)
+    id: false, //don't return the id of the element(s)
   }
 );
 
+playerSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified("password")) {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
+
+  next();
+});
+
+playerSchema.methods.isCorrectPassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
 playerSchema
-  .virtual('friendCount')
+  .virtual("friendCount")
   // Getter
   .get(function () {
     return this.friends.length;
@@ -52,7 +66,6 @@ playerSchema
     this.set({ playername });
   });
 
-
-const Player = model('Player', playerSchema);
+const Player = model("Player", playerSchema);
 
 module.exports = Player;

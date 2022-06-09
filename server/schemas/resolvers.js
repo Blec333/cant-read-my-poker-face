@@ -1,6 +1,6 @@
-const { AuthenticationError } = require('apollo-server-express');
-const { Player, Game, Location } = require('../models');
-const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require("apollo-server-express");
+const { Player, Game, Location } = require("../models");
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
@@ -28,21 +28,20 @@ const resolvers = {
 
   // 🔑 We call the signToken() function in the resolvers where we want to transmit data securely to generate a signed token:
   Mutation: {
-    login: async (parent, { playerId, password }) => {
-      const player = await Player.findOne({ _id: playerId });
+    login: async (parent, { playerName, password }) => {
+      const player = await Player.findOne({ playerName: playerName });
       if (!player) {
-        throw new AuthenticationError('No player with this name found!');
+        throw new AuthenticationError("No player with this name found!");
       }
       const correctPw = await player.isCorrectPassword(password);
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect password!');
+        throw new AuthenticationError("Incorrect password!");
       }
       const token = signToken(player);
       return { token, player };
     },
 
-
-    addPlayer: async (parent, { playerName, password, account }) => {
+    addPlayer: async (parent, { playerName, password }) => {
       const player = await Player.create({ playerName, password, account });
       const token = signToken(player);
       console.log({ token, player });
@@ -52,18 +51,17 @@ const resolvers = {
       return Player.findOneAndDelete({ _id: playerId });
     },
 
-
     addGame: async (parent, { playerId, winner, playerLimit, type }) => {
-      return game = await Game.create({ winner, playerLimit, type },
+      return (game = await Game.create(
+        { winner, playerLimit, type },
         {
           $addToSet: { players: playerId },
-        },
-        )
+        }
+      ));
     },
     removeGame: async (parent, { gameId }) => {
       return Game.findOneAndDelete({ _id: gameId });
     },
-
 
     addPlayerToGame: async (parent, { gameId, playerId }) => {
       return await Game.findOneAndUpdate(
@@ -85,7 +83,6 @@ const resolvers = {
       );
     },
 
-
     addGameToPlayer: async (parent, { playerId, gameId }) => {
       return await Player.findOneAndUpdate(
         { _id: playerId },
@@ -105,8 +102,6 @@ const resolvers = {
         { new: true }
       );
     },
-
-    
   },
 };
 
