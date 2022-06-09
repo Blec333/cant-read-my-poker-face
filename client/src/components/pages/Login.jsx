@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
-import SignUp from "./SignUp";
+// import SignUp from "./SignUp";
 
 import Auth from "../../utils/auth";
 
@@ -74,7 +74,7 @@ const Login = (props) => {
               <form onSubmit={handleFormSubmit}>
                 <input
                   className={
-                    "border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
+                    "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral"
                   }
                   placeholder="Your player name"
                   // name="playerName"
@@ -84,7 +84,7 @@ const Login = (props) => {
                 />
                 <input
                   className={
-                    "border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
+                    "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral"
                   }
                   placeholder="******"
                   // name="password"

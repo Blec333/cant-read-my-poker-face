@@ -49,10 +49,10 @@ const Signup = () => {
   };
 
   return (
-    <div class="bg-white h-screen w-screen flex justify-center items-center">
-      <div class="px-6 py-3 rounded border w-64">
-        <div class="flex flex-col items-center justify-center mb-4">
-          <h2 class="text-2xl font-bold">Sign Up</h2>
+    <div className="bg-white h-screen w-screen flex justify-center items-center">
+      <div className="px-6 py-3 rounded border w-64">
+        <div className="flex flex-col items-center justify-center mb-4">
+          <h2 className="text-2xl font-bold">Sign Up</h2>
         </div>
         {data ? (
           <p>
@@ -62,7 +62,7 @@ const Signup = () => {
           <form onSubmit={handleFormSubmit}>
             <input
               className={
-                "border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
+                "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral"
               }
               placeholder="Your username"
               // name="playername"
@@ -71,7 +71,7 @@ const Signup = () => {
               onChange={handlePlayerNameChange}
             />
             <input
-              className="border mb-2 py-2 px-3 rounded text-gray-700 w-full focus:bg-primary "
+              className="border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
               placeholder="******"
               // name="password"
               // type="password"
@@ -79,7 +79,7 @@ const Signup = () => {
               onChange={handlePasswordChange}
             />
             <button
-              className="btn btn-block btn-info"
+              className="btn btn-block btn-primary"
               style={{ cursor: "pointer" }}
               type="submit"
             >
