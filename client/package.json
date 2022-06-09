@@ -23,20 +23,19 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.1",
     "socket.io": "^3.0.4",
+    "socket.io-client": "^4.5.1",
     "stream": "^0.0.2",
     "tailwind": "^4.0.0",
     "tailwindcss": "^3.0.24",
     "web-vitals": "^2.1.4",
     "ws": "^7.4.1"
   },
-   
-"scripts": { 
-	"start": "react-scripts start", 
-  "build": "react-scripts build", 
-  "test": "react-scripts test", 
-  "eject": "react-scripts eject" 
- },
-
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

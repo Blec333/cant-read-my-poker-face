@@ -19,6 +19,22 @@ import Footer from "./components/Footer";
 import Login from "./components/pages/Login";
 import "./index.css";
 
+import { io } from "socket.io-client";
+
+// const App = () => {
+//   const [time, setTime] = React.useState("fetching");
+//   React.useEffect(() => {
+//     const socket = io("http://localhost:5000");
+//     socket.on("connect", () => console.log(socket.id));
+//     socket.on("connect_error", () => {
+//       setTimeout(() => socket.connect(), 5000);
+//     });
+//     socket.on("time", (data) => setTime(data));
+//     socket.on("disconnect", () => setTime("server disconnected"));
+//   }, []);
+//   return <div className="App">{time}</div>;
+// };
+
 global.Buffer = Buffer;
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -42,30 +58,43 @@ const client = new ApolloClient({
 });
 
 const App = () => {
+  const [time, setTime] = React.useState("hello");
+  React.useEffect(() => {
+    const socket = io("http://localhost:8080");
+    socket.on("connect", () => console.log(socket.id));
+    socket.on("connect_error", () => {
+      setTimeout(() => socket.connect(), 8080);
+    });
+    socket.on("time", (data) => setTime(data));
+    socket.on("disconnect", () => setTime("server disconnected"));
+  }, []);
   return (
     <ApolloProvider client={client}>
       {/* Wrap page elements in Router component to keep track of location state */}
       <Router>
-          <CasinoProvider>
-            <div className="flex-column justify-flex-start min-100-vh">
-              <div className="container">
-                <Routes>
-                  {/* Define routes to render different page components at different paths */}
-                  <Route path="/" element={<CasinoContainer />} />
-                  {/* Define a route that will take in variable data */}
-                  <Route
-                    path="/players/:playerId/"
-                    element={<PlayerProfile />}
-                  />
-                  {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
-                  <Route path="/game/" element={<PokerTable />} />
-                  <Route path="/playerBoard+/" element={<PlayerBoard />} />
-                  <Route path="/login" element={<Login />} />
-                </Routes>
-              </div>
-             
+        <CasinoProvider>
+          <div className="flex-column justify-flex-start min-100-vh">
+            <div className="container">
+              <Routes>
+                {/* Define routes to render different page components at different paths */}
+                <Route path="/" element={<CasinoContainer />} />
+                {/* Define a route that will take in variable data */}
+                <Route path="/players/:playerId/" element={<PlayerProfile />} />
+                {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
+                <Route path="/game/" element={<PokerTable />} />
+                <Route path="/playerBoard+/" element={<PlayerBoard />} />
+                <Route path="/login" element={<Login />} />
+              </Routes>
             </div>
-          </CasinoProvider>
+
+            <ul id="messages"></ul>
+            <form id="form">
+              <input id="input" autoComplete="off" />
+              <button type="submit">Send</button>
+            </form>
+          </div>
+          <script src="/socket.io/socket.io.js"></script>
+        </CasinoProvider>
       </Router>
     </ApolloProvider>
   );
