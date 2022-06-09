@@ -46,7 +46,6 @@ const App = () => {
     <ApolloProvider client={client}>
       {/* Wrap page elements in Router component to keep track of location state */}
       <Router>
-        <div>
           <CasinoProvider>
             <div className="flex-column justify-flex-start min-100-vh">
               <Header />
@@ -69,7 +68,6 @@ const App = () => {
               <Footer />
             </div>
           </CasinoProvider>
-        </div>
       </Router>
     </ApolloProvider>
   );
