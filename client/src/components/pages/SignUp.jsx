@@ -49,10 +49,10 @@ const Signup = () => {
   };
 
   return (
-    <div class="bg-white h-screen w-screen flex justify-center items-center">
-      <div class="px-6 py-3 rounded border w-64">
-        <div class="flex flex-col items-center justify-center mb-4">
-          <h2 class="text-2xl font-bold">Sign Up</h2>
+    <div className="bg-white h-screen w-screen flex justify-center items-center">
+      <div className="px-6 py-3 rounded border w-64">
+        <div className="flex flex-col items-center justify-center mb-4">
+          <h2 className="text-2xl font-bold">Sign Up</h2>
         </div>
         {data ? (
           <p>

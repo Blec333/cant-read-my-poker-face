@@ -41,7 +41,7 @@ const resolvers = {
       return { token, player };
     },
 
-    addPlayer: async (parent, { playerName, password }) => {
+    addPlayer: async (parent, { playerName, password, account }) => {
       const player = await Player.create({ playerName, password, account });
       const token = signToken(player);
       console.log({ token, player });
