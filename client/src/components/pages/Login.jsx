@@ -7,17 +7,35 @@ import SignUp from "./SignUp";
 import Auth from "../../utils/auth";
 
 const Login = (props) => {
-  const [formState, setFormState] = useState({ username: "", password: "" });
+  const [formState, setFormState] = useState({ playerName: "", password: "" });
   const [login, { error, data }] = useMutation(LOGIN_USER);
 
   // update state based on form input changes
-  const handleChange = (event) => {
-    const { username, value } = event.target;
+  // const handleChange = (event) => {
+  //   const { playerName, value } = event.target;
 
+  //   setFormState({
+  //     ...formState,
+  //     playerName: value,
+  //   });
+  // };
+
+  const handlePlayerNameChange = (event) => {
+    const { value } = event.target;
     setFormState({
       ...formState,
-      [username]: value,
+      playerName: value,
     });
+    console.log(value);
+  };
+
+  const handlePasswordChange = (event) => {
+    const { value } = event.target;
+    setFormState({
+      ...formState,
+      password: value,
+    });
+    console.log(value);
   };
 
   // submit form
@@ -36,15 +54,15 @@ const Login = (props) => {
 
     // clear form values
     setFormState({
-      username: "",
+      playerName: "",
       password: "",
     });
   };
 
   return (
-    <div class="bg-white h-screen w-screen flex justify-center items-center">
-      <div class="px-6 py-3 rounded border w-64">
-        <div class="flex flex-col items-center justify-center mb-4">
+    <div className="bg-white h-screen w-screen flex justify-center items-center">
+      <div className="px-6 py-3 rounded border w-64">
+        <div className="flex flex-col items-center justify-center mb-4">
           <div className="card-body">
             {" "}
             {data ? (
@@ -62,7 +80,7 @@ const Login = (props) => {
                   // name="playerName"
                   // type="playerName"
                   // value={formState.username}
-                  onChange={handleChange}
+                  onChange={handlePlayerNameChange}
                 />
                 <input
                   className={
@@ -72,7 +90,7 @@ const Login = (props) => {
                   // name="password"
                   // type="password"
                   // value={formState.password}
-                  onChange={handleChange}
+                  onChange={handlePasswordChange}
                 />
                 <button
                   className="btn btn-block btn-primary"
