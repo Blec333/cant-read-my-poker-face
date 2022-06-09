@@ -26,11 +26,16 @@ export const reducer = (state, action) => {
         games: [action.games],
       };
 
-      case UPDATE_CURRENT_GAME:
-        return {
-          ...state,
-          currentGame: [...action.currentGame],
-        };
+    case UPDATE_CURRENT_GAME:
+      return {
+        ...state,
+        currentPlayerCardImages: [...action.currentPlayerCardImages],
+        currentPlayerCardDescriptions: [...action.currentPlayerCardDescriptions],
+        currentCommunityCardImages: [...action.currentCommunityCardImages],
+        currentCommunityCardDescriptions: [...action.currentCommunityCardDescriptions],
+        currentPlayerResults: [...action.currentPlayerResults],
+        currentWinnerResults: [...action.currentWinnerResults],
+      };
 
     default:
       return state;
