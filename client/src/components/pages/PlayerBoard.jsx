@@ -42,9 +42,7 @@ export default function PlayerBoard() {
         <ATM />
         
       </div>
-      <div className="align-items-end">
         <JoinGame />
-      </div>
     </main>
   );
 }
