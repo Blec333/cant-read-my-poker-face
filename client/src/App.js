@@ -21,20 +21,6 @@ import "./index.css";
 
 import { io } from "socket.io-client";
 
-// const App = () => {
-//   const [time, setTime] = React.useState("fetching");
-//   React.useEffect(() => {
-//     const socket = io("http://localhost:5000");
-//     socket.on("connect", () => console.log(socket.id));
-//     socket.on("connect_error", () => {
-//       setTimeout(() => socket.connect(), 5000);
-//     });
-//     socket.on("time", (data) => setTime(data));
-//     socket.on("disconnect", () => setTime("server disconnected"));
-//   }, []);
-//   return <div className="App">{time}</div>;
-// };
-
 global.Buffer = Buffer;
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -58,7 +44,7 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const [time, setTime] = React.useState("hello");
+  const [time, setTime] = React.useState("hello brennan and alex");
   React.useEffect(() => {
     const socket = io("http://localhost:8080");
     socket.on("connect", () => console.log(socket.id));
@@ -86,14 +72,8 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
               </Routes>
             </div>
-
-            <ul id="messages"></ul>
-            <form id="form">
-              <input id="input" autoComplete="off" />
-              <button type="submit">Send</button>
-            </form>
+            <div>{time}</div>
           </div>
-          <script src="/socket.io/socket.io.js"></script>
         </CasinoProvider>
       </Router>
     </ApolloProvider>

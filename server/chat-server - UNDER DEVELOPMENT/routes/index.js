@@ -25,26 +25,28 @@ io.on("connection", (socket) => {
     console.log(reason);
   });
 });
+
+io.emit("some event", {
+  someProperty: "some value",
+  otherProperty: "other value",
+});
+
+io.on("connection", (socket) => {
+  socket.broadcast.emit("hi");
+});
+
+io.on("connection", (socket) => {
+  socket.on("chat message", (msg) => {
+    io.emit("chat message", msg);
+  });
+});
 setInterval(() => {
   io.to("clock-room").emit("time", new Date());
 }, 1000);
+
 server.listen(PORT, (err) => {
   if (err) console.log(err);
   console.log("Server running on Port", PORT);
-});
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (input.value) {
-    socket.emit("chat message", input.value);
-    input.value = "";
-  }
-});
-
-socket.on("chat message", function (msg) {
-  var item = document.createElement("li");
-  item.textContent = msg;
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
 });
 
 // module.exports = router;
