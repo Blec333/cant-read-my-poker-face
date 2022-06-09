@@ -48,7 +48,7 @@ const App = () => {
       <Router>
           <CasinoProvider>
             <div className="flex-column justify-flex-start min-100-vh">
-              <Header />
+              
               <div className="container">
                 <h1 className="text-3xl font-bold underline">CASINO</h1>
                 <Routes>
@@ -65,7 +65,7 @@ const App = () => {
                   <Route path="/login" element={<Login />} />
                 </Routes>
               </div>
-              <Footer />
+             
             </div>
           </CasinoProvider>
       </Router>
