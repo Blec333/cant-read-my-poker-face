@@ -5,9 +5,6 @@ function Header({ currentPage, handlePageChange }) {
     <>
       <nav>
         <div className="navbar z-20 bg-neutral text-primary-content">
-          <div className="flex-1">
-            <a className="btn normal-case text-xl" href="/portfolio">Casino {currentPage}</a>
-          </div>
           <div className="flex-none">
             <ul className="menu menu-horizontal p-0">
               <li tabIndex="0">

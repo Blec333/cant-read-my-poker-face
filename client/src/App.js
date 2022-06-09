@@ -48,9 +48,7 @@ const App = () => {
       <Router>
           <CasinoProvider>
             <div className="flex-column justify-flex-start min-100-vh">
-              
               <div className="container">
-                <h1 className="text-3xl font-bold underline">CASINO</h1>
                 <Routes>
                   {/* Define routes to render different page components at different paths */}
                   <Route path="/" element={<CasinoContainer />} />
@@ -59,7 +57,7 @@ const App = () => {
                     path="/players/:playerId/"
                     element={<PlayerProfile />}
                   />
-                  <Route path="/game/:gameId/" element={<GameContainer />} />
+                  {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
                   <Route path="/game/" element={<PokerTable />} />
                   <Route path="/playerBoard+/" element={<PlayerBoard />} />
                   <Route path="/login" element={<Login />} />
