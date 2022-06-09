@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function LandingPage() {
+export default function Home() {
   return (
     <div className="bg-accent-dark bg-cover bg-hero">
       <div>

@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Login from "./pages/Login";
-import LandingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
 import PlayerBoard from "./pages/PlayerBoard";
 import SignUp from "./pages/SignUp";
 
 export default function CasinoContainer() {
-  const [currentPage, setCurrentPage] = useState("LandingPage");
+  const [currentPage, setCurrentPage] = useState("Home");
 
   const renderPage = () => {
-    if (currentPage === "LandingPage") {
-      return <LandingPage />;
+    if (currentPage === "Home") {
+      return <Home />;
     }
     if (currentPage === "Login") {
       return <Login />;
