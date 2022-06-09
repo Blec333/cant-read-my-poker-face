@@ -43,7 +43,7 @@ const typeDefs = gql`
     addPlayer(playerName: String!, password: String!, account: Int): Auth
     removePlayer(playerId: ID!): Player
 
-    addGame( winner: String, playerLimit: Int, type: String, players: [ID!]): Game
+    addGame( winner: String, playerLimit: Int, type: String, playerId: String, name: String): Game
     removeGame( gameId: ID!): Game
 
     addPlayerToGame(gameId: ID!, playerId: String): Game

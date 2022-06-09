@@ -34,23 +34,14 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_GAME = gql`
-  mutation addGame(
-    $game: String!
-    $playerLimit: Number!
-    $type: String!
-    $players: ID!
-  ) {
-    addGame(
-      game: $game
-      playerLimit: $playerLimit
-      type: $type
-      players: $players
-    )
+  mutation addGame($name: String, $playerLimit: Number, $type: String, $playerId: String, $winner: String) {
+    addGame(name: $name, playerLimit: $playerLimit, type: $type, playerId: $playerId, winner: $winner){
     _id
     name
     playerLimit
     type
-    game
+    winner
+    }
   }
 `;
 

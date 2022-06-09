@@ -4,8 +4,10 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PLAYERS } from "../../utils/queries";
 import { UPDATE_PLAYERS} from "../../utils/actions";
 import JoinGame from "../JoinGame";
-import PlayerInfo from "../../components/playerInfo";
+
+import Auth from "../../utils/auth";
 import ATM from "../ATM";
+
 export default function PlayerBoard() {
   const { loading, data } =  useQuery(QUERY_PLAYERS);
   const [state, dispatch] = useCasinoContext();
@@ -31,18 +33,18 @@ export default function PlayerBoard() {
   }
 
   return (
-    <main>
-      <div>
-        {/* {showPlayer().map((player)=>(
-          <PlayerInfo
-          key = {player._id}
-          player = {player}
-          />
-        ))} */}
-        <ATM />
+    <div>
+      {Auth.loggedIn() ? (
+        <div>
+          <ATM />
         
-      </div>
-        <JoinGame />
-    </main>
+          <JoinGame />
+        </div>
+      ):(
+        <h1>You need to be loggedIn to see this page</h1>
+      )}
+    </div>
+
+
   );
 }

@@ -52,13 +52,18 @@ const resolvers = {
     },
 
     addGame: async (parent, { playerId, winner, playerLimit, type }) => {
-      return (game = await Game.create(
-        { winner, playerLimit, type },
-        {
-          $addToSet: { players: playerId },
-        }
-      ));
+      try{
+        return await Game.create(
+          { winner, playerLimit, type,
+            players: [playerId] 
+          },
+        );
+      }catch(err){
+        console.log(err)
+      }
+
     },
+    
     removeGame: async (parent, { gameId }) => {
       return Game.findOneAndDelete({ _id: gameId });
     },

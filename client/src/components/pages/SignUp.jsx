@@ -41,7 +41,7 @@ const Signup = () => {
       const { data } = await addPlayer({
         variables: { ...formState },
       });
-
+        
       Auth.login(data.addPlayer.token);
     } catch (e) {
       console.error(e);

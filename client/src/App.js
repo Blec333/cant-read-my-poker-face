@@ -59,7 +59,6 @@ const App = () => {
                   />
                   {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
                   <Route path="/game/" element={<PokerTable />} />
-                  <Route path="/playerBoard+/" element={<PlayerBoard />} />
                   <Route path="/login" element={<Login />} />
                 </Routes>
               </div>
