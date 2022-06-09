@@ -62,7 +62,7 @@ const Signup = () => {
           <form onSubmit={handleFormSubmit}>
             <input
               className={
-                "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral"
+                "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
               }
               placeholder="Your username"
               // name="playername"
