@@ -1,4 +1,5 @@
 import React, { useState }from "react";
+
 import { getAccount } from "./helpers/playerInfoHelper";
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
@@ -7,6 +8,9 @@ import { QUERY_ME } from '../utils/queries';
 export default function ATM(players) {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount ] = useState(0);
+
+  const { loading, data } = useQuery(QUERY_ME);
+  // const [state, dispatch]= usce
 
     function resetval(){
         if(showModal === true){

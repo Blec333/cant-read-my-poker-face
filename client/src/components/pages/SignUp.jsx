@@ -41,8 +41,8 @@ const Signup = () => {
       const { data } = await addPlayer({
         variables: { ...formState },
       });
-        
-      Auth.login(data.addPlayer.token);
+      console.log(data);
+      // Auth.login(data.addPlayer.token);
     } catch (e) {
       console.error(e);
     }
@@ -54,11 +54,11 @@ const Signup = () => {
         <div className="flex flex-col items-center justify-center mb-4">
           <h2 className="text-2xl font-bold">Sign Up</h2>
         </div>
-        {data ? (
+        {/* {data ? (
           <p>
             Success! You may now head <Link to="/">back to the homepage.</Link>
           </p>
-        ) : (
+        ) : ( */}
           <form onSubmit={handleFormSubmit}>
             <input
               className={
@@ -86,7 +86,7 @@ const Signup = () => {
               Submit
             </button>
           </form>
-        )}
+        {/* )} */}
 
         {error && (
           <div className="my-3 p-3 bg-danger text-white">{error.message}</div>
