@@ -20,6 +20,7 @@ import Login from "./components/pages/Login";
 import "./index.css";
 
 import { io } from "socket.io-client";
+let socket;
 
 global.Buffer = Buffer;
 const httpLink = createHttpLink({
@@ -55,12 +56,30 @@ const App = () => {
     socket.on("disconnect", () => setMessage("server disconnected"));
   }, []);
 
-  const handleMessage = async (event) => {
-    setMessage(event.target.value);
-  };
-  function lastMessage() {
+  const handleSubmit = (e) => {
     console.log(message);
-  }
+    e.preventDefault();
+    if (message) {
+      socket.emit("sendMessage", { message });
+      setMessage("");
+    } else alert("empty input");
+  };
+
+  // function liMaker() {
+  //   let cardDate = $("<h3>").attr("class", "card-text");
+  //   let messageEl = document.createElement("li");
+  //   messageEl.text(message);
+  // ul.appendChild(li);
+
+  // const handleMessage = async (event) => {
+  //   setMessage(event.target.value);
+  //   let messageEl = document.createElement("li");
+  //   messageEl.text(message);
+  // };
+  // function lastMessage() {
+  //   console.log(message);
+  //   setMessage.innerText(message);
+  // }
 
   return (
     <ApolloProvider client={client}>
@@ -80,22 +99,38 @@ const App = () => {
               </Routes>
             </div>
           </div>
+          {/* <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="name"
+            type="name"
+            name="name"
+            value={message}
+          />
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="name"
             type="name"
             name="name"
-            onChange={handleMessage}
+            // onChange={handleMessage}
             placeholder="Enter Message"
           />
           <div>
             <button
               className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
-              onClick={() => lastMessage(true)}
+              onClick={() => handleMessage}
             >
               Send Message
-            </button>
+            </button> */}
+          <div>
+            <form action="" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <input type="submit" />
+            </form>
           </div>
         </CasinoProvider>
       </Router>
