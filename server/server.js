@@ -45,14 +45,15 @@ app.use(express.json());
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });
-}
 
-db.once('open', () => {
-  app.listen(PORT, () => {
-    console.log(`API server for ${activity} running on port ${PORT}!`);
-    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server for ${activity} running on port ${PORT}!`);
+      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+    });
   });
-});
+}
 
 startApolloServer(typeDefs, resolvers);
 
