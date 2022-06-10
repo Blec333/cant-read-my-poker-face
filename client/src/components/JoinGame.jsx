@@ -13,7 +13,7 @@ import  Auth  from "../utils/auth";
 
 export default function JoinGame() {
 
-  const [addGame] = useMutation(ADD_GAME);
+  const [addGame, data] = useMutation(ADD_GAME);
   const [addGameToPlayer] = useMutation(ADD_GAME_TO_PLAYER);
   const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
   const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
@@ -38,22 +38,23 @@ export default function JoinGame() {
     }
 
     const handleAddGame = async () =>{
-    console.log(nameState)
-    console.log(Auth.getProfile().data._id)
-      // try{
-      //   await addGame({
-      //     variables:{
-      //       name: nameState,
-      //       playerLimit: 8,
-      //       type: 'poker',
-      //       winner: 'test',
-      //       playerId: Auth.getProfile().data._id
-      //     },
-      //   });
-
-      // }catch(error){
-      //   console.log(error)
-      // }
+      console.log(nameState)
+      console.log(data)
+      console.log(Auth.getProfile().data._id)
+      try{
+        const game = await addGame({
+          variables:{
+            gameName: nameState.trim(),
+            // winner: 'test',
+            playerLimit: 6,
+            gameType: 'poker',
+            playerId: Auth.getProfile().data._id
+          },
+        });
+        console.log(game);
+      }catch(error){
+        console.log(error)
+      }
     }
 
     const handleId =  async (event) => {
@@ -95,7 +96,7 @@ export default function JoinGame() {
                       
                 />
                 <div className="relative p-6 flex-auto">
-                {/* <Link to= '/game/'> */}
+                {/* <Link to= {`/game/${gameData}`}> */}
                     <button onClick={()=> handleAddGame()} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
                         Solo
                     </button>

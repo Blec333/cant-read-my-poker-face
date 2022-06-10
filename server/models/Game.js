@@ -4,7 +4,7 @@ const dayjs = require('dayjs');
 
 const gameSchema = new Schema(
   {
-    name: {
+    gameName: {
       type: String,
       // required: true
     },
@@ -14,7 +14,7 @@ const gameSchema = new Schema(
     playerLimit: {
       type: Number,
     },
-    type: {
+    gameType: {
       type: String,
     },
     createdAt:{
@@ -25,7 +25,7 @@ const gameSchema = new Schema(
     players: [
       {
         type: String,
-        unique: true,      
+        // unique: true,
       },
     ],
   },
@@ -34,7 +34,7 @@ const gameSchema = new Schema(
       virtuals: true,
       getters: true,
     },
-    id: false,
+    // id: false,
   }
 );
 

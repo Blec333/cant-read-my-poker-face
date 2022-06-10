@@ -25,8 +25,10 @@ const resolvers = {
       return Location.findOne({ _id: locationId });
     },
     me: async (parent, args, context) =>{
+      console.log(context.user)
       if(context.user){
-        return User.findOne({_id: context.user._id});
+
+        return Player.findOne({_id: context.user._id});
       }
       throw new AuthenticationError('You need to be logged in!')
     }
@@ -57,17 +59,15 @@ const resolvers = {
       return Player.findOneAndDelete({ _id: playerId });
     },
 
-    addGame: async (parent, { playerId, winner, playerLimit, type }) => {
+    addGame: async (parent, { gameName, winner, playerLimit, gameType, playerId }) => {
       try{
-        return await Game.create(
-          { winner, playerLimit, type,
-            players: [playerId] 
-          },
+        const game = await Game.create(
+          { gameName, winner, playerLimit, gameType, players: [{_id: playerId}] },
         );
+        return game;
       }catch(err){
         console.log(err)
       }
-
     },
     
     removeGame: async (parent, { gameId }) => {
@@ -75,6 +75,18 @@ const resolvers = {
     },
 
     addPlayerToGame: async (parent, { gameId, playerId }) => {
+      return await Game.findOneAndUpdate(
+        { _id: gameId },
+        {
+          $addToSet: { players: playerId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    },
+    updatePlayer: async (parent, { playerInfo }) => {
       return await Game.findOneAndUpdate(
         { _id: gameId },
         {

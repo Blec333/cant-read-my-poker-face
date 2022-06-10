@@ -1,34 +1,46 @@
-import React, { useState }from "react";
+import React, { useState, useEffect }from "react";
 import { useCasinoContext } from "../utils/GlobalState";
 
 import { getAccount } from "./helpers/playerInfoHelper";
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
+import { UPDATE_CURRENT_PLAYER } from "../utils/actions";
 
 
-export default function ATM(players) {
+export default function ATM(user) {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount ] = useState(0);
 
-  const { loading, data } = useQuery(QUERY_ME);
   const [state, dispatch]= useCasinoContext();
-  const player = data?.player || [];
-  console.log(player) 
 
     function resetval(){
-        if(showModal === true){
-            setAmount(0)
-            setShowModal(false);
-            
-        }else if(showModal === false){
-            setShowModal(true);
-        }
+      if(showModal === true){
+
+
+
+        setAmount(0)
+        setShowModal(false);
+        console.log(account-amount)    
+      }else if(showModal === false){
+        setShowModal(true);
+      }
     }
-  const handleIncrease = (num) =>{
-    setAmount(amount + num);
-  };
+
+    const handleIncrease = (num) =>{
+      setAmount(amount + num);
+    };
+
+    const {
+      _id,
+      account
+    } = user
+    console.log(user._id)
+
+   
+
   return (
     <>
+
       <button
         className="bg-pink-500 items-end text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
@@ -63,7 +75,7 @@ export default function ATM(players) {
                         name="price"
                         readOnly
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                        placeholder= '1000000'
+                        placeholder= {account}
                         />
                     </div>
                 </div>    
