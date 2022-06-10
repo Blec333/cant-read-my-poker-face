@@ -44,16 +44,23 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const [time, setTime] = React.useState("");
+  const [message, setMessage] = React.useState("");
   React.useEffect(() => {
     const socket = io("http://localhost:8080");
     socket.on("connect", () => console.log(socket.id));
     socket.on("connect_error", () => {
       setTimeout(() => socket.connect(), 8080);
     });
-    socket.on("time", (data) => setTime(data));
-    socket.on("disconnect", () => setTime("server disconnected"));
+    socket.on("time", (data) => setMessage(data));
+    socket.on("disconnect", () => setMessage("server disconnected"));
   }, []);
+
+  const handleMessage = async (event) => {
+    setMessage(event.target.value);
+  };
+  function lastMessage() {
+    console.log(message);
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -73,7 +80,23 @@ const App = () => {
               </Routes>
             </div>
           </div>
-          <div>{time}</div>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="name"
+            type="name"
+            name="name"
+            onChange={handleMessage}
+            placeholder="Enter Message"
+          />
+          <div>
+            <button
+              className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button"
+              onClick={() => lastMessage(true)}
+            >
+              Send Message
+            </button>
+          </div>
         </CasinoProvider>
       </Router>
     </ApolloProvider>
