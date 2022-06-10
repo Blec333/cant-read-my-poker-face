@@ -7,20 +7,20 @@ import { QUERY_ME } from '../utils/queries';
 import { UPDATE_CURRENT_PLAYER } from "../utils/actions";
 
 
-export default function ATM(me) {
+export default function ATM(user) {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount ] = useState(0);
 
   const [state, dispatch]= useCasinoContext();
 
-
-
-
     function resetval(){
       if(showModal === true){
+
+
+
         setAmount(0)
         setShowModal(false);
-            
+        console.log(account-amount)    
       }else if(showModal === false){
         setShowModal(true);
       }
@@ -31,13 +31,12 @@ export default function ATM(me) {
     };
 
     const {
-      playerName,
-      games,
+      _id,
       account
-    } = me
+    } = user
+    console.log(user._id)
 
-
-
+   
 
   return (
     <>

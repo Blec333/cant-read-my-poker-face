@@ -1,13 +1,18 @@
 import React from "react";
-import { getPlayerName, getAccount, getGames } from "./helpers/playerInfoHelper";
+import layerInfoHelper from "../playerInfoHelper";
 
 export default function PlayerInfo(player){
+    const{
+        playerName,
+        account,
+        games
+    } = player;
 
     return(
         <div>
-            <h1>{getPlayerName(player)}</h1>
-            <div>you have ${getAccount(player)} in your account</div>
-            <div>{getGames(player)}</div>
+            <h1>{playerName}</h1>
+            <div>you have ${account} in your account</div>
+            <div>{games}</div>
         </div>
     )
 }
