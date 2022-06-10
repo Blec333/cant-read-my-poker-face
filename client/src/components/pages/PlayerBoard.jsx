@@ -39,7 +39,7 @@ export default function PlayerBoard() {
         <div>
           <ATM />
         
-          {/* <JoinGame /> */}
+          <JoinGame />
         </div>
       ):(
         <h1>You need to be loggedIn to see this page</h1>
