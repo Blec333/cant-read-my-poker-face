@@ -45,18 +45,6 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-<<<<<<< HEAD
-  // const [time, setTime] = React.useState("");
-  // React.useEffect(() => {
-  //   const socket = io("http://localhost:8080");
-  //   socket.on("connect", () => console.log(socket.id));
-  //   socket.on("connect_error", () => {
-  //     setTimeout(() => socket.connect(), 8080);
-  //   });
-  //   socket.on("time", (data) => setTime(data));
-  //   socket.on("disconnect", () => setTime("server disconnected"));
-  // }, []);
-=======
   const [message, setMessage] = React.useState("");
   React.useEffect(() => {
     const socket = io("http://localhost:8080");
@@ -67,7 +55,6 @@ const App = () => {
     socket.on("time", (data) => setMessage(data));
     socket.on("disconnect", () => setMessage("server disconnected"));
   }, []);
->>>>>>> c40afa3b8fa1edca664bbb5aef83c579469b046f
 
   const handleSubmit = (e) => {
     console.log(message);
@@ -112,9 +99,6 @@ const App = () => {
               </Routes>
             </div>
           </div>
-<<<<<<< HEAD
-          {/* <div>{time}</div> */}
-=======
           {/* <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="name"
@@ -148,7 +132,6 @@ const App = () => {
               <input type="submit" />
             </form>
           </div>
->>>>>>> c40afa3b8fa1edca664bbb5aef83c579469b046f
         </CasinoProvider>
       </Router>
     </ApolloProvider>
