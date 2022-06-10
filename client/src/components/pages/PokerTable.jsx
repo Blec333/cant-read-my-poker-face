@@ -2,7 +2,7 @@ import React, { useReducer, useState, useEffect } from "react";
 import { useCasinoContext } from "../../utils/GlobalState";
 import { UPDATE_CURRENT_GAME } from "../../utils/actions";
 import { REMOVE_PLAYER_FROM_GAME } from "../../utils/actions";
-import { QUERY_GAME } from "../../utils/queries";
+import { QUERY_SINGLE_GAME } from "../../utils/queries";
 import { Link, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/client";
@@ -63,7 +63,7 @@ export default function PokerTable() {
   //EFFECTS ----------------------------------------------------
 
   //QUERIES ----------------------------------------------------
-  // const { loading, gameData } =  useQuery(QUERY_GAME);
+  const { loading, gameData } =  useQuery(QUERY_SINGLE_GAME);
   //QUERIES ----------------------------------------------------
 
   //MUTATIONS (CUD) --------------------------------------------

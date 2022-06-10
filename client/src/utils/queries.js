@@ -5,10 +5,10 @@ export const QUERY_PLAYERS = gql`
     players {
       _id
       playerName
-      password
       account
       games {
         _id
+        gameName
       }
 
     }
@@ -19,9 +19,12 @@ export const QUERY_SINGLE_PLAYER = gql`
   query singlePlayer($playerID: ID!) {
     player(playerId: $playerId) {
       _id
-      name
-      games
+      playerName
       account
+      games {
+        _id
+        gameName
+      }
     }
   }
 `;
@@ -32,8 +35,9 @@ export const QUERY_ME = gql`
       _id
       playerName
       account
-      games{
+      games {
         _id
+        gameName
       }
     }
   }
@@ -50,11 +54,11 @@ export const QUERY_LOCATIONS = gql`
 `;
 
 export const QUERY_SINGLE_LOCATION = gql`
-  query location {
-    location {
+  query location ($locationId: ID!) {
+    location (locationId: $locationId) {
       _id
       location
-      difficult
+      difficulty
     }
   }
 `;
@@ -67,20 +71,27 @@ export const QUERY_GAMES = gql`
       playerLimit
       type
       createdAt
-      players
+      players {
+        _id
+        playerName
+      }
     }
   }
 `;
 
 export const QUERY_SINGLE_GAME = gql`
-  query game {
-    game {
+  query game ($gameId: ID!) {
+    game (gameId: $gameId) {
       _id
+      gameName
       winner
       playerLimit
-      type
+      gameType
       createdAt
-      players
+      players {
+        _id
+        playerName
+      }
     }
   }
 `;

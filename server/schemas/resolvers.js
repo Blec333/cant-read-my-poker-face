@@ -59,17 +59,15 @@ const resolvers = {
       return Player.findOneAndDelete({ _id: playerId });
     },
 
-    addGame: async (parent, { playerId, winner, playerLimit, type }) => {
+    addGame: async (parent, { gameName, winner, playerLimit, gameType, playerId }) => {
       try{
-        return await Game.create(
-          { winner, playerLimit, type,
-            players: [playerId] 
-          },
+        const game = await Game.create(
+          { gameName, winner, playerLimit, gameType, players: [{_id: playerId}] },
         );
+        return game;
       }catch(err){
         console.log(err)
       }
-
     },
     
     removeGame: async (parent, { gameId }) => {
