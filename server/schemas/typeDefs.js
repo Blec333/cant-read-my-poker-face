@@ -31,10 +31,11 @@ const typeDefs = gql`
   type Query {
     players: [Player]!
     player(playerId: ID!): Player
-    games: [Player]!
+    games: [Game]!
     game(gameId: ID!): Game
     locations: [Location]!
     location(locationId: ID!): Location
+    me: Player
   }
 
   type Mutation {

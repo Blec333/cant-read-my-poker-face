@@ -1,5 +1,7 @@
 import React, { useState }from "react";
 import { getAccount } from "./helpers/playerInfoHelper";
+import { useQuery } from '@apollo/client';
+import { QUERY_ME } from '../utils/queries';
 
 
 export default function ATM(players) {

@@ -34,7 +34,7 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_GAME = gql`
-  mutation addGame($name: String, $playerLimit: Number, $type: String, $playerId: String, $winner: String) {
+  mutation addGame($name: String, $playerLimit: Int, $type: String, $playerId: String, $winner: String) {
     addGame(name: $name, playerLimit: $playerLimit, type: $type, playerId: $playerId, winner: $winner){
     _id
     name

@@ -24,6 +24,12 @@ const resolvers = {
     location: async (parent, { locationId }) => {
       return Location.findOne({ _id: locationId });
     },
+    me: async (parent, args, context) =>{
+      if(context.user){
+        return User.findOne({_id: context.user._id});
+      }
+      throw new AuthenticationError('You need to be logged in!')
+    }
   },
 
   // 🔑 We call the signToken() function in the resolvers where we want to transmit data securely to generate a signed token:

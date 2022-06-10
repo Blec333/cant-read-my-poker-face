@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { ADD_GAME,  
+import { 
+    ADD_GAME,  
     ADD_GAME_TO_PLAYER, 
     ADD_PLAYER_TO_GAME, 
     REMOVE_PLAYER_FROM_GAME 
 } from "../utils/mutations";
 
 import  Auth  from "../utils/auth";
-import { set } from "mongoose";
-// add game 
-// add curent user to game
-//  add game to player
+
 
 export default function JoinGame() {
 
-  const [addGame, {error, data }] = useMutation(ADD_GAME);
+  const [addGame] = useMutation(ADD_GAME);
   const [addGameToPlayer] = useMutation(ADD_GAME_TO_PLAYER);
   const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
   const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
@@ -56,7 +54,6 @@ export default function JoinGame() {
       }catch(error){
         console.log(error)
       }
-
     }
 
     const handleId =  async (event) => {
