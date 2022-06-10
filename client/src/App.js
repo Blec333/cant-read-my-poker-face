@@ -44,7 +44,7 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const [time, setTime] = React.useState("hello brennan and alex");
+  const [time, setTime] = React.useState("");
   React.useEffect(() => {
     const socket = io("http://localhost:8080");
     socket.on("connect", () => console.log(socket.id));
@@ -54,6 +54,7 @@ const App = () => {
     socket.on("time", (data) => setTime(data));
     socket.on("disconnect", () => setTime("server disconnected"));
   }, []);
+
   return (
     <ApolloProvider client={client}>
       {/* Wrap page elements in Router component to keep track of location state */}
