@@ -41,6 +41,18 @@ const playerSchema = new Schema(
   }
 );
 
+playerSchema
+  .virtual("friendCount")
+  // Getter
+  .get(function () {
+    return this.friends.length;
+  })
+  // Setter to set the playername
+  .set(function (virtual) {
+    const playername = virtual;
+    this.set({ playername });
+  });
+
 playerSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
@@ -53,18 +65,6 @@ playerSchema.pre("save", async function (next) {
 playerSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
-
-playerSchema
-  .virtual("friendCount")
-  // Getter
-  .get(function () {
-    return this.friends.length;
-  })
-  // Setter to set the playername
-  .set(function (virtual) {
-    const playername = virtual;
-    this.set({ playername });
-  });
 
 const Player = model("Player", playerSchema);
 
