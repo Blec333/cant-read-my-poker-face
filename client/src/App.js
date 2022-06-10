@@ -69,12 +69,11 @@ const App = () => {
                 <Route path="/players/:playerId/" element={<PlayerProfile />} />
                 {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
                 <Route path="/game/" element={<PokerTable />} />
-                <Route path="/playerBoard+/" element={<PlayerBoard />} />
                 <Route path="/login" element={<Login />} />
               </Routes>
             </div>
-            <div>{time}</div>
           </div>
+          <div>{time}</div>
         </CasinoProvider>
       </Router>
     </ApolloProvider>

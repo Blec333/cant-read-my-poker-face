@@ -6,14 +6,14 @@ const playerSchema = new Schema(
   {
     playerName: {
       type: String,
-      // unique: true,
+      unique: true,
       required: true,
       trim: true,
     },
     password: {
       type: String,
-      // required: true,
-      minlength: 8,
+      required: true,
+       minlength: 8,
     },
     account: {
       type: Number,

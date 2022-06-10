@@ -4,9 +4,12 @@ const dayjs = require('dayjs');
 
 const gameSchema = new Schema(
   {
+    name: {
+      type: String,
+      // required: true
+    },
     winner: {
       type: String,
-      unique: true,
     },
     playerLimit: {
       type: Number,
