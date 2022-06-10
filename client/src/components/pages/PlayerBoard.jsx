@@ -17,14 +17,14 @@ export default function PlayerBoard() {
 
 
 
-  useEffect(()=>{
-    if(data){
-      dispatch({
-        type: UPDATE_PLAYERS,
-        players: data.players
-      });
-    }
-  },[data, dispatch]);
+  // useEffect(()=>{
+  //   if(data){
+  //     dispatch({
+  //       type: UPDATE_PLAYERS,
+  //       players: data.players
+  //     });
+  //   }
+  // },[data, dispatch]);
 
   function showPlayer(){
     if(!currentPlayers){
@@ -34,11 +34,12 @@ export default function PlayerBoard() {
 
   return (
     <div>
+      <h1>test</h1>
       {Auth.loggedIn() ? (
         <div>
           <ATM />
         
-          <JoinGame />
+          {/* <JoinGame /> */}
         </div>
       ):(
         <h1>You need to be loggedIn to see this page</h1>

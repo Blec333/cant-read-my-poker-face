@@ -1,4 +1,5 @@
 import React, { useState }from "react";
+import { useCasinoContext } from "../utils/GlobalState";
 
 import { getAccount } from "./helpers/playerInfoHelper";
 import { useQuery } from '@apollo/client';
@@ -10,7 +11,9 @@ export default function ATM(players) {
   const [amount, setAmount ] = useState(0);
 
   const { loading, data } = useQuery(QUERY_ME);
-  // const [state, dispatch]= usce
+  const [state, dispatch]= useCasinoContext();
+  const player = data?.player || [];
+  console.log(player) 
 
     function resetval(){
         if(showModal === true){

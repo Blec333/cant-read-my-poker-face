@@ -40,20 +40,20 @@ export default function JoinGame() {
     const handleAddGame = async () =>{
     console.log(nameState)
     console.log(Auth.getProfile().data._id)
-      try{
-        await addGame({
-          variables:{
-            name: nameState,
-            playerLimit: 8,
-            type: 'poker',
-            winner: 'test',
-            playerId: Auth.getProfile().data._id
-          },
-        });
+      // try{
+      //   await addGame({
+      //     variables:{
+      //       name: nameState,
+      //       playerLimit: 8,
+      //       type: 'poker',
+      //       winner: 'test',
+      //       playerId: Auth.getProfile().data._id
+      //     },
+      //   });
 
-      }catch(error){
-        console.log(error)
-      }
+      // }catch(error){
+      //   console.log(error)
+      // }
     }
 
     const handleId =  async (event) => {
