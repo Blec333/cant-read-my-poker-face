@@ -25,8 +25,10 @@ const resolvers = {
       return Location.findOne({ _id: locationId });
     },
     me: async (parent, args, context) =>{
+      console.log(context.user)
       if(context.user){
-        return User.findOne({_id: context.user._id});
+
+        return Player.findOne({_id: context.user._id});
       }
       throw new AuthenticationError('You need to be logged in!')
     }

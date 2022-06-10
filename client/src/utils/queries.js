@@ -30,9 +30,11 @@ export const QUERY_ME = gql`
   query me {
     me {
       _id
-      name
-      games
+      playerName
       account
+      games{
+        _id
+      }
     }
   }
 `;
