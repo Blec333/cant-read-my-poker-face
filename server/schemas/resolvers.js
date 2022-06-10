@@ -24,14 +24,13 @@ const resolvers = {
     location: async (parent, { locationId }) => {
       return Location.findOne({ _id: locationId });
     },
-    me: async (parent, args, context) =>{
-      console.log(context.user)
-      if(context.user){
-
-        return Player.findOne({_id: context.user._id});
+    me: async (parent, args, context) => {
+      console.log(context.user);
+      if (context.user) {
+        return Player.findOne({ _id: context.user._id });
       }
-      throw new AuthenticationError('You need to be logged in!')
-    }
+      throw new AuthenticationError("You need to be logged in!");
+    },
   },
 
   // 🔑 We call the signToken() function in the resolvers where we want to transmit data securely to generate a signed token:
@@ -49,27 +48,34 @@ const resolvers = {
       return { token, player };
     },
 
-    addPlayer: async (parent, { playerName, password }) => {
-      const player = await Player.create({ playerName, password });
-      const token = signToken(player);
-      console.log({ token, player });
-      return { token, player };
-    },
+    // addPlayer: async (parent, { playerName, password }) => {
+    //   const player = await Player.create({ playerName, password });
+    //   const token = signToken(player);
+    //   console.log({ token, player });
+    //   return { token, player };
+    // },
     removePlayer: async (parent, { playerId }) => {
       return Player.findOneAndDelete({ _id: playerId });
     },
 
-    addGame: async (parent, { gameName, winner, playerLimit, gameType, playerId }) => {
-      try{
-        const game = await Game.create(
-          { gameName, winner, playerLimit, gameType, players: [{_id: playerId}] },
-        );
+    addGame: async (
+      parent,
+      { gameName, winner, playerLimit, gameType, playerId }
+    ) => {
+      try {
+        const game = await Game.create({
+          gameName,
+          winner,
+          playerLimit,
+          gameType,
+          players: [{ _id: playerId }],
+        });
         return game;
-      }catch(err){
-        console.log(err)
+      } catch (err) {
+        console.log(err);
       }
     },
-    
+
     removeGame: async (parent, { gameId }) => {
       return Game.findOneAndDelete({ _id: gameId });
     },

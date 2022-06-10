@@ -59,27 +59,27 @@ const Signup = () => {
             Success! You may now head <Link to="/">back to the homepage.</Link>
           </p>
         ) : ( */}
-          <form onSubmit={handleFormSubmit}>
-            <input
-              className={
-                "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
-              }
-              placeholder="Your username"
-              onChange={handlePlayerNameChange}
-            />
-            <input
-              className="border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
-              placeholder="******"
-              onChange={handlePasswordChange}
-            />
-            <button
-              className="btn btn-block btn-primary"
-              style={{ cursor: "pointer" }}
-              type="submit"
-            >
-              Submit
-            </button>
-          </form>
+        <form onSubmit={handleFormSubmit}>
+          <input
+            className={
+              "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
+            }
+            placeholder="Your username"
+            onChange={handlePlayerNameChange}
+          />
+          <input
+            className="border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
+            placeholder="******"
+            onChange={handlePasswordChange}
+          />
+          <button
+            className="btn btn-block btn-primary"
+            style={{ cursor: "pointer" }}
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
         {/* )} */}
 
         {error && (

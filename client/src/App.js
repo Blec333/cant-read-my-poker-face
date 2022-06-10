@@ -18,6 +18,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./components/pages/Login";
 import "./index.css";
+import HomeChat from "./components/HomeChat";
+import Chat from "./components/Chat";
 
 import { io } from "socket.io-client";
 let socket;
@@ -45,25 +47,29 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const [message, setMessage] = React.useState("");
-  React.useEffect(() => {
-    const socket = io("http://localhost:8080");
-    socket.on("connect", () => console.log(socket.id));
-    socket.on("connect_error", () => {
-      setTimeout(() => socket.connect(), 8080);
-    });
-    socket.on("time", (data) => setMessage(data));
-    socket.on("disconnect", () => setMessage("server disconnected"));
-  }, []);
+  // <Router>
+  //   <Route path="/" exact component={Home} />
+  //   <Route path="/chat" component={Chat} />
+  // </Router>;
+  // const [message, setMessage] = React.useState("");
+  // React.useEffect(() => {
+  //   const socket = io("http://localhost:8080");
+  //   socket.on("connect", () => console.log(socket.id));
+  //   socket.on("connect_error", () => {
+  //     setTimeout(() => socket.connect(), 8080);
+  //   });
+  //   socket.on("time", (data) => setMessage(data));
+  //   socket.on("disconnect", () => setMessage("server disconnected"));
+  // }, []);
 
-  const handleSubmit = (e) => {
-    console.log(message);
-    e.preventDefault();
-    if (message) {
-      socket.emit("sendMessage", { message });
-      setMessage("");
-    } else alert("empty input");
-  };
+  // const handleSubmit = (e) => {
+  //   console.log(message);
+  //   e.preventDefault();
+  //   if (message) {
+  //     socket.emit("sendMessage", { message });
+  //     setMessage("");
+  //   } else alert("empty input");
+  // };
 
   // function liMaker() {
   //   let cardDate = $("<h3>").attr("class", "card-text");
@@ -96,6 +102,8 @@ const App = () => {
                 {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
                 <Route path="/game/" element={<PokerTable />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/homeChat" exact component={HomeChat} />
+                <Route path="/chat" component={Chat} />
               </Routes>
             </div>
           </div>
@@ -122,7 +130,7 @@ const App = () => {
             >
               Send Message
             </button> */}
-          <div>
+          {/* <div>
             <form action="" onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -131,7 +139,7 @@ const App = () => {
               />
               <input type="submit" />
             </form>
-          </div>
+          </div> */}
         </CasinoProvider>
       </Router>
     </ApolloProvider>

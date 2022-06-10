@@ -1,53 +1,46 @@
-// var router = express.Router();
+// const express = require("express");
+// const socketIo = require("socket.io");
+// const http = require("http");
+// const PORT = process.env.PORT || 8080;
+// const app = express();
+// const server = http.createServer(app);
+// const io = socketIo(server, {
+//   cors: {
+//     origin: "http://localhost:8080",
+//   },
+// }); //in case server and client run on different urls
+// io.on("connection", (socket) => {
+//   console.log("client connected: ", socket.id);
 
-/* GET home page. */
-// router.get("/", function (req, res, next) {
-//   res.render("index", { title: "Express" });
+//   socket.join("clock-room");
+
+//   socket.on("disconnect", (reason) => {
+//     console.log(reason);
+//   });
 // });
 
-const express = require("express");
-const socketIo = require("socket.io");
-const http = require("http");
-const PORT = process.env.PORT || 8080;
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:8080",
-  },
-}); //in case server and client run on different urls
-io.on("connection", (socket) => {
-  console.log("client connected: ", socket.id);
+// io.emit("some event", {
+//   someProperty: "some value",
+//   otherProperty: "other value",
+// });
 
-  socket.join("clock-room");
+// io.on("connection", (socket) => {
+//   socket.broadcast.emit("hi");
+// });
 
-  socket.on("disconnect", (reason) => {
-    console.log(reason);
-  });
-});
+// io.on("connection", (socket) => {
+//   socket.on("chat message", (msg) => {
+//     io.emit("chat message", msg);
+//   });
+// });
+// setInterval(() => {
+//   io.to("clock-room").emit("time", new Date());
+// }, 1000);
 
-io.emit("some event", {
-  someProperty: "some value",
-  otherProperty: "other value",
-});
-
-io.on("connection", (socket) => {
-  socket.broadcast.emit("hi");
-});
-
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
-  });
-});
-setInterval(() => {
-  io.to("clock-room").emit("time", new Date());
-}, 1000);
-
-server.listen(PORT, (err) => {
-  if (err) console.log(err);
-  console.log("Server running on Port", PORT);
-});
+// server.listen(PORT, (err) => {
+//   if (err) console.log(err);
+//   console.log("Server running on Port", PORT);
+// });
 
 // module.exports = router;
 
