@@ -86,6 +86,18 @@ const resolvers = {
         }
       );
     },
+    updatePlayer: async (parent, { playerInfo }) => {
+      return await Game.findOneAndUpdate(
+        { _id: gameId },
+        {
+          $addToSet: { players: playerId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    },
     removePlayerFromGame: async (parent, { gameId, playerId }) => {
       return Game.findOneAndUpdate(
         { _id: gameId },

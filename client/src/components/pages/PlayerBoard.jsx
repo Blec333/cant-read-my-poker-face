@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useCasinoContext } from "../../utils/GlobalState";
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from "../../utils/queries";
+import { QUERY_PLAYERS } from "../../utils/queries";
 import { UPDATE_CURRENT_PLAYER } from "../../utils/actions";
 import Auth from "../../utils/auth";
 
@@ -12,26 +13,25 @@ export default function PlayerBoard() {
 
   const [state, dispatch] = useCasinoContext();
   const { currentPlayer } = state;
-  const { loading, data } = useQuery(QUERY_ME);
+  const { queryMe, data } = useQuery(QUERY_ME);
+  // const { loading, data } = useQuery(QUERY_PLAYERS);
+  const user = data?.me || []
 
-  console.log(data)
+console.log(user.account)
 
- useEffect(()=>{
-   if(data){
-     dispatch({
-      type: UPDATE_CURRENT_PLAYER,
-      me: data.me
-     }); 
-   };
- }, [data, loading, dispatch]);
-
-
-
+//  useEffect(()=>{
+//    if(data){
+//      dispatch({
+//       type: UPDATE_CURRENT_PLAYER,
+//       me: data.me
+//      }); 
+//    };
+//  }, [data, dispatch]);
 
  function showMe(){
-   if(!currentPlayer){
-     return state.me;
-   }
+  //  if(!currentPlayer){
+  //    return state.me;
+  //  }
  }
 
   return (
@@ -39,11 +39,11 @@ export default function PlayerBoard() {
       <h1>test</h1>
       {Auth.loggedIn() ? (
         <div>
-            <ATM
-     
-            />
-        
-        
+          <ATM 
+          key={user._id}
+          user = {user}
+          />
+
           <JoinGame />
         </div>
       ):(
