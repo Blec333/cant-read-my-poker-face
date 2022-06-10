@@ -44,16 +44,16 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const [time, setTime] = React.useState("");
-  React.useEffect(() => {
-    const socket = io("http://localhost:8080");
-    socket.on("connect", () => console.log(socket.id));
-    socket.on("connect_error", () => {
-      setTimeout(() => socket.connect(), 8080);
-    });
-    socket.on("time", (data) => setTime(data));
-    socket.on("disconnect", () => setTime("server disconnected"));
-  }, []);
+  // const [time, setTime] = React.useState("");
+  // React.useEffect(() => {
+  //   const socket = io("http://localhost:8080");
+  //   socket.on("connect", () => console.log(socket.id));
+  //   socket.on("connect_error", () => {
+  //     setTimeout(() => socket.connect(), 8080);
+  //   });
+  //   socket.on("time", (data) => setTime(data));
+  //   socket.on("disconnect", () => setTime("server disconnected"));
+  // }, []);
 
   return (
     <ApolloProvider client={client}>
@@ -73,7 +73,7 @@ const App = () => {
               </Routes>
             </div>
           </div>
-          <div>{time}</div>
+          {/* <div>{time}</div> */}
         </CasinoProvider>
       </Router>
     </ApolloProvider>
