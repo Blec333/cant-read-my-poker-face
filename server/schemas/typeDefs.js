@@ -15,7 +15,7 @@ const typeDefs = gql`
     winner: String
     playerLimit: Int
     gameType: String
-    players: [ID!]
+    players: [Player]
   }
 
   type Location {
@@ -45,8 +45,8 @@ const typeDefs = gql`
     addPlayer(playerName: String!, password: String!, account: Int): Auth
     removePlayer(playerId: ID!): Player
 
-    addGame( gameName: String, winner: String, playerLimit: Int, gameType: String, playerId: String): Game
-    removeGame( gameId: ID!): Game
+    addGame(gameName: String, winner: String, playerLimit: Int, gameType: String, playerId: String): Game
+    removeGame(gameId: ID!): Game
 
     addPlayerToGame(gameId: ID!, playerId: String): Game
     removePlayerFromGame(gameId: ID!, playerId: String): Game

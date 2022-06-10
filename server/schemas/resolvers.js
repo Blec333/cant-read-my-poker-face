@@ -62,13 +62,12 @@ const resolvers = {
     addGame: async (parent, { gameName, winner, playerLimit, gameType, playerId }) => {
       try{
         const game = await Game.create(
-          { gameName, winner, playerLimit, gameType, players: [playerId] },
+          { gameName, winner, playerLimit, gameType, players: [{_id: playerId}] },
         );
         return game;
       }catch(err){
         console.log(err)
       }
-
     },
     
     removeGame: async (parent, { gameId }) => {
