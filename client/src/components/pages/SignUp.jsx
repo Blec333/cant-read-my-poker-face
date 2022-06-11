@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_PLAYER } from "../../utils/mutations";
 
+import { useQuery  } from "@apollo/client";
+import { QUERY_GAMES } from "../../utils/queries";
+
 import Auth from "../../utils/auth";
 
 const Signup = () => {
@@ -42,7 +45,7 @@ const Signup = () => {
         variables: { ...formState },
       });
       console.log(data);
-      // Auth.login(data.addPlayer.token);
+      Auth.login(data.addPlayer.token);
     } catch (e) {
       console.error(e);
     }
@@ -54,33 +57,33 @@ const Signup = () => {
         <div className="flex flex-col items-center justify-center mb-4">
           <h2 className="text-2xl font-bold">Sign Up</h2>
         </div>
-        {/* {data ? (
+        {data ? (
           <p>
             Success! You may now head <Link to="/">back to the homepage.</Link>
           </p>
-        ) : ( */}
-        <form onSubmit={handleFormSubmit}>
-          <input
-            className={
-              "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
-            }
-            placeholder="Your username"
-            onChange={handlePlayerNameChange}
-          />
-          <input
-            className="border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
-            placeholder="******"
-            onChange={handlePasswordChange}
-          />
-          <button
-            className="btn btn-block btn-primary"
-            style={{ cursor: "pointer" }}
-            type="submit"
-          >
-            Submit
-          </button>
-        </form>
-        {/* )} */}
+        ) : (
+          <form onSubmit={handleFormSubmit}>
+            <input
+              className={
+                "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
+              }
+              placeholder="Your username"
+              onChange={handlePlayerNameChange}
+            />
+            <input
+              className="border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
+              placeholder="******"
+              onChange={handlePasswordChange}
+            />
+            <button
+              className="btn btn-block btn-primary"
+              style={{ cursor: "pointer" }}
+              type="submit"
+            >
+              Submit
+            </button>
+          </form>
+         )} 
 
         {error && (
           <div className="my-3 p-3 bg-danger text-white">{error.message}</div>

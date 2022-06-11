@@ -17,22 +17,7 @@ export default function PlayerBoard() {
   // const { loading, data } = useQuery(QUERY_PLAYERS);
   const user = data?.me || []
 
-console.log(user.account)
 
-//  useEffect(()=>{
-//    if(data){
-//      dispatch({
-//       type: UPDATE_CURRENT_PLAYER,
-//       me: data.me
-//      }); 
-//    };
-//  }, [data, dispatch]);
-
- function showMe(){
-  //  if(!currentPlayer){
-  //    return state.me;
-  //  }
- }
 
   return (
     <div>
@@ -41,7 +26,8 @@ console.log(user.account)
         <div>
           <ATM 
           key={user._id}
-          user = {user}
+          account = {user.account}
+          _id ={user._id}
           />
 
           <JoinGame />

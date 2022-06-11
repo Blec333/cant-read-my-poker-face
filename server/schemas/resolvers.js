@@ -48,12 +48,12 @@ const resolvers = {
       return { token, player };
     },
 
-    // addPlayer: async (parent, { playerName, password }) => {
-    //   const player = await Player.create({ playerName, password });
-    //   const token = signToken(player);
-    //   console.log({ token, player });
-    //   return { token, player };
-    // },
+    addPlayer: async (parent, { playerName, password }) => {
+      const player = await Player.create({ playerName, password });
+      const token = signToken(player);
+      console.log({ token, player });
+      return { token, player };
+    },
     removePlayer: async (parent, { playerId }) => {
       return Player.findOneAndDelete({ _id: playerId });
     },
@@ -68,7 +68,7 @@ const resolvers = {
           winner,
           playerLimit,
           gameType,
-          players: [{ _id: playerId }],
+          players: [ playerId ],
         });
         return game;
       } catch (err) {
@@ -92,17 +92,26 @@ const resolvers = {
         }
       );
     },
-    updatePlayer: async (parent, { playerInfo }) => {
-      return await Game.findOneAndUpdate(
-        { _id: gameId },
-        {
-          $addToSet: { players: playerId },
-        },
-        {
-          new: true,
-          runValidators: true,
+    updatePlayer: async (parent, args, context) => {
+      
+      try{
+        if(context.user._id) {
+          return await Player.findOneAndUpdate(
+            context.user._id, args,
+          { new: true }
+        );
+        }else{
+          console.log(args)
         }
-      );
+
+      }catch(err){
+        console.log("user" );
+        console.log(context.user.id)
+        console.log("args")
+        console.log(args)
+
+        console.log(err)
+      }
     },
     removePlayerFromGame: async (parent, { gameId, playerId }) => {
       return Game.findOneAndUpdate(

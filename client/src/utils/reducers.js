@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import {
   UPDATE_PLAYERS,
-  UPDATE_CURRENT_PLAYER,
+  UPDATE_CURRENT_PLAYERS_WALLET,
   UPDATE_GAMES,
   UPDATE_CURRENT_GAME
 } from "./actions";
@@ -14,16 +14,16 @@ export const reducer = (state, action) => {
         players: [...action.players],
       };
 
-    case UPDATE_CURRENT_PLAYER:
+    case UPDATE_CURRENT_PLAYERS_WALLET:
       return {
         ...state,
-        currentPlayer: [...action.currentPlayer],
+        currentWallet: [...action.currentWallet],
       };
 
     case UPDATE_GAMES:
       return {
         ...state,
-        games: [action.games],
+        games: [action.sgames],
       };
 
     case UPDATE_CURRENT_GAME:

@@ -67,14 +67,11 @@ export const QUERY_GAMES = gql`
   query games {
     games {
       _id
+      gameName
       winner
       playerLimit
-      type
-      createdAt
-      players {
-        _id
-        playerName
-      }
+      gameType
+      players 
     }
   }
 `;
@@ -87,7 +84,6 @@ export const QUERY_SINGLE_GAME = gql`
       winner
       playerLimit
       gameType
-      createdAt
       players {
         _id
         playerName

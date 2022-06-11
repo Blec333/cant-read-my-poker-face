@@ -55,66 +55,66 @@ const startApolloServer = async (typeDefs, resolvers) => {
 startApolloServer(typeDefs, resolvers);
 
 // HANDLE WEB SOCKETS BELOW ----------------------------------------------------------------------------------
-const http = require("http");
-const serverIo = http.createServer(app);
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "http://localhost:8080",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true,
-  },
-});
+// const http = require("http");
+// const serverIo = http.createServer(app);
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "http://localhost:8080",
+//     methods: ["GET", "POST"],
+//     allowedHeaders: ["my-custom-header"],
+//     credentials: true,
+//   },
+// });
 
-const PORTIO = process.env.PORT || 8080;
+// const PORTIO = process.env.PORT || 8080;
 
-serverIo.listen(PORTIO, () =>
-  console.log(`Server is Connected to Port ${PORTIO}`)
-);
+// serverIo.listen(PORTIO, () =>
+//   console.log(`Server is Connected to Port ${PORTIO}`)
+// );
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-  });
-});
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+//   socket.on("disconnect", () => {
+//     console.log("a user disconnected");
+//   });
+// });
 
-const { addUser, removeUser } = require("./user");
-io.on("connection", (socket) => {
-  socket.on("join", ({ name, room }, callBack) => {
-    const { user, error } = addUser({ id: socket.id, name, room });
+// const { addUser, removeUser } = require("./user");
+// io.on("connection", (socket) => {
+//   socket.on("join", ({ name, room }, callBack) => {
+//     const { user, error } = addUser({ id: socket.id, name, room });
 
-    if (error) return callBack(error);
-    socket.emit("message", {
-      user: "Admin",
-      text: `Welcome to ${user.room}`,
-    });
-    socket.broadcast
-      .to(user.room)
-      .emit("message", { user: "Admin", text: `${user.name} has joined!` });
-    socket.join(user.room);
-    callBack(null);
-    socket.on("sendMessage", ({ message }) => {
-      io.to(user.room).emit("message", {
-        user: user.name,
-        text: message,
-      });
-    });
-    socket.on("disconnect", () => {
-      const user = removeUser(socket.id);
-      console.log(user);
-      io.to(user.room).emit("message", {
-        user: "Admin",
-        text: `${user.name} just left the room`,
-      });
-      console.log("A disconnection has been made");
-    });
-  });
-});
+//     if (error) return callBack(error);
+//     socket.emit("message", {
+//       user: "Admin",
+//       text: `Welcome to ${user.room}`,
+//     });
+//     socket.broadcast
+//       .to(user.room)
+//       .emit("message", { user: "Admin", text: `${user.name} has joined!` });
+//     socket.join(user.room);
+//     callBack(null);
+//     socket.on("sendMessage", ({ message }) => {
+//       io.to(user.room).emit("message", {
+//         user: user.name,
+//         text: message,
+//       });
+//     });
+//     socket.on("disconnect", () => {
+//       const user = removeUser(socket.id);
+//       console.log(user);
+//       io.to(user.room).emit("message", {
+//         user: "Admin",
+//         text: `${user.name} just left the room`,
+//       });
+//       console.log("A disconnection has been made");
+//     });
+//   });
+// });
 
-useEffect(() => {
-  // The rest of the code
-  socket.emit("join", { name, room }, (error) => {
-    if (error) alert(error);
-  });
-}, [location.search]);
+// useEffect(() => {
+//   // The rest of the code
+//   socket.emit("join", { name, room }, (error) => {
+//     if (error) alert(error);
+//   });
+// }, [location.search]);
