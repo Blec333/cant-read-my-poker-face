@@ -5,10 +5,12 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import PlayerBoard from "./pages/PlayerBoard";
 import SignUp from "./pages/SignUp";
+import { useCasinoContext } from "../utils/GlobalState";
 
 export default function CasinoContainer() {
   const [currentPage, setCurrentPage] = useState("Home");
-
+  const [state, dispatch]= useCasinoContext();
+  
   const renderPage = () => {
     if (currentPage === "Home") {
       return <Home />;
@@ -21,6 +23,8 @@ export default function CasinoContainer() {
     }
     return <PlayerBoard />;
   };
+
+
 
   const handlePageChange = (page) => setCurrentPage(page);
 

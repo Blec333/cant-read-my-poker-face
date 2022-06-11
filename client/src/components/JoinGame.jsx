@@ -31,7 +31,7 @@ export default function JoinGame() {
     }else if(showModal === false){
         setShowModal(true);
     }
-}
+  }
     const handleName = async (event)=>{
         setName(event.target.value);
     

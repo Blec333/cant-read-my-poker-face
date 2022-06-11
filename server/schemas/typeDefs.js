@@ -44,6 +44,7 @@ const typeDefs = gql`
 
     addPlayer(playerName: String!, password: String!, account: Int): Auth
     removePlayer(playerId: ID!): Player
+    updatePlayer( account: Int): Player
 
     addGame(gameName: String, winner: String, playerLimit: Int, gameType: String, playerId: String): Game
     removeGame(gameId: ID!): Game

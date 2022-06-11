@@ -12,11 +12,18 @@ export const ADD_PLAYER = gql`
   }
 `;
 
+export const UPDATE_PLAYER = gql`
+  mutation updatePlayer( $account: Int ){
+    updatePlayer( account: $account){
+      account
+    }
+  }
+`;
+
 export const REMOVE_PLAYER = gql`
   mutation removePlayer($playerId: ID!) {
     removePlayer(playerId: $playerID) {
       _id
-      name
     }
   }
 `;
