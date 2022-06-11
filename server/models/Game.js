@@ -6,7 +6,7 @@ const gameSchema = new Schema(
   {
     gameName: {
       type: String,
-      // required: true
+      required: true
     },
     winner: {
       type: String,
@@ -17,11 +17,11 @@ const gameSchema = new Schema(
     gameType: {
       type: String,
     },
-    createdAt:{
-      type: Date,
-      default: Date.now,
-      get: createdAtVal => dayjs(createdAtVal).format('MMM DD, YYYY [at] hh:mm:a')
-    },
+    // createdAt:{
+    //   type: Date,
+    //   default: Date.now,
+    //   get: createdAtVal => dayjs(createdAtVal).format('MMM DD, YYYY [at] hh:mm:a')
+    // },
     players: [
       {
         type: String,

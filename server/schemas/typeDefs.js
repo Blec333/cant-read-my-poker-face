@@ -15,7 +15,7 @@ const typeDefs = gql`
     winner: String
     playerLimit: Int
     gameType: String
-    players: [Player]
+    players: [String]
   }
 
   type Location {

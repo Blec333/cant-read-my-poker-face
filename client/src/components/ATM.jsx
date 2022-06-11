@@ -33,8 +33,8 @@ export default function ATM(user) {
     const handleWithdraw = async () =>{   
       // setSumerian(amount);
       const newAmount = user.account-amount
-      walletAmount.push(amount)  
-      console.log(walletAmount)
+      walletAmount.push(amount) 
+      // console.log(newAmount) 
       dispatch({
         type: UPDATE_CURRENT_PLAYERS_WALLET,
         currentWallet: walletAmount,
@@ -60,13 +60,7 @@ export default function ATM(user) {
         type="button"
         onClick={() => resetval()}
       >
-        ATM
-      </button>
-      <button
-        className="bg-pink-500 items-end text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button"
-        onClick={() => console.log(state)}
-      >
+        
         ATM
       </button>
       {showModal ? (

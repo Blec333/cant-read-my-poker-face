@@ -48,12 +48,12 @@ const resolvers = {
       return { token, player };
     },
 
-    // addPlayer: async (parent, { playerName, password }) => {
-    //   const player = await Player.create({ playerName, password });
-    //   const token = signToken(player);
-    //   console.log({ token, player });
-    //   return { token, player };
-    // },
+    addPlayer: async (parent, { playerName, password }) => {
+      const player = await Player.create({ playerName, password });
+      const token = signToken(player);
+      console.log({ token, player });
+      return { token, player };
+    },
     removePlayer: async (parent, { playerId }) => {
       return Player.findOneAndDelete({ _id: playerId });
     },
@@ -68,7 +68,7 @@ const resolvers = {
           winner,
           playerLimit,
           gameType,
-          players: [{ _id: playerId }],
+          players: [ playerId ],
         });
         return game;
       } catch (err) {
