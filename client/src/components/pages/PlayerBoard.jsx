@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
-import { useCasinoContext } from "../../utils/GlobalState";
+import React from "react";
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from "../../utils/queries";
-import { QUERY_PLAYERS } from "../../utils/queries";
-import { UPDATE_CURRENT_PLAYER } from "../../utils/actions";
+
 import Auth from "../../utils/auth";
 
 import JoinGame from "../JoinGame";
@@ -11,11 +9,9 @@ import ATM from "../ATM";
 
 export default function PlayerBoard() {
 
-  const [state, dispatch] = useCasinoContext();
-  const { currentPlayer } = state;
-  const { queryMe, data } = useQuery(QUERY_ME);
-  // const { loading, data } = useQuery(QUERY_PLAYERS);
-  const user = data?.me || []
+
+  const { data } = useQuery(QUERY_ME);
+  const user = data?.me || [];
 
 
 
