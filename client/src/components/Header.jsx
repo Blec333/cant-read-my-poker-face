@@ -144,16 +144,16 @@ function Header({ currentPage, handlePageChange }) {
                     </ul>
                   </li>
                   {/* <li tabIndex="0">
-                <a
-                  href="/"
-                  onClick={() => handlePageChange("Home")}
-                  className={
-                    currentPage === "Home" ? "nav-link active" : "nav-link"
-                  }
-                >
-                  Logout
-                </a>
-              </li>  */}
+                    <a
+                      href="/"
+                      onClick={() => handlePageChange("Home")}
+                      className={
+                        currentPage === "Home" ? "nav-link active" : "nav-link"
+                      }
+                    >
+                      Logout
+                    </a>
+                  </li> */}
                 </ul>
               </div>
             </div>
