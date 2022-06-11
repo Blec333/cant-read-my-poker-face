@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_PLAYER } from "../../utils/mutations";
 
+import { useQuery } from "@apollo/client";
+import { QUERY_GAMES } from "../../utils/queries";
+
 import Auth from "../../utils/auth";
 
 const Signup = () => {
@@ -42,7 +45,7 @@ const Signup = () => {
         variables: { ...formState },
       });
       console.log(data);
-      // Auth.login(data.addPlayer.token);
+      Auth.login(data.addPlayer.token);
     } catch (e) {
       console.error(e);
     }

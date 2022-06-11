@@ -1,42 +1,56 @@
 import React, { useState, useEffect }from "react";
 import { useCasinoContext } from "../utils/GlobalState";
-
-import { getAccount } from "./helpers/playerInfoHelper";
-import { useQuery } from '@apollo/client';
-import { QUERY_ME } from '../utils/queries';
-import { UPDATE_CURRENT_PLAYER } from "../utils/actions";
+import { useMutation } from "@apollo/client";
+import { UPDATE_CURRENT_PLAYERS_WALLET } from "../utils/actions";
+import { UPDATE_PLAYER } from "../utils/mutations";
 
 
 export default function ATM(user) {
+  const [Withdraw, data] = useMutation(UPDATE_PLAYER);
+
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount ] = useState(0);
+  // const [sumerian, setSumerian ] = useState(0);
 
   const [state, dispatch]= useCasinoContext();
 
     function resetval(){
       if(showModal === true){
-
-
-
+        handleWithdraw();
         setAmount(0)
         setShowModal(false);
-        console.log(account-amount)    
       }else if(showModal === false){
         setShowModal(true);
       }
     }
 
     const handleIncrease = (num) =>{
-      setAmount(amount + num);
+      setAmount(amount + num)
     };
-
-    const {
-      _id,
-      account
-    } = user
-    console.log(user._id)
-
-   
+    
+    
+    let walletAmount =[];
+    const handleWithdraw = async () =>{   
+      // setSumerian(amount);
+      const newAmount = user.account-amount
+      walletAmount.push(amount) 
+      // console.log(newAmount) 
+      dispatch({
+        type: UPDATE_CURRENT_PLAYERS_WALLET,
+        currentWallet: walletAmount,
+      });
+      try{
+        await Withdraw({
+          variables:{ 
+            account: newAmount
+          }
+        }) 
+      }catch(err){
+        console.log(err)
+      }
+    }
+    // useEffect(()=>{}, [sumerian])
+    
 
   return (
     <>
@@ -46,6 +60,7 @@ export default function ATM(user) {
         type="button"
         onClick={() => resetval()}
       >
+        
         ATM
       </button>
       {showModal ? (
@@ -75,7 +90,7 @@ export default function ATM(user) {
                         name="price"
                         readOnly
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                        placeholder= {account}
+                        placeholder= {user.account}
                         />
                     </div>
                 </div>    
@@ -91,6 +106,7 @@ export default function ATM(user) {
                         type="number"
                         name="price"
                         id="price"
+                        readOnly
                         step='20'
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                         value= {amount}
