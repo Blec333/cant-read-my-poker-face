@@ -1,5 +1,4 @@
 import React from "react";
-import { Buffer } from "buffer";
 import {
   ApolloClient,
   InMemoryCache,
