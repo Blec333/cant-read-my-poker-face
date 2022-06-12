@@ -98,6 +98,7 @@ export default function Signup() {
                         />
                         <input
                           className="border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral "
+                          type="password"
                           placeholder="******"
                           onChange={handlePasswordChange}
                         />

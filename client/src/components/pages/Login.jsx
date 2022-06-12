@@ -8,6 +8,7 @@ import Auth from "../../utils/auth";
 
 // const Login = (props) =>
 export default function Login(props) {
+  const [currentPage, setCurrentPage] = useState("Signup");
   const [showModal, setShowModal] = React.useState(false);
 
   const [formState, setFormState] = useState({ playerName: "", password: "" });
@@ -52,6 +53,8 @@ export default function Login(props) {
     });
   };
 
+  const handlePageChange = (page) => setCurrentPage(page);
+
   return (
     <>
       <div
@@ -81,7 +84,17 @@ export default function Login(props) {
                   {data ? (
                     <p>
                       Success! You may now head{" "}
-                      <Link to="/playerboard">Welcome to the Casino.</Link>
+                      <Link
+                        to={{
+                          pathname: "/Signup",
+                          state: {
+                            stateName: "Signup",
+                          },
+                        }}
+                      >
+                        Link text here.
+                      </Link>
+                      {/* <Link to="/#playerboard">Welcome to the Casino.</Link> */}
                     </p>
                   ) : (
                     <div className="relative p-6 flex-auto">
@@ -97,6 +110,7 @@ export default function Login(props) {
                           className={
                             "border mb-2 py-2 px-3 rounded focus:text-neutral-content w-full focus:bg-neutral"
                           }
+                          type="password"
                           placeholder="******"
                           onChange={handlePasswordChange}
                         />
@@ -109,7 +123,17 @@ export default function Login(props) {
                         </button>
                         <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                           Don't have an account?
-                          <Link to={SignUp}>Sign Up</Link>
+                          <a
+                            href="#login"
+                            onClick={() => handlePageChange("Signup")}
+                            className={
+                              currentPage === "Signup"
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                          >
+                            Sign Up
+                          </a>
                         </p>
                         <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                           <button
