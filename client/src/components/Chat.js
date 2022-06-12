@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import queryString from "query-string";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 var cors = require("cors");
 
 let socket;
@@ -14,20 +14,27 @@ let roomId = props.roomId
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-
+  // const ENDPOINT = "http://localhost:3001";
+  // const socket = io(ENDPOINT);
+  // socket.on("connect_error",(e:any)=>{
+  //   console.log(e);
+  // });
 
 
   useEffect(() => {
-    socket = io("http://localhost:3001/",{
-      withCredentials: true,
-      transportOptions: {
-        polling: {
-          extraHeaders: {
-            "my-custom-header": "abcde"
-        }
-      }
-    }
-    });
+     socket = io("http://localhost:3001/", {
+  transports: ["websocket"]
+});
+    // socket = io("http://localhost:3001/",{
+    //   withCredentials: true,
+    //   transportOptions: {
+    //     polling: {
+    //       extraHeaders: {
+    //         "my-custom-header": "abcde"
+    //     }
+    //   }
+    // }
+    // });
     setRoom(roomId);
     setName(playerName);
     socket.emit("join", {playerName, roomId});

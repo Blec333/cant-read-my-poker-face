@@ -89,6 +89,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
+
       {/* Wrap page elements in Router component to keep track of location state */}
       <Router>
         <CasinoProvider>
