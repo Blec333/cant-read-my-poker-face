@@ -7,7 +7,6 @@ import Home from "./pages/Home";
 import PlayerBoard from "./pages/PlayerBoard";
 import SignUp from "./pages/SignUp";
 import { useCasinoContext } from "../utils/GlobalState";
-import PasswordPrompt from "inquirer/lib/prompts/password";
 
 export default function CasinoContainer(props) {
   const location = useLocation();

@@ -85,7 +85,7 @@ function Header({ currentPage, handlePageChange }) {
                   Casino {currentPage}
                 </a>
               </div>
-              <div className="flex-none">
+              {/* <div className="flex-none">
                 <ul className="menu menu-horizontal p-0">
                   <li tabIndex="0">
                     <a href="#aboutme">
@@ -143,7 +143,7 @@ function Header({ currentPage, handlePageChange }) {
                       </li>
                     </ul>
                   </li>
-                  {/* <li tabIndex="0">
+                  <li tabIndex="0">
                     <a
                       href="/"
                       onClick={() => handlePageChange("Home")}
@@ -153,9 +153,9 @@ function Header({ currentPage, handlePageChange }) {
                     >
                       Logout
                     </a>
-                  </li> */}
+                  </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </nav>
         </>
