@@ -24,7 +24,6 @@ import Chat from "./components/Chat";
 import { io } from "socket.io-client";
 let socket;
 
-global.Buffer = Buffer;
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
