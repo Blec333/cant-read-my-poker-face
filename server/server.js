@@ -1,17 +1,17 @@
 const path = require("path");
 const express = require("express");
 const { authMiddleware } = require("./utils/auth");
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require("./schemas");
 // const db = require("./config/connection");
-var cors = require("cors");
+// var cors = require("cors");
 // const  io  = require('socket.io');
 // const routes = require('./routes');// this is for restful api
 
 const cwd = process.cwd();
 const PORT = process.env.PORT || 3001;
 const app = express();
-const INDEX = '/index.html';
+// const INDEX = '/index.html';
 
 // const http = require("http");
 // const serverIo = http.createServer(app);
@@ -33,15 +33,15 @@ const INDEX = '/index.html';
 
 
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT ,DELETE");
-  res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT ,DELETE");
+//   res.header(
+//       "Access-Control-Allow-Headers",
+//       "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
 
 // const socket = require("socket.io-client")("ws://echo.websocket.org");
 
@@ -75,7 +75,7 @@ const activity = cwd.includes("01-Activities")
   ? cwd.split("/01-Activities/")[1]
   : cwd;
 
-app.use(cors());
+// app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(routes);// this is for restful api
