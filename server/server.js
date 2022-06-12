@@ -3,9 +3,9 @@ const express = require("express");
 const { authMiddleware } = require("./utils/auth");
 const { ApolloServer } = require("apollo-server-express");
 const { typeDefs, resolvers } = require("./schemas");
-const db = require("./config/connection");
+// const db = require("./config/connection");
 var cors = require("cors");
-const  io  = require('socket.io');
+// const  io  = require('socket.io');
 // const routes = require('./routes');// this is for restful api
 
 const cwd = process.cwd();
@@ -13,9 +13,9 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const INDEX = '/index.html';
 
-const http = require("http");
-const serverIo = http.createServer(app);
-const socketIo = require("socket.io")
+// const http = require("http");
+// const serverIo = http.createServer(app);
+// const socketIo = require("socket.io")
 // const io = socketIo(serverIo)
 //   , {
 //   cors: {
@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-const socket = require("socket.io-client")("ws://echo.websocket.org");
+// const socket = require("socket.io-client")("ws://echo.websocket.org");
 
 // socket.on("connect_error", (err) => {
 //   console.log(`connect_error due to ${err.message}`);
@@ -80,15 +80,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(routes);// this is for restful api
 
-const ioServer = express()
-  .use((req,res)=>res.sendFile(INDEX,{root:__dirname}))
+// const ioServer = express()
+//   .use((req,res)=>res.sendFile(INDEX,{root:__dirname}))
 
-io.on('connection', (socket) =>{
-  console.log('client connected');
-  socket.on('disconnect',()=> console.log('client disconnected'));
-});
+// io.on('connection', (socket) =>{
+//   console.log('client connected');
+//   socket.on('disconnect',()=> console.log('client disconnected'));
+// });
 
-setInterval(()=> io.emit('time', new Date().toTimeString()),1000);
+// setInterval(()=> io.emit('time', new Date().toTimeString()),1000);
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
