@@ -14,15 +14,15 @@ function Header({ currentPage, handlePageChange }) {
     if (Auth.loggedIn()) {
       return (
         <nav>
-          <div className="navbar z-20 bg-neutral text-primary-content w-screen">
+          <div className="navbar z-20 bg-neutral text-primary-content w-screen hover:z-50">
             <div className="flex-1">
               <a className="btn normal-case text-xl" href="/">
                 Casino {currentPage}
               </a>
             </div>
             <div className="flex-none">
-              <ul className="menu menu-horizontal p-0">
-                <li tabIndex="0">
+              <ul className="menu menu-horizontal rounded-box glass p-0">
+                <li className="" tabIndex="0">
                   <a href="#aboutme">
                     Pages
                     <svg
@@ -86,7 +86,7 @@ function Header({ currentPage, handlePageChange }) {
                 </a>
               </div>
               <div className="flex-none">
-                <ul className="menu menu-horizontal p-0">
+                <ul className="menu menu-horizontal rounded-box glass p-0" style={{marginRight: '2vw'}}>
                   <li tabIndex="0">
                     <a href="#aboutme">
                       Pages
