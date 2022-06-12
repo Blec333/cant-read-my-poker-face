@@ -5,7 +5,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 var cors = require("cors");
-const { io } = require('socket.io');
+const  io  = require('socket.io');
 // const routes = require('./routes');// this is for restful api
 
 const cwd = process.cwd();
