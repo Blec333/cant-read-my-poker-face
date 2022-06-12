@@ -13,6 +13,7 @@
     "dev": "concurrently \"npm run server\" \"cd client && npm start\""
   },
   "dependencies": {
+    "@inquirer/password": "^0.0.19-alpha.0",
     "apollo-server-express": "^3.6.2",
     "bcrypt": "^5.0.0",
     "dayjs": "^1.11.2",
@@ -21,7 +22,9 @@
     "inquirer": "^8.2.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
+    "npm": "^8.12.1",
     "socket.io": "^3.1.2",
+    "socket.io-client": "^4.5.1",
     "ws": "^7.4.1"
   },
   "devDependencies": {

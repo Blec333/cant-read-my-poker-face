@@ -112,6 +112,13 @@ export default function PokerTable() {
 
   useEffect(() => {
     updateGameDisplay();
+    if(gameRound >2){
+      setBetButtonVisibility()
+      setCallButtonVisibility()
+      setRaiseButtonVisibility()
+      setCheckButtonVisibility()
+      setfoldButtonVisibility()
+    }
   }, [gameRound]);
   //USE EFFECTS ----------------------------------------------------
 
@@ -157,6 +164,9 @@ export default function PokerTable() {
       }
     }
   }
+
+  // if(currentBet === true)
+
   const handleCall = () => {
     if (multiplayer === false) {
       if (playerAction === true) {
