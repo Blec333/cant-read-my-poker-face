@@ -80,7 +80,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(routes);// this is for restful api
 
-const io = socketIo(app)
+ioServer = express()
+  .use((req,res)=>res.sendFile(INDEX,{root:__dirname}))
 
 io.on('connection', (socket) =>{
   console.log('client connected');
@@ -95,7 +96,6 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
   db.once("open", () => {
     app
-    .use((req, res)=> res.sendFile(INDEX, {root: __dirname}))
     .listen(PORT, () => {
       console.log(`API server for ${activity} running on port ${PORT}!`);
       console.log(
