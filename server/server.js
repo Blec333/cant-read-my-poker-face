@@ -3,7 +3,7 @@ const express = require("express");
 const { authMiddleware } = require("./utils/auth");
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require("./schemas");
-// const db = require("./config/connection");
+const db = require("./config/connection");
 // var cors = require("cors");
 // const  io  = require('socket.io');
 // const routes = require('./routes');// this is for restful api
@@ -95,8 +95,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
   server.applyMiddleware({ app });
 
   db.once("open", () => {
-    app
-    .listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`API server for ${activity} running on port ${PORT}!`);
       console.log(
         `Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`
