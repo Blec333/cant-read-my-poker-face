@@ -1,54 +1,85 @@
 import React, { useState, useEffect } from "react";
 import queryString from "query-string";
 import io from "socket.io-client";
+var cors = require("cors");
 
 let socket;
 
-const Chat = ({ location }) => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
-  const ENDPOINT = "http://localhost:8080";
+const Chat = (props) => {
+let playerName = props.playerName
+let roomId = props.roomId
 
-  useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
-    socket = io(ENDPOINT);
-    setRoom(room);
-    setName(name);
-  }, [location.search]);
-
+  const [statePlayerName, setName] = useState("");
+  const [stateRoomId, setRoom] = useState("");
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+
+
+
   useEffect(() => {
-    socket.on("message", (message) => {
-      setMessages((messages) => [...messages, message]);
+    socket = io("http://localhost:3001/",{
+      withCredentials: true,
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            "my-custom-header": "abcde"
+        }
+      }
+    }
     });
+    setRoom(roomId);
+    setName(playerName);
+    socket.emit("join", {playerName, roomId});
+    socket.on("time", () => {
+      console.log("timed ping");
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on("message", (user, messages) => {
+      setMessages(messages);
+    });
+  }, []);
+
+  useEffect(() => {
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (messages) {
-      socket.emit("sendMessage", { messages });
-      setMessages("");
-    } else alert("empty input");
+    if (!message) {
+      setMessage("dummy message")
+      let messageArray = messages;
+      messageArray.push(message);
+      setMessages(messageArray);
+      setMessage("");
+    } else {
+      let messageArray = messages;
+      messageArray.push(message);
+      setMessages(messageArray);
+      setMessage("");
+    }
+      socket.emit("sendMessage", { playerName, roomId, messages });
   };
 
   return (
-    <div>
-      {messages.map((val, i) => {
+    <div className="flex flex-col justify-end border" style={{height: '20vw'}}>
+      <ul className="scroll-smooth hover:scroll-auto">
+      {messages.map((iMessage) => {
         return (
-          <div key={i}>
-            {val.text}
-            <br />
-            {val.user}
-          </div>
+          <li>
+            {iMessage}
+          </li>
         );
       })}
-      <form action="" onSubmit={handleSubmit}>
-        <input
+      </ul>
+      <form className="border" action="" onSubmit={handleSubmit}>
+        <input className="border bg-neutral text-neutral-content"
           type="text"
-          value={messages}
-          onChange={(e) => setMessages(e.target.value)}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
-        <input type="submit" />
+        <input className="border bg-secondary text-secondary-content" type="submit" />
       </form>
     </div>
   );
