@@ -38,6 +38,7 @@
     "react-transition-group": "^4.4.2",
     "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.1",
+    "tty-browserify": "^0.0.1",
     "util": "^0.12.4"
   }
 }
