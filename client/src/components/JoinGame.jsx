@@ -28,9 +28,9 @@ export default function JoinGame() {
   const [showError, setError] = useState(false)
   const [nameState, setName] = useState('');
   const [state, dispatch] = useCasinoContext();
-  const { currentGame } =state;
+  // const { currentGame } =state;
 
-  const { loading, data } = useQuery(QUERY_GAMES);
+  const { data } = useQuery(QUERY_GAMES);
   const games = data?.games || []
 
     useEffect(()=>{
@@ -89,24 +89,25 @@ export default function JoinGame() {
     
   return (
     <>
-      <div>
+      <div className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box bg-white opacity-75 z-20 font-black">
       <button
-        className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="text-white hover:opacity-25 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
         onClick={() => showModals(true)}
       >
         Join Table
       </button>
+     
       {showModal ? (
         <>
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
           >
-            <div className="relative w-auto my-6 mx-auto max-w-sm">
+            <div className="relative  w-auto my-6 mx-auto max-w-sm">
               {/*content*/}
-              <div className="border-0 items-center rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border-0 items-center rounded-lg shadow-lg relative flex flex-col bg-white w-full outline-none focus:outline-none">
                 {/*header*/}               
-                <div className=" p-5 border-b border-solid border-slate-200 rounded-t">
+                <div className=" p-5 border-b text-black rounded-t">
                   <h3 className="text-3xl font-semibold">
                     Join Table
                   </h3>
@@ -139,16 +140,17 @@ export default function JoinGame() {
                           />
                       </div>
                       <div className="flex items-center">
-                          <button onClick={()=> handleAddGame()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        <p>Join Game</p>
+                          {/* <button onClick={()=> handleAddGame()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                             Join Table
-                        </button>
+                        </button> */}
                       </div>
                       <br/>
                       <div className="flex items-center" >
 
-                              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                                  Create Table
-                              </button>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                            Create Table
+                          </button>
                           
                       </div>
                     </form>
