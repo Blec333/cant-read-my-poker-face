@@ -1,13 +1,16 @@
 import React, { useReducer, useState, useEffect } from "react";
 import { useCasinoContext } from "../../utils/GlobalState";
-import { UPDATE_CURRENT_GAME } from "../../utils/actions";
-import { REMOVE_PLAYER_FROM_GAME } from "../../utils/actions";
-import { QUERY_SINGLE_GAME } from "../../utils/queries";
 import { Link, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 
+import { REMOVE_PLAYER_FROM_GAME } from "../../utils/actions";
+import { UPDATE_CURRENT_GAME } from "../../utils/actions";
+import { QUERY_ME } from '../../utils/queries';
+import { QUERY_SINGLE_GAME } from "../../utils/queries";
+// import { ADD_PLAYER_TO_GAME } from "../../utils/mutations";
 import Auth from "../../utils/auth";
+import Chat from "../Chat";
 
 import onePlayer from "../../assets/img/one-player.jpg";
 import twoPlayers from "../../assets/img/two-players.jpg";
@@ -24,7 +27,6 @@ const axios = require("axios");
 
 export default function PokerTable() {
   const [state, dispatch] = useCasinoContext();
-  const { gameId } = useParams();
 
   const [gameRound, setGameRound] = useState(0);
   const [gameState, setGameState] = useState({
@@ -52,7 +54,33 @@ export default function PokerTable() {
     seat9Name: "PLAYER 9",
   });
 
+
+  //USE PARAMS -----------------------------------------------------
+  let { roomId } = useParams();
+  if (roomId === undefined) {roomId = "62a4f2cfdded97bc21acdb97"}
+  //USE PARAMS -----------------------------------------------------
+  console.log(roomId)
+
+
+  //QUERIES ----------------------------------------------------
+  const { queryMe, data } = useQuery(QUERY_ME);
+  const user = data?.me || []
+  const {playerName} = user
+
+  const { loading, error, gameData } =  useQuery(QUERY_SINGLE_GAME, {
+    // pass URL parameter
+    variables: { gameId: roomId },
+  });
+  //QUERIES ----------------------------------------------------
+
+
   //EFFECTS ----------------------------------------------------
+  useEffect(() => {
+    console.log(roomId)
+    console.log(playerName)
+    console.log(gameData)
+  }, [gameData]);
+
   useEffect(() => {
     initiateGamePlay();
   }, []);
@@ -61,10 +89,6 @@ export default function PokerTable() {
     updateGameDisplay();
   }, [gameRound]);
   //EFFECTS ----------------------------------------------------
-
-  //QUERIES ----------------------------------------------------
-  const { loading, gameData } =  useQuery(QUERY_SINGLE_GAME);
-  //QUERIES ----------------------------------------------------
 
   //MUTATIONS (CUD) --------------------------------------------
   // const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
@@ -275,8 +299,11 @@ export default function PokerTable() {
           <div id="grid7" style={{ fontSize: "1vw" }}></div>
           <div id="grid8" style={{ fontSize: "1vw" }}></div>
           <div id="grid9" style={{ fontSize: "1vw" }}></div>
-          <div id="grid10" style={{ fontSize: "1vw" }}></div>
-          <div id="grid11" style={{ fontSize: "1vw" }}></div>
+          <div id="chat-component" className="h-333px row-span-5 col-span-2" style={{ fontSize: "1vw" }}>
+            <Chat playerName={playerName} roomId={roomId}/>
+          </div>
+          {/* <div id="grid10" style={{ fontSize: "1vw" }}></div> */}
+          {/* <div id="grid11" style={{ fontSize: "1vw" }}></div> */}
           <div id="grid12" style={{ fontSize: "1vw" }}></div>
           <div id="grid13" style={{ fontSize: "1vw" }}></div>
           <div id="grid14" style={{ fontSize: "1vw" }}></div>
@@ -295,8 +322,8 @@ export default function PokerTable() {
           <div id="grid18" style={{ fontSize: "1vw" }}></div>
           <div id="grid19" style={{ fontSize: "1vw" }}></div>
           <div id="grid20" style={{ fontSize: "1vw" }}></div>
-          <div id="grid21" style={{ fontSize: "1vw" }}></div>
-          <div id="grid22" style={{ fontSize: "1vw" }}></div>
+          {/* <div id="grid21" style={{ fontSize: "1vw" }}></div> */}
+          {/* <div id="grid22" style={{ fontSize: "1vw" }}></div> */}
           <div id="grid23" style={{ fontSize: "1vw" }}></div>
           <div id="grid24" style={{ fontSize: "1vw" }}></div>
           <div id="" className="flex justify-center items-start">
@@ -324,8 +351,8 @@ export default function PokerTable() {
             </div>
           </div>
           {/* <div id="grid31" style={{fontSize: '1vw'}}></div> */}
-          <div id="grid32" style={{ fontSize: "1vw" }}></div>
-          <div id="grid33" style={{ fontSize: "1vw" }}></div>
+          {/* <div id="grid32" style={{ fontSize: "1vw" }}></div> */}
+          {/* <div id="grid33" style={{ fontSize: "1vw" }}></div> */}
           <div id="grid34" style={{ fontSize: "1vw" }}></div>
           <div id="grid35" style={{ fontSize: "1vw" }}></div>
           <div id="grid36" style={{ fontSize: "1vw" }}></div>
@@ -335,8 +362,8 @@ export default function PokerTable() {
           <div id="grid40" style={{ fontSize: "1vw" }}></div>
           <div id="grid41" style={{ fontSize: "1vw" }}></div>
           <div id="grid42" style={{ fontSize: "1vw" }}></div>
-          <div id="grid43" style={{ fontSize: "1vw" }}></div>
-          <div id="grid44" style={{ fontSize: "1vw" }}></div>
+          {/* <div id="grid43" style={{ fontSize: "1vw" }}></div> */}
+          {/* <div id="grid44" style={{ fontSize: "1vw" }}></div> */}
           <div id="grid45" style={{ fontSize: "1vw" }}></div>
           <div id="grid46" style={{ fontSize: "1vw" }}></div>
           <div id="grid47" style={{ fontSize: "1vw" }}></div>
@@ -346,8 +373,8 @@ export default function PokerTable() {
           <div id="grid51" style={{ fontSize: "1vw" }}></div>
           <div id="grid52" style={{ fontSize: "1vw" }}></div>
           <div id="grid53" style={{ fontSize: "1vw" }}></div>
-          <div id="grid54" style={{ fontSize: "1vw" }}></div>
-          <div id="grid55" style={{ fontSize: "1vw" }}></div>
+          {/* <div id="grid54" style={{ fontSize: "1vw" }}></div> */}
+          {/* <div id="grid55" style={{ fontSize: "1vw" }}></div> */}
           <div id="grid56" style={{ fontSize: "1vw" }}></div>
           <div id="grid57" style={{ fontSize: "1vw" }}></div>
           <div id="grid58" style={{ fontSize: "1vw" }}></div>

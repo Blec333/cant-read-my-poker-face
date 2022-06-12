@@ -10,6 +10,42 @@ var cors = require("cors");
 const cwd = process.cwd();
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+const http = require("http");
+const serverIo = http.createServer(app);
+const socketIo = require("socket.io")
+const io = socketIo(serverIo)
+//   , {
+//   cors: {
+//     handlePreflightRequest: (req, res) => {
+//       res.writeHead(200, {
+//       "Access-Control-Allow-Origin": "http://localhost:3000",
+//       "Access-Control-Allow-Methods": ["GET", "POST"],
+//       "Access-Control-Allow-Headers": ["my-custom-header"],
+//       "Access-Control-Allow-Credentials": true,
+//       });
+//       res.end();
+//     }
+//   }
+// })
+
+
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT ,DELETE");
+  res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
+
+
+
+
+
 //ADD APOLLO SERVER------------------------
 const server = new ApolloServer({
   typeDefs,
@@ -51,6 +87,92 @@ const startApolloServer = async (typeDefs, resolvers) => {
     });
   });
 };
+
+
+
+
+let users = [];
+
+const addUser = ({ id, playerName, roomId }) => {
+  if (!playerName || !roomId)
+  {
+  let playerName = "Dev";
+  let roomId = "Main"
+  }
+  // return { error: "name and room required." };
+  const user = { id, playerName, roomId };
+  users.push(user);
+  return { user };
+};
+
+const removeUser = (id) => {
+  const index = users.findIndex((user) => user.id === id);
+  return users[index];
+};
+
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  socket.on("join", ({ playerName, roomId }, callBack) => {
+    const { user, error } = addUser({ id: socket.id, playerName, roomId });
+    if (error) return callBack(error);
+
+    socket.join(user.roomId);
+    socket.emit("message", {
+      user: "Admin",
+      text: `Welcome to ${user.roomId}`,
+    });
+
+    socket.broadcast
+      .to(user.roomId)
+      .emit("message", { user: "Admin", text: `${user.playerName} has joined!` });
+    callBack(null);
+
+    socket.on("sendMessage", ({ playerName, roomId, messages }) => {
+      io.to(user.roomId).emit("message", {
+        user: playerName,
+        messages: messages,
+      });
+    });
+
+
+    // socket.on("time",
+    //   setInterval(() => io.emit('time', new Date().toTimeString()), 1000)
+    //   );
+    
+    // socket.on("sendMessage", ({ message }) => {
+    //   io.to(user.roomId).emit("message", {
+    //     user: user.name,
+    //     text: message,
+    //   });
+    // });
+
+
+    // socket.on("sendMessage", ({ message }) => {
+    //   io.to(user.roomId).emit("message", {
+    //     user: user.name,
+    //     text: message,
+    //   });
+    // });
+
+  });
+
+    socket.on("disconnect", () => {
+      const user = removeUser(socket.id);
+      console.log(user);
+      io.to(user.roomId).emit("message", {
+        user: "Admin",
+        text: `${user.playerName} just left the room`,
+      });
+    console.log("a user disconnected");
+    });
+  });
+
+
+
+
+
 
 startApolloServer(typeDefs, resolvers);
 
