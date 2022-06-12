@@ -84,10 +84,7 @@ export const QUERY_SINGLE_GAME = gql`
       winner
       playerLimit
       gameType
-      players {
-        _id
-        playerName
-      }
+      players
     }
   }
 `;
