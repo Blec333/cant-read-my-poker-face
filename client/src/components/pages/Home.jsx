@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Login from "./Login";
+import CasinoContainer from "../CasinoContainer";
 
 export default function Home() {
+  const login = "Login";
   return (
     <div className="bg-cover w-screen h-screen relative">
       <div>
@@ -12,7 +15,15 @@ export default function Home() {
         />
       </div>
       <button className="absolute bottom-0 left-0 top-0 right-0">
-        <Link to="/login">Go to Casino</Link>
+        <Link to={{ pathname: "/", passedPage: login }}>Go to Casino</Link>
+        {/* <Link
+          to={{
+            pathname: "/",
+            state: { passedPage: "Login" },
+          }}
+        >
+          Go to Casino
+        </Link> */}
       </button>
     </div>
   );
