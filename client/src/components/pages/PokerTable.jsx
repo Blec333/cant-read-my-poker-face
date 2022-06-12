@@ -25,6 +25,7 @@ import { ADD_PLAYER_TO_GAME } from "../../utils/mutations";
 
 const axios = require("axios");
 
+//BEGINNING OF PRIMARY FUNCTION ==============================================================================
 export default function PokerTable() {
   let multiplayer = false;
 
@@ -130,14 +131,7 @@ export default function PokerTable() {
         setDealerMessage(`${seatLabels.seat1Name} has folded their hand`);
         setGameRound(gameRound + 3);
         setPlayerAction(false);
-      } else {
-
-
-
-        //computer action here
-        setPlayerChipStack(playerChipStack + potAmount);
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
+        computerAction();
       }
     }
   }
@@ -148,15 +142,7 @@ export default function PokerTable() {
 
         setPlayerAction(false);
         setDealerMessage(`${seatLabels.seat1Name} has checked over to ${seatLabels.seat2Name}`);
-      } else {
-
-
-
-        //computer action here
-        setGameRound(gameRound + 1);
-        updateGameDisplay();
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} has checked over to ${seatLabels.seat1Name}`);
+        computerAction();
       }
     }
   }
@@ -167,17 +153,7 @@ export default function PokerTable() {
         setPotAmount(0);
         setPlayerAction(false);
         setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentBet}, action to ${seatLabels.seat2Name}`);
-      } else {
-
-
-
-
-        //computer action here
-        setComputerChipStack();
-        setGameRound(gameRound + 1);
-        updateGameDisplay();
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} `);
+        computerAction();
       }
     }
   }
@@ -191,21 +167,11 @@ export default function PokerTable() {
 
           setPlayerAction(false);
           setDealerMessage(`${seatLabels.seat1Name} has called ${seatLabels.seat2Name}`);
+          computerAction();
         } else {
           setDealerMessage(`I'm afraid you do not have enough to see your opponent, cards will now be revealed.`);
         }
-      } else {
-
-
-
-
-        setComputerChipStack();
-        //computer action here
-        setGameRound(gameRound + 1);
-        updateGameDisplay();
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} `);
-      }
+    }
     }
   }
 
@@ -220,22 +186,12 @@ export default function PokerTable() {
           }
           setPreviousBet()
           setRaiseCount(raiseCount + 1);
-          setGameRound(gameRound + 1);
+          computerAction();
         }
-      } else {
-
-
-
-
-        //computer action here
-        setComputerChipStack();
-        setGameRound(gameRound + 1);
-        updateGameDisplay();
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} `);
+      }
       }
     }
-  }
+  
 
   //PLAYER DECISION FUNCTIONS---------------------------------------
 
@@ -249,6 +205,7 @@ const computerAction = () => {
         setPlayerChipStack(playerChipStack + potAmount);
         setPlayerAction(true);
         setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
+        setGameRound(gameRound + 1);
   } else if (decision === 'check') {
 
 
@@ -740,7 +697,7 @@ const computerAction = () => {
               className="border btn btn-primary text-neutral-content text-center font-bolder"
               style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
               visibility={betButtonVisibility}
-              onClick={() => handleCall()}
+              onClick={() => handleBet()}
             >
               BET
             </button>
