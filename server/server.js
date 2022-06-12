@@ -11,11 +11,12 @@ var cors = require("cors");
 const cwd = process.cwd();
 const PORT = process.env.PORT || 3001;
 const app = express();
+const INDEX = '/index.html';
 
 const http = require("http");
 const serverIo = http.createServer(app);
 const socketIo = require("socket.io")
-const io = socketIo(serverIo)
+// const io = socketIo(serverIo)
 //   , {
 //   cors: {
 //     handlePreflightRequest: (req, res) => {
@@ -49,8 +50,8 @@ const socket = require("socket.io-client")("ws://echo.websocket.org");
 // });
 
 
-
-
+// const ioServer = express()
+//   .use((req, res)=> res.sendFile(INDEX,{root: __dirname}))
 //ADD APOLLO SERVER------------------------
 const server = new ApolloServer({
   typeDefs,
@@ -79,67 +80,77 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(routes);// this is for restful api
 
-const startApolloServer = async (typeDefs, resolvers) => {
-  await server.start();
-  server.applyMiddleware({ app });
+// const io = socketIO(app)
+// io.on('connection', (socket) =>{
+//   console.log('client connected');
+//   socket.on('disconnect',()=> console.log('client disconnected'));
+// });
 
-  db.once("open", () => {
-    app.listen(PORT, () => {
-      console.log(`API server for ${activity} running on port ${PORT}!`);
-      console.log(
-        `Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`
-      );
-    });
-  });
-};
+// setInterval(()=> io.emit('time', new Date().toTimeString()),1000);
 
+// const startApolloServer = async (typeDefs, resolvers) => {
+//   await server.start();
+//   server.applyMiddleware({ app });
 
-
-
-let users = [];
-
-const addUser = ({ id, playerName, roomId }) => {
-  if (!playerName || !roomId)
-  {
-  let playerName = "Dev";
-  let roomId = "Main"
-  }
-  // return { error: "name and room required." };
-  const user = { id, playerName, roomId };
-  users.push(user);
-  return { user };
-};
-
-const removeUser = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-  return users[index];
-};
+//   db.once("open", () => {
+//     app
+//     .use((req, res)=> res.sendFile(INDEX, {root: __dirname}))
+//     .listen(PORT, () => {
+//       console.log(`API server for ${activity} running on port ${PORT}!`);
+//       console.log(
+//         `Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`
+//       );
+//     });
+//   });
+// };
 
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
 
-  socket.on("join", ({ playerName, roomId }, callBack) => {
-    const { user, error } = addUser({ id: socket.id, playerName, roomId });
-    if (error) return callBack(error);
 
-    socket.join(user.roomId);
-    socket.emit("message", {
-      user: "Admin",
-      text: `Welcome to ${user.roomId}`,
-    });
+// let users = [];
 
-    socket.broadcast
-      .to(user.roomId)
-      .emit("message", { user: "Admin", text: `${user.playerName} has joined!` });
-    callBack(null);
+// const addUser = ({ id, playerName, roomId }) => {
+//   if (!playerName || !roomId)
+//   {
+//   let playerName = "Dev";
+//   let roomId = "Main"
+//   }
+//   // return { error: "name and room required." };
+//   const user = { id, playerName, roomId };
+//   users.push(user);
+//   return { user };
+// };
 
-    socket.on("sendMessage", ({ playerName, roomId, messages }) => {
-      io.to(user.roomId).emit("message", {
-        user: playerName,
-        messages: messages,
-      });
-    });
+// const removeUser = (id) => {
+//   const index = users.findIndex((user) => user.id === id);
+//   return users[index];
+// };
+
+
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+
+//   socket.on("join", ({ playerName, roomId }, callBack) => {
+//     const { user, error } = addUser({ id: socket.id, playerName, roomId });
+//     if (error) return callBack(error);
+
+//     socket.join(user.roomId);
+//     socket.emit("message", {
+//       user: "Admin",
+//       text: `Welcome to ${user.roomId}`,
+//     });
+
+//     socket.broadcast
+//       .to(user.roomId)
+//       .emit("message", { user: "Admin", text: `${user.playerName} has joined!` });
+//     callBack(null);
+
+//     socket.on("sendMessage", ({ playerName, roomId, messages }) => {
+//       io.to(user.roomId).emit("message", {
+//         user: playerName,
+//         messages: messages,
+//       });
+//     });
 
 
     // socket.on("time",
@@ -161,18 +172,18 @@ io.on("connection", (socket) => {
     //   });
     // });
 
-  });
+  // });
 
-    socket.on("disconnect", () => {
-      const user = removeUser(socket.id);
-      console.log(user);
-      io.to(user.roomId).emit("message", {
-        user: "Admin",
-        text: `${user.playerName} just left the room`,
-      });
-    console.log("a user disconnected");
-    });
-  });
+  //   socket.on("disconnect", () => {
+  //     const user = removeUser(socket.id);
+  //     console.log(user);
+  //     io.to(user.roomId).emit("message", {
+  //       user: "Admin",
+  //       text: `${user.playerName} just left the room`,
+  //     });
+  //   console.log("a user disconnected");
+  //   });
+  // });
 
 
 

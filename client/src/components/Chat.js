@@ -3,7 +3,9 @@ import queryString from "query-string";
 import { io } from "socket.io-client";
 var cors = require("cors");
 
-let socket;
+let socket = io();
+// const el;
+// let socket;
 
 const Chat = (props) => {
 let playerName = props.playerName
@@ -22,9 +24,14 @@ let roomId = props.roomId
 
 
   useEffect(() => {
-     socket = io("http://localhost:3001/", {
-  transports: ["websocket"]
-});
+    socket.on('time',function(toTimeString){
+      console.log('worked') 
+    })
+    
+    
+    //      socket = io("http://localhost:3001/", {
+    //   transports: ["websocket"]
+    // });
     // socket = io("http://localhost:3001/",{
     //   withCredentials: true,
     //   transportOptions: {
