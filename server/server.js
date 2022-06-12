@@ -80,29 +80,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(routes);// this is for restful api
 
-// const io = socketIO(app)
-// io.on('connection', (socket) =>{
-//   console.log('client connected');
-//   socket.on('disconnect',()=> console.log('client disconnected'));
-// });
+const io = socketIo(app)
 
-// setInterval(()=> io.emit('time', new Date().toTimeString()),1000);
+io.on('connection', (socket) =>{
+  console.log('client connected');
+  socket.on('disconnect',()=> console.log('client disconnected'));
+});
 
-// const startApolloServer = async (typeDefs, resolvers) => {
-//   await server.start();
-//   server.applyMiddleware({ app });
+setInterval(()=> io.emit('time', new Date().toTimeString()),1000);
 
-//   db.once("open", () => {
-//     app
-//     .use((req, res)=> res.sendFile(INDEX, {root: __dirname}))
-//     .listen(PORT, () => {
-//       console.log(`API server for ${activity} running on port ${PORT}!`);
-//       console.log(
-//         `Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`
-//       );
-//     });
-//   });
-// };
+const startApolloServer = async (typeDefs, resolvers) => {
+  await server.start();
+  server.applyMiddleware({ app });
+
+  db.once("open", () => {
+    app
+    .use((req, res)=> res.sendFile(INDEX, {root: __dirname}))
+    .listen(PORT, () => {
+      console.log(`API server for ${activity} running on port ${PORT}!`);
+      console.log(
+        `Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`
+      );
+    });
+  });
+};
 
 
 
