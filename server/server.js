@@ -80,7 +80,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(routes);// this is for restful api
 
-ioServer = express()
+const ioServer = express()
   .use((req,res)=>res.sendFile(INDEX,{root:__dirname}))
 
 io.on('connection', (socket) =>{
