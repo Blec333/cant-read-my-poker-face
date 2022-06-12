@@ -36,20 +36,6 @@ function Header({ currentPage, handlePageChange }) {
                     </svg>
                   </a>
                   <ul className="p-2 bg-neutral text-primary-content">
-                    <li className="text-lg text-color-primary px-2 mx-2">
-                      <a
-                        href="#landingpage"
-                        onClick={() => handlePageChange("Home")}
-                        className={
-                          currentPage === "Home"
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                      >
-                        Home
-                      </a>
-                    </li>
-
                     <li className="px-2 mx-2">
                       <a
                         href="#playerboard"
@@ -63,6 +49,33 @@ function Header({ currentPage, handlePageChange }) {
                         Player Board
                       </a>
                     </li>
+                    <li className="text-lg text-color-primary px-2 mx-2">
+                      <a
+                        href="#landingpage"
+                        onClick={() => handlePageChange("Home")}
+                        className={
+                          currentPage === "Home"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                      >
+                        Home
+                      </a>
+                    </li>
+                    {/* 
+                    <li className="px-2 mx-2">
+                      <a
+                        href="#playerboard"
+                        onClick={() => handlePageChange("PlayerBoard")}
+                        className={
+                          currentPage === "PlayerBoard"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                      >
+                        Player Board
+                      </a>
+                    </li> */}
                   </ul>
                 </li>
                 <li tabIndex="0">
@@ -86,7 +99,10 @@ function Header({ currentPage, handlePageChange }) {
                 </a>
               </div>
               <div className="flex-none">
-                <ul className="menu menu-horizontal rounded-box glass p-0" style={{marginRight: '2vw'}}>
+                <ul
+                  className="menu menu-horizontal rounded-box glass p-0"
+                  style={{ marginRight: "2vw" }}
+                >
                   <li tabIndex="0">
                     <a href="#aboutme">
                       Pages

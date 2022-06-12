@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
+import CasinoContainer from "../CasinoContainer";
 import SignUp from "./SignUp";
 
 import Auth from "../../utils/auth";
 
 // const Login = (props) =>
-export default function Login(props) {
-  const [currentPage, setCurrentPage] = useState("Signup");
+export default function Login({ nowPage, nextChange }) {
+  const signup = "Signup";
+
   const [showModal, setShowModal] = React.useState(false);
 
   const [formState, setFormState] = useState({ playerName: "", password: "" });
@@ -52,8 +54,6 @@ export default function Login(props) {
     });
   };
 
-  const handlePageChange = (page) => setCurrentPage(page);
-
   return (
     <>
       <div
@@ -83,17 +83,10 @@ export default function Login(props) {
                   {data ? (
                     <p>
                       Success! You may now head{" "}
-                      <Link
-                        to={{
-                          pathname: "/Signup",
-                          state: {
-                            stateName: "Signup",
-                          },
-                        }}
-                      >
-                        Link text here.
-                      </Link>
-                      {/* <Link to="/#playerboard">Welcome to the Casino.</Link> */}
+                      <p>
+                        Success! You may now head{" "}
+                        <Link to="/">back to the homepage.</Link>
+                      </p>
                     </p>
                   ) : (
                     <div className="relative p-6 flex-auto">
@@ -123,10 +116,11 @@ export default function Login(props) {
                         <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                           Don't have an account?
                           <a
-                            href="#login"
-                            onClick={() => handlePageChange("Signup")}
+                            style={{ fontSize: "" }}
+                            href="#signup"
+                            onClick={() => nextChange("Signup")}
                             className={
-                              currentPage === "Signup"
+                              nowPage === "Signup"
                                 ? "nav-link active"
                                 : "nav-link"
                             }

@@ -26,7 +26,7 @@ export default function Home({ currentPage, handlePageChange }) {
           onClick={() => handlePageChange("Login")}
           className={currentPage === "Login" ? "nav-link active" : "nav-link"}
         >
-          Enter Casino
+          Go to Casino
         </a>
       </div>
     </div>
