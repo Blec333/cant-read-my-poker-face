@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import queryString from "query-string";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 var cors = require("cors");
 
 let socket;
@@ -14,20 +14,27 @@ let roomId = props.roomId
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-
+  // const ENDPOINT = "http://localhost:3001";
+  // const socket = io(ENDPOINT);
+  // socket.on("connect_error",(e:any)=>{
+  //   console.log(e);
+  // });
 
 
   useEffect(() => {
-    socket = io("http://localhost:3001/",{
-      withCredentials: true,
-      transportOptions: {
-        polling: {
-          extraHeaders: {
-            "my-custom-header": "abcde"
-        }
-      }
-    }
-    });
+     socket = io("http://localhost:3001/", {
+  transports: ["websocket"]
+});
+    // socket = io("http://localhost:3001/",{
+    //   withCredentials: true,
+    //   transportOptions: {
+    //     polling: {
+    //       extraHeaders: {
+    //         "my-custom-header": "abcde"
+    //     }
+    //   }
+    // }
+    // });
     setRoom(roomId);
     setName(playerName);
     socket.emit("join", {playerName, roomId});
@@ -63,8 +70,8 @@ let roomId = props.roomId
   };
 
   return (
-    <div className="flex flex-col justify-end border" style={{height: '20vw'}}>
-      <ul className="scroll-smooth hover:scroll-auto">
+    <div className="flex flex-col justify-end border m-0 p-0" style={{height: '25.2755vw'}}>
+      <ul className="scroll-smooth hover:scroll-auto m-0 p-0">
       {messages.map((iMessage) => {
         return (
           <li>
@@ -73,13 +80,13 @@ let roomId = props.roomId
         );
       })}
       </ul>
-      <form className="border" action="" onSubmit={handleSubmit}>
-        <input className="border bg-neutral text-neutral-content"
+      <form className="flex border m-0 p-0" action="" onSubmit={handleSubmit}>
+        <input className="border bg-neutral text-neutral-content h-full items-end" style={{width: '15vw'}}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <input className="border bg-secondary text-secondary-content" type="submit" />
+        <input className="btn rounded-box glass border bg-secondary w-auto text-secondary-content m-0 p-0" type="submit" />
       </form>
     </div>
   );

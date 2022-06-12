@@ -5,6 +5,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 var cors = require("cors");
+// import { io } from 'socket.io-client'
 // const routes = require('./routes');// this is for restful api
 
 const cwd = process.cwd();
@@ -41,7 +42,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+const socket = require("socket.io-client")("ws://echo.websocket.org");
 
+// socket.on("connect_error", (err) => {
+//   console.log(`connect_error due to ${err.message}`);
+// });
 
 
 

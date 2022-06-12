@@ -25,10 +25,56 @@ import { ADD_PLAYER_TO_GAME } from "../../utils/mutations";
 
 const axios = require("axios");
 
+//BEGINNING OF PRIMARY FUNCTION ==============================================================================
 export default function PokerTable() {
-  const [state, dispatch] = useCasinoContext();
+  let multiplayer = false;
 
+  //USE PARAMS -----------------------------------------------------
+  let { roomId } = useParams();
+  if (roomId === undefined) { roomId = "Main" }
+  //USE PARAMS -----------------------------------------------------
+  console.log(roomId)
+
+
+  //QUERIES ----------------------------------------------------
+  const { queryMe, data } = useQuery(QUERY_ME);
+  const user = data?.me || []
+  const { playerName } = user
+
+  const { loading, error, gameData } = useQuery(QUERY_SINGLE_GAME, {
+    // pass URL parameter
+    variables: { gameId: roomId },
+  });
+  //QUERIES ----------------------------------------------------
+
+
+  //USE GLOBAL STATE -----------------------------------------------
+  const [state, dispatch] = useCasinoContext();
+  //USE GLOBAL STATE -----------------------------------------------
+
+
+  //USE STATE ------------------------------------------------------
+  const [dealerMessage, setDealerMessage] = useState('');
   const [gameRound, setGameRound] = useState(0);
+  const [currentAmount, setCurrentAmount] = useState(0);
+  const [potAmount, setPotAmount] = useState(0);
+  const [raiseCount, setRaiseCount] = useState(0);
+  const [callCount, setCallCount] = useState(0);
+  const [checkCount, setCheckCount] = useState(0);
+  const [foldTest, setFoldTest] = useState(false);
+  const [playerChipStack, setPlayerChipStack] = useState(0);
+  const [computerChipStack, setComputerChipStack] = useState(0);
+  const [playerAction, setPlayerAction] = useState(true);
+  const [previousBet, setPreviousBet] = useState(true);
+  const [currentBet, setCurrentBet] = useState(true);
+  const [callButtonValue, setCallButtonValue] = useState(0);
+  const [foldButtonVisibility, setfoldButtonVisibility] = useState("visible");
+  const [checkButtonVisibility, setCheckButtonVisibility] = useState("visible");
+  const [callButtonVisibility, setCallButtonVisibility] = useState("visible");
+  const [betButtonVisibility, setBetButtonVisibility] = useState("visible");
+  const [raiseButtonVisibility, setRaiseButtonVisibility] = useState("visible");
+  const [playButtonVisibility, setPlayButtonVisibility] = useState("visible");
+
   const [gameState, setGameState] = useState({
     riverDesc: facedownCard,
     riverImg: facedownCard,
@@ -53,28 +99,11 @@ export default function PokerTable() {
     seat8Name: "PLAYER 8",
     seat9Name: "PLAYER 9",
   });
+  //USE STATE ------------------------------------------------------
 
 
-  //USE PARAMS -----------------------------------------------------
-  let { roomId } = useParams();
-  if (roomId === undefined) {roomId = "62a4f2cfdded97bc21acdb97"}
-  //USE PARAMS -----------------------------------------------------
-  console.log(roomId)
 
-
-  //QUERIES ----------------------------------------------------
-  const { queryMe, data } = useQuery(QUERY_ME);
-  const user = data?.me || []
-  const {playerName} = user
-
-  const { loading, error, gameData } =  useQuery(QUERY_SINGLE_GAME, {
-    // pass URL parameter
-    variables: { gameId: roomId },
-  });
-  //QUERIES ----------------------------------------------------
-
-
-  //EFFECTS ----------------------------------------------------
+  //USE EFFECTS ----------------------------------------------------
   useEffect(() => {
     console.log(roomId)
     console.log(playerName)
@@ -82,13 +111,165 @@ export default function PokerTable() {
   }, [gameData]);
 
   useEffect(() => {
-    initiateGamePlay();
-  }, []);
-
-  useEffect(() => {
     updateGameDisplay();
+    if(gameRound >2){
+      setBetButtonVisibility()
+      setCallButtonVisibility()
+      setRaiseButtonVisibility()
+      setCheckButtonVisibility()
+      setfoldButtonVisibility()
+    }
   }, [gameRound]);
-  //EFFECTS ----------------------------------------------------
+  //USE EFFECTS ----------------------------------------------------
+
+
+  if (raiseCount === 2 || checkCount === 2 || callCount === 1) {
+    setRaiseCount(0)
+  }
+
+
+  //PLAYER DECISION FUNCTIONS---------------------------------------
+  const handleFold = () => {
+    if (multiplayer === false) {
+      if (playerAction === true) {
+        setFoldTest(true);
+        setComputerChipStack(computerChipStack + potAmount);
+        setPotAmount(0);
+        setDealerMessage(`${seatLabels.seat1Name} has folded their hand`);
+        setGameRound(gameRound + 3);
+        setPlayerAction(false);
+        computerAction();
+      }
+    }
+  }
+  const handleCheck = () => {
+    if (multiplayer === false) {
+      if (playerAction === true) {
+        setCheckCount(checkCount + 1)
+
+        setPlayerAction(false);
+        setDealerMessage(`${seatLabels.seat1Name} has checked over to ${seatLabels.seat2Name}`);
+        computerAction();
+      }
+    }
+  }
+  const handleBet = () => {
+    if (multiplayer === false) {
+      if (playerAction === true) {
+
+        setPotAmount(0);
+        setPlayerAction(false);
+        setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentBet}, action to ${seatLabels.seat2Name}`);
+        computerAction();
+      }
+    }
+  }
+
+  // if(currentBet === true)
+
+  const handleCall = () => {
+    if (multiplayer === false) {
+      if (playerAction === true) {
+        if (playerChipStack > previousBet) {
+          setPlayerChipStack(playerChipStack - previousBet);
+          setPotAmount(potAmount + previousBet);
+          setCallCount(callCount + 1);
+
+          setPlayerAction(false);
+          setDealerMessage(`${seatLabels.seat1Name} has called ${seatLabels.seat2Name}`);
+          computerAction();
+        } else {
+          setDealerMessage(`I'm afraid you do not have enough to see your opponent, cards will now be revealed.`);
+        }
+    }
+    }
+  }
+
+  const handleRaise = () => {
+    if (multiplayer === false) {
+      if (playerAction === true) {
+        if (raiseCount === 2) {
+          setDealerMessage("You can no longer raise the pot, please match your opponent or fold.")
+        } else {
+          if (currentAmount === 0) {
+
+          }
+          setPreviousBet()
+          setRaiseCount(raiseCount + 1);
+          computerAction();
+        }
+      }
+      }
+    }
+  
+
+  //PLAYER DECISION FUNCTIONS---------------------------------------
+
+  //COMPUTER DECISION LOGIC ----------------------------------------
+const computerAction = () => {
+  let decision = Math.floor(Math.random()*5);
+  if (decision === 'fold') {
+
+
+        //computer action here
+        setPlayerChipStack(playerChipStack + potAmount);
+        setPlayerAction(true);
+        setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
+        setGameRound(gameRound + 1);
+  } else if (decision === 'check') {
+
+
+        //computer action here
+        setGameRound(gameRound + 1);
+        updateGameDisplay();
+        setPlayerAction(true);
+        setDealerMessage(`${seatLabels.seat2Name} has checked over to ${seatLabels.seat1Name}`);
+  } else if (decision === 'bet') {
+
+
+        //computer action here
+        setComputerChipStack();
+        setGameRound(gameRound + 1);
+        updateGameDisplay();
+        setPlayerAction(true);
+        setDealerMessage(`${seatLabels.seat2Name} `);
+  } else if (decision === 'call') {
+
+
+        setComputerChipStack();
+        //computer action here
+        setGameRound(gameRound + 1);
+        updateGameDisplay();
+        setPlayerAction(true);
+        setDealerMessage(`${seatLabels.seat2Name} `);
+  } else if (decision === 'raise') {
+
+
+        setComputerChipStack();
+        setGameRound(gameRound + 1);
+        updateGameDisplay();
+        setPlayerAction(true);
+        setDealerMessage(`${seatLabels.seat2Name} `);
+      }
+  }
+
+
+
+
+  //COMPUTER DECISION LOGIC ----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   //MUTATIONS (CUD) --------------------------------------------
   // const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
@@ -98,16 +279,30 @@ export default function PokerTable() {
 
   //USER ACTION FUNCTIONS FOR STATE ----------------------------
   function updateGameDisplay() {
-    if (gameRound === 1) {
+    if (gameRound === 0) {
       setGameState({
         ...gameState,
-        flop3Desc: state.currentCommunityCardDescriptions[2],
-        flop3Img: state.currentCommunityCardImages[2],
-        flop2Desc: state.currentCommunityCardDescriptions[1],
-        flop2Img: state.currentCommunityCardImages[1],
-        flop1Desc: state.currentCommunityCardDescriptions[0],
-        flop1Img: state.currentCommunityCardImages[0],
-      });
+        riverDesc: facedownCard,
+        riverImg: facedownCard,
+        turnDesc: facedownCard,
+        turnImg: facedownCard,
+        flop3Desc: facedownCard,
+        flop3Img: facedownCard,
+        flop2Desc: facedownCard,
+        flop2Img: facedownCard,
+        flop1Desc: facedownCard,
+        flop1Img: facedownCard,
+      })
+    } else if (gameRound === 1) {
+        setGameState({
+          ...gameState,
+          flop3Desc: state.currentCommunityCardDescriptions[2],
+          flop3Img: state.currentCommunityCardImages[2],
+          flop2Desc: state.currentCommunityCardDescriptions[1],
+          flop2Img: state.currentCommunityCardImages[1],
+          flop1Desc: state.currentCommunityCardDescriptions[0],
+          flop1Img: state.currentCommunityCardImages[0],
+        });
     } else if (gameRound === 2) {
       setGameState({
         ...gameState,
@@ -143,9 +338,7 @@ export default function PokerTable() {
   //USER ACTION FUNCTIONS FOR STATE ----------------------------
 
   //GLOBAL VARIABLES -------------------------------------------
-  let playerActionInRound;
-  let numberOfPlayers = 8;
-
+  let numberOfPlayers = 2;
   let bgPoker = onePlayer;
   let deckCount = 1;
   let communityCardImages = [];
@@ -189,55 +382,54 @@ export default function PokerTable() {
       default:
         bgPoker = onePlayer;
     }
-    console.log("Background placed");
+    // console.log("Background placed");
   }
 
   async function shuffleDeck(deckCount, numberOfPlayers) {
     let shuffleURL = `https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${deckCount}`;
     await axios.get(shuffleURL).then(function (res) {
       let shuffleId = res.data.deck_id;
-      deal = `https://www.deckofcardsapi.com/api/deck/${shuffleId}/draw/?count=${
-        numberOfPlayers * 2 + 5
-      }`;
-      console.log("Shuffled the deck");
+      deal = `https://www.deckofcardsapi.com/api/deck/${shuffleId}/draw/?count=${numberOfPlayers * 2 + 5
+        }`;
+      // console.log("Shuffled the deck");
       return res;
     });
   }
 
   async function dealCards(deal) {
     await axios.get(deal).then(function (res) {
-      console.log(res);
-      for (let i = 0; i < res.data.cards.length; i++) {
-        res.data.cards[i].code = res.data.cards[i].code.replace("0", "10");
+      let cards = res.data.cards;
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].code = cards[i].code.replace("0", "10");
       }
-      communityCardCodes = `${res.data.cards[0].code},${res.data.cards[1].code},${res.data.cards[2].code},${res.data.cards[3].code},${res.data.cards[4].code}`;
+      communityCardCodes = `${cards[0].code},${cards[1].code},${cards[2].code},${cards[3].code},${cards[4].code}`;
       communityCardImages = [
-        `${res.data.cards[0].images.png}`,
-        `${res.data.cards[1].images.png}`,
-        `${res.data.cards[2].images.png}`,
-        `${res.data.cards[3].images.png}`,
-        `${res.data.cards[4].images.png}`,
+        `${cards[0].images.png}`,
+        `${cards[1].images.png}`,
+        `${cards[2].images.png}`,
+        `${cards[3].images.png}`,
+        `${cards[4].images.png}`,
       ];
       communityCardDescriptions = [
-        `${res.data.cards[0].value} of ${res.data.cards[0].suit}`,
-        `${res.data.cards[1].value} of ${res.data.cards[1].suit}`,
-        `${res.data.cards[2].value} of ${res.data.cards[2].suit}`,
-        `${res.data.cards[3].value} of ${res.data.cards[3].suit}`,
-        `${res.data.cards[4].value} of ${res.data.cards[4].suit}`,
+        `${cards[0].value} of ${cards[0].suit}`,
+        `${cards[1].value} of ${cards[1].suit}`,
+        `${cards[2].value} of ${cards[2].suit}`,
+        `${cards[3].value} of ${cards[3].suit}`,
+        `${cards[4].value} of ${cards[4].suit}`,
       ];
       for (let i = 0; i < numberOfPlayers * 2 - 1; i += 2) {
         playerCardCodes = playerCardCodes.concat(
-          `&pc[]=${res.data.cards[i + 5].code},${res.data.cards[i + 6].code}`
+          `&pc[]=${cards[i + 5].code},${cards[i + 6].code}`
         );
         playerCardImages.push(
-          res.data.cards[i + 5].images.png,
-          res.data.cards[i + 6].images.png
+          cards[i + 5].images.png,
+          cards[i + 6].images.png
         );
         playerCardDescriptions.push(
-          `${res.data.cards[i + 5].value} of ${res.data.cards[i + 6].suit}`
+          `${cards[i + 5].value} of ${cards[i + 6].suit}`
         );
       }
-      console.log("Cards have been dealt");
+      // console.log("Cards have been dealt");
       return res;
     });
   }
@@ -251,13 +443,14 @@ export default function PokerTable() {
       winnerResults = Object.values(res.data.winners).map(function (el) {
         return el.result;
       });
-      console.log("Winner has been determined");
+      // console.log("Winner has been determined");
       return res;
     });
   }
 
   async function initiateGamePlay() {
     getBackground();
+    setGameRound(0);
     await shuffleDeck(deckCount, numberOfPlayers);
     await dealCards(deal);
     await determineWinner(communityCardCodes, playerCardCodes);
@@ -270,7 +463,7 @@ export default function PokerTable() {
       currentPlayerResults: playerResults,
       currentWinnerResults: winnerResults,
     });
-    console.log(state);
+    updateGameDisplay();
   }
   //UPON PAGE LOAD GLOBAL STATE FUNCTIONS ----------------------
 
@@ -290,43 +483,49 @@ export default function PokerTable() {
           className="borders grid grid-cols-11 text-center text-neutral-content"
           style={{ aspectRatio: 2 / 1.1 }}
         >
-          <div id="grid1" style={{ fontSize: "1vw" }}></div>
-          <div id="grid2" style={{ fontSize: "1vw" }}></div>
-          <div id="grid3" style={{ fontSize: "1vw" }}></div>
-          <div id="grid4" style={{ fontSize: "1vw" }}></div>
-          <div id="grid5" style={{ fontSize: "1vw" }}></div>
-          <div id="grid6" style={{ fontSize: "1vw" }}></div>
-          <div id="grid7" style={{ fontSize: "1vw" }}></div>
-          <div id="grid8" style={{ fontSize: "1vw" }}></div>
-          <div id="grid9" style={{ fontSize: "1vw" }}></div>
-          <div id="chat-component" className="h-333px row-span-5 col-span-2" style={{ fontSize: "1vw" }}>
-            <Chat playerName={playerName} roomId={roomId}/>
+          <div id="grid1" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid2" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid3" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid4" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid5" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid6" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid7" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid8" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid9" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="chat-component" className="border h-333px row-span-5 col-span-2 m-0 p-0" style={{ width: "18.2vw", height: "25.275vw", fontSize: "1vw" }}>
+            <Chat playerName={playerName} roomId={roomId} />
           </div>
           {/* <div id="grid10" style={{ fontSize: "1vw" }}></div> */}
           {/* <div id="grid11" style={{ fontSize: "1vw" }}></div> */}
-          <div id="grid12" style={{ fontSize: "1vw" }}></div>
-          <div id="grid13" style={{ fontSize: "1vw" }}></div>
-          <div id="grid14" style={{ fontSize: "1vw" }}></div>
-          <div id="grid15" style={{ fontSize: "1vw" }}></div>
-          <div id="grid16" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-center items-end">
+          <div id="grid12" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid13" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid14" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid15" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="dealer-message" 
+            className="border bg-white text-black text-center font-bold rounded-br-none rounded-tr-full rounded-tl-full rounded-bl-full" 
+            style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
+            >
+              {dealerMessage}
+          </div>
+          {/* <div id="grid16" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
+          <div id="" className="border flex justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
-              className="bg-success border-success-content text-neutral text-center text-xl font-bold rounded-box"
+              className="border bg-success border-success-content text-neutral text-center text-xl font-bold rounded-box"
               style={{ fontSize: "1vw", padding: "0.2vw" }}
             >
               {seatLabels.seat0Name}
             </div>
           </div>
           {/* <div id="grid17" style={{fontSize: '1vw'}}></div> */}
-          <div id="grid18" style={{ fontSize: "1vw" }}></div>
-          <div id="grid19" style={{ fontSize: "1vw" }}></div>
-          <div id="grid20" style={{ fontSize: "1vw" }}></div>
+          <div id="grid18" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid19" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid20" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           {/* <div id="grid21" style={{ fontSize: "1vw" }}></div> */}
           {/* <div id="grid22" style={{ fontSize: "1vw" }}></div> */}
-          <div id="grid23" style={{ fontSize: "1vw" }}></div>
-          <div id="grid24" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-center items-start">
+          <div id="grid23" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid24" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="" className="border flex justify-center items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
               className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
@@ -336,12 +535,12 @@ export default function PokerTable() {
             </div>
           </div>
           {/* <div id="grid25" style={{fontSize: '1vw'}}></div> */}
-          <div id="grid26" style={{ fontSize: "1vw" }}></div>
-          <div id="grid27" style={{ fontSize: "1vw" }}></div>
-          <div id="grid28" style={{ fontSize: "1vw" }}></div>
-          <div id="grid29" style={{ fontSize: "1vw" }}></div>
-          <div id="grid30" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-center items-start">
+          <div id="grid26" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid27" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid28" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid29" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid30" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="" className="flex justify-center items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
               className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
@@ -353,65 +552,79 @@ export default function PokerTable() {
           {/* <div id="grid31" style={{fontSize: '1vw'}}></div> */}
           {/* <div id="grid32" style={{ fontSize: "1vw" }}></div> */}
           {/* <div id="grid33" style={{ fontSize: "1vw" }}></div> */}
-          <div id="grid34" style={{ fontSize: "1vw" }}></div>
-          <div id="grid35" style={{ fontSize: "1vw" }}></div>
-          <div id="grid36" style={{ fontSize: "1vw" }}></div>
-          <div id="grid37" style={{ fontSize: "1vw" }}></div>
-          <div id="grid38" style={{ fontSize: "1vw" }}></div>
-          <div id="grid39" style={{ fontSize: "1vw" }}></div>
-          <div id="grid40" style={{ fontSize: "1vw" }}></div>
-          <div id="grid41" style={{ fontSize: "1vw" }}></div>
-          <div id="grid42" style={{ fontSize: "1vw" }}></div>
+          <div id="grid34" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid35" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid36" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid37" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid38" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid39" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid40" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid41" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid42" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           {/* <div id="grid43" style={{ fontSize: "1vw" }}></div> */}
           {/* <div id="grid44" style={{ fontSize: "1vw" }}></div> */}
-          <div id="grid45" style={{ fontSize: "1vw" }}></div>
-          <div id="grid46" style={{ fontSize: "1vw" }}></div>
-          <div id="grid47" style={{ fontSize: "1vw" }}></div>
-          <div id="grid48" style={{ fontSize: "1vw" }}></div>
-          <div id="grid49" style={{ fontSize: "1vw" }}></div>
-          <div id="grid50" style={{ fontSize: "1vw" }}></div>
-          <div id="grid51" style={{ fontSize: "1vw" }}></div>
-          <div id="grid52" style={{ fontSize: "1vw" }}></div>
-          <div id="grid53" style={{ fontSize: "1vw" }}></div>
+          <div id="grid45" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid46" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid47" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid48" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid49" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div
+            id="play-button-container"
+            className="border flex flex-row text-secondary-content justify-center items-center" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
+          >
+            <button
+              id="play-button"
+              className="border btn btn-secondary text-secondary-content text-center font-bolder"
+              style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              visibility={playButtonVisibility}
+              onClick={() => initiateGamePlay()}
+            >
+              DEAL!
+            </button>
+          </div>
+          {/* <div id="grid50" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
+          <div id="grid51" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid52" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid53" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           {/* <div id="grid54" style={{ fontSize: "1vw" }}></div> */}
-          {/* <div id="grid55" style={{ fontSize: "1vw" }}></div> */}
-          <div id="grid56" style={{ fontSize: "1vw" }}></div>
-          <div id="grid57" style={{ fontSize: "1vw" }}></div>
-          <div id="grid58" style={{ fontSize: "1vw" }}></div>
-          <div id="grid59" style={{ fontSize: "1vw" }}></div>
+          {/* <div id="gri className="border"d55" style={{ fontSize: "1vw" }}></div> */}
+          <div id="grid56" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid57" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid58" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid59" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div
             id="community-cards"
-            className="flex flex-row text-neutral-content justify-center items-end col-span-3"
+            className="border flex flex-row text-neutral-content justify-center items-start col-span-3"
           >
-            <div id="River" className="w-[75px]" style={{ fontSize: "1vw" }}>
+            <div id="River" className="" style={{ width: "3vw", fontSize: "1vw" }}>
               <img
                 title={gameState.riverDesc}
                 alt={gameState.riverDesc}
                 src={gameState.riverImg}
               ></img>
             </div>
-            <div id="Turn" className="w-[75px]" style={{ fontSize: "1vw" }}>
+            <div id="Turn" className="" style={{ width: "3vw", fontSize: "1vw" }}>
               <img
                 title={gameState.turnDesc}
                 alt={gameState.turnDesc}
                 src={gameState.turnImg}
               ></img>
             </div>
-            <div id="Flop3" className="w-[75px]" style={{ fontSize: "1vw" }}>
+            <div id="Flop3" className="" style={{ width: "3vw", fontSize: "1vw" }}>
               <img
                 title={gameState.flop3Desc}
                 alt={gameState.flop3Desc}
                 src={gameState.flop3Img}
               ></img>
             </div>
-            <div id="Flop2" className="w-[75px]" style={{ fontSize: "1vw" }}>
+            <div id="Flop2" className="" style={{ width: "3vw", fontSize: "1vw" }}>
               <img
                 title={gameState.flop2Desc}
                 alt={gameState.flop2Desc}
                 src={gameState.flop2Img}
               ></img>
             </div>
-            <div id="Flop1" className="w-[75px]" style={{ fontSize: "1vw" }}>
+            <div id="Flop1" className="" style={{ width: "3vw", fontSize: "1vw" }}>
               <img
                 title={gameState.flop1Desc}
                 alt={gameState.flop1Desc}
@@ -422,12 +635,12 @@ export default function PokerTable() {
           {/* <div id="grid60" style={{ fontSize: '1vw' }}></div> */}
           {/* <div id="grid61" style={{fontSize: '1vw'}}></div> */}
           {/* <div id="grid62" style={{ fontSize: '1vw' }}></div> */}
-          <div id="grid63" style={{ fontSize: "1vw" }}></div>
-          <div id="grid64" style={{ fontSize: "1vw" }}></div>
-          <div id="grid65" style={{ fontSize: "1vw" }}></div>
-          <div id="grid66" style={{ fontSize: "1vw" }}></div>
-          <div id="grid67" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-end items-start">
+          <div id="grid63" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid64" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid65" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid66" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid67" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="" className="border flex justify-end items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
               className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
@@ -437,14 +650,14 @@ export default function PokerTable() {
             </div>
           </div>
           {/* <div id="grid68" style={{fontSize: '1vw'}}></div> */}
-          <div id="grid69" style={{ fontSize: "1vw" }}></div>
-          <div id="grid70" style={{ fontSize: "1vw" }}></div>
-          <div id="grid71" style={{ fontSize: "1vw" }}></div>
+          <div id="grid69" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid70" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid71" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div
             id="community-cards"
-            className="flex text-neutral-content justify-center items-end"
+            className="border flex text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
           >
-            <div id="pc1" style={{ fontSize: "1vw" }}>
+            <div id="pc1" className="border" style={{ width: "3.6vw", fontSize: "1vw" }}>
               <img
                 style={{ fontSize: "1vw" }}
                 title={state.currentPlayerCardDescriptions[0]}
@@ -452,7 +665,7 @@ export default function PokerTable() {
                 src={state.currentPlayerCardImages[0]}
               ></img>
             </div>
-            <div id="pc2" style={{ fontSize: "1vw" }}>
+            <div id="pc2" className="border" style={{ width: "3.6vw", fontSize: "1vw" }}>
               <img
                 style={{ fontSize: "1vw" }}
                 title={state.currentPlayerCardDescriptions[1]}
@@ -462,75 +675,118 @@ export default function PokerTable() {
             </div>
           </div>
           {/* <div id="grid72" style={{ fontSize: '1vw' }}></div> */}
-          <div id="grid73" style={{ fontSize: "1vw" }}></div>
-          <div id="grid74" style={{ fontSize: "1vw" }}></div>
-          <div id="grid75" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-start items-start">
+          <div id="grid73" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid74" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid75" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="" className="border flex justify-start items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
-              className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
+              className="border bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
               style={{ fontSize: "1vw", padding: "0.2vw" }}
             >
               {seatLabels.seat2Name}
             </div>
           </div>
           {/* <div id="grid76" style={{fontSize: '1vw'}}></div> */}
-          <div id="grid77" style={{ fontSize: "1vw" }}></div>
-          <div id="grid78" style={{ fontSize: "1vw" }}></div>
-          <div id="grid79" style={{ fontSize: "1vw" }}></div>
-          <div id="grid80" style={{ fontSize: "1vw" }}></div>
-          <div id="grid81" style={{ fontSize: "1vw" }}></div>
-          <div id="grid82" style={{ fontSize: "1vw" }}></div>
-          <div id="grid83" style={{ fontSize: "1vw" }}></div>
-          <div id="grid84" style={{ fontSize: "1vw" }}></div>
-          <div id="grid85" style={{ fontSize: "1vw" }}></div>
-          <div id="grid86" style={{ fontSize: "1vw" }}></div>
-          <div id="grid87" style={{ fontSize: "1vw" }}></div>
-          <div id="grid88" style={{ fontSize: "1vw" }}></div>
-          <div id="grid89" style={{ fontSize: "1vw" }}></div>
-          <div id="grid90" style={{ fontSize: "1vw" }}></div>
-          <div id="grid91" style={{ fontSize: "1vw" }}></div>
-          <div id="grid92" style={{ fontSize: "1vw" }}></div>
-          <div id="grid93" style={{ fontSize: "1vw" }}></div>
-          <div id="grid94" style={{ fontSize: "1vw" }}></div>
-          <div id="grid95" style={{ fontSize: "1vw" }}></div>
-          <div id="grid96" style={{ fontSize: "1vw" }}></div>
-          <div id="grid97" style={{ fontSize: "1vw" }}></div>
-          <div id="grid98" style={{ fontSize: "1vw" }}></div>
-          <div id="grid99" style={{ fontSize: "1vw" }}></div>
-          <div id="grid100" style={{ fontSize: "1vw" }}></div>
+          <div id="grid77" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid78" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid79" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid80" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid81" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid82" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid83" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid84" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid85" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid86" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div
-            id="community-cards"
-            className="flex flex-row text-neutral-content justify-center items-end"
+            id="call-button-container"
+            className="border flex flex-row text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
           >
             <button
-              id="fold"
-              className="btn btn-primary text-neutral-content text-center font-bolder"
-              style={{ height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              id="call-button"
+              className="border btn btn-primary text-neutral-content text-center font-bolder"
+              style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              visibility={betButtonVisibility}
+              onClick={() => handleBet()}
+            >
+              BET
+            </button>
+          </div>
+          {/* <div id="grid87" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
+          <div id="grid88" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid89" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div
+            id="check-button-container"
+            className="border flex flex-row text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
+          >
+            <button
+              id="check-button"
+              className="border btn btn-primary text-neutral-content text-center font-bolder"
+              style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              visibility={checkButtonVisibility}
+              onClick={() => handleCheck()}
+            >
+              CHECK
+            </button>
+          </div>
+          {/* <div id="grid90" className="border" style={{width: "9.1vw", height: "5.11vw", fontSize: "1vw" }}></div> */}
+          <div id="grid91" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid92" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid93" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid94" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid95" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid96" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid97" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div
+            id="call-button-container"
+            className="border flex flex-row text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
+          >
+            <button
+              id="call-button"
+              className="border btn btn-primary text-neutral-content text-center font-bolder"
+              style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              onClick={() => handleCall()}
+            >
+              CALL
+            </button>
+          </div>
+          {/* <div id="grid98" className="border" style={{width: "9.1vw", height: "5.11vw", fontSize: "1vw" }}></div> */}
+          <div id="grid99" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid100" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div
+            id="fold-button-container"
+            className="border flex flex-row text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
+          >
+            <button
+              id="fold-button"
+              className="border btn btn-primary text-neutral-content text-center font-bolder"
+              style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              visibility={foldButtonVisibility}
+              onClick={() => handleFold()}
             >
               FOLD
             </button>
           </div>
           {/* <div id="grid101" style={{fontSize: '1vw'}}></div> */}
-          <div id="" className="flex justify-end items-start">
+          <div id="" className="border flex justify-end items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
-              className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
+              className="border bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
               style={{ fontSize: "1vw", padding: "0.2vw" }}
             >
               {seatLabels.seat4Name}
             </div>
           </div>
           {/* <div id="grid102" style={{fontSize: '1vw'}}></div> */}
-          <div id="grid103" style={{ fontSize: "1vw" }}></div>
-          <div id="grid104" style={{ fontSize: "1vw" }}></div>
-          <div id="grid105" style={{ fontSize: "1vw" }}></div>
-          <div id="grid106" style={{ fontSize: "1vw" }}></div>
-          <div id="grid107" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-start items-start">
+          <div id="grid103" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid104" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid105" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid106" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid107" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="" className="border flex justify-start items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
-              className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
+              className="border bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
               style={{ fontSize: "1vw", padding: "0.2vw" }}
             >
               {seatLabels.seat5Name}
@@ -538,45 +794,46 @@ export default function PokerTable() {
           </div>
           {/* <div id="grid108" style={{fontSize: '1vw'}}>108</div> */}
           <div
-            id="community-cards"
-            className="flex flex-row text-neutral-content justify-center items-end"
+            id="raise-button-container"
+            className="border flex flex-row text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
           >
             <button
-              id="action"
-              className="btn btn-primary text-neutral-content text-center font-bolder"
-              style={{ height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
-              onClick={handleActionClick}
+              id="raise-button"
+              className="border btn btn-primary text-neutral-content text-center font-bolder"
+              style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              visibility={raiseButtonVisibility}
+              onClick={() => handleRaise()}
             >
-              ACTION
+              RAISE
             </button>
           </div>
           {/* <div id="grid109" style={{fontSize: '1vw'}}>109</div> */}
-          <div id="grid110" style={{ fontSize: "1vw" }}></div>
-          <div id="grid111" style={{ fontSize: "1vw" }}></div>
-          <div id="grid112" style={{ fontSize: "1vw" }}></div>
-          <div id="grid113" style={{ fontSize: "1vw" }}></div>
-          <div id="grid114" style={{ fontSize: "1vw" }}></div>
-          <div id="" className="flex justify-start items-start">
+          <div id="grid110" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid111" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid112" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid113" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid114" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="" className="border flex justify-start items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
-              className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
+              className="border bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
               style={{ fontSize: "1vw", padding: "0.2vw" }}
             >
               {seatLabels.seat8Name}
             </div>
           </div>
           {/* <div id="grid115" style={{fontSize: '1vw'}}>115</div> */}
-          <div id="" className="flex justify-center items-start">
+          <div id="" className="border flex justify-center items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
-              className="bg-secondary text-secondary-content text-center text-xl font-bold rounded-box"
+              className="border bg-secondary text-secondary-content text-center text-xl font-bold rounded-box"
               style={{ fontSize: "1vw", padding: "0.2vw" }}
             >
               {seatLabels.seat1Name}
             </div>
           </div>
           {/* <div id="grid116" style={{fontSize: '1vw'}}>116</div> */}
-          <div id="" className="flex justify-end items-start">
+          <div id="" className="border flex justify-end items-start" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
               id="grid17"
               className="bg-neutral border border-neutral-content text-neutral-content text-center text-xl font-bold rounded-box"
@@ -586,10 +843,28 @@ export default function PokerTable() {
             </div>
           </div>
           {/* <div id="grid117" style={{fontSize: '1vw'}}>117</div> */}
-          <div id="grid118" style={{ fontSize: "1vw" }}></div>
-          <div id="grid119" style={{ fontSize: "1vw" }}></div>
-          <div id="grid120" style={{ fontSize: "1vw" }}></div>
-          <div id="grid121" style={{ fontSize: "1vw" }}></div>
+          <div id="grid118" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid119" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div
+            id="amount-container"
+            className="border flex text-neutral-content justify-center items-center" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
+          >
+            <ul>
+            <li className="w-full ">AMOUNT</li>
+            <input
+              id="bet-amount"
+              className="border bg-neutral text-neutral-content text-left font-bolder"
+              type='number'
+              style={{ width: "9vw", height: "2.25vw", fontSize: "1.25vw", padding: "0.1vw" }}
+              visibility={'visible'}
+              placeholder="$0.00"
+              onChange={(e) => setCurrentAmount(e.target.value)}
+            >
+            </input>
+            </ul>
+          </div>
+          <div id="grid120" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          <div id="grid121" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
         </div>
       </div>
     </div>
