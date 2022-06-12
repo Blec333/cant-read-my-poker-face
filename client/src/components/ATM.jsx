@@ -10,9 +10,10 @@ export default function ATM(user) {
 
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount ] = useState(0);
-  // const [sumerian, setSumerian ] = useState(0);
+  const [newAccount, setNewAccount] = useState(user.account);
 
   const [state, dispatch]= useCasinoContext();
+  const newAmount = user.account-amount
 
     function resetval(){
       if(showModal === true){
@@ -27,14 +28,16 @@ export default function ATM(user) {
     const handleIncrease = (num) =>{
       setAmount(amount + num)
     };
+
+    function handleNewAccount(){
+      setNewAccount(newAmount)
+    }
     
     
     let walletAmount =[];
     const handleWithdraw = async () =>{   
-      // setSumerian(amount);
-      const newAmount = user.account-amount
       walletAmount.push(amount) 
-      // console.log(newAmount) 
+      handleNewAccount();
       dispatch({
         type: UPDATE_CURRENT_PLAYERS_WALLET,
         currentWallet: walletAmount,
@@ -49,7 +52,6 @@ export default function ATM(user) {
         console.log(err)
       }
     }
-    // useEffect(()=>{}, [sumerian])
     
 
   return (
@@ -90,7 +92,7 @@ export default function ATM(user) {
                         name="price"
                         readOnly
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                        placeholder= {user.account}
+                        placeholder= {newAccount}
                         />
                     </div>
                 </div>    

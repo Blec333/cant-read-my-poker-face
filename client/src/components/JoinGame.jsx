@@ -4,11 +4,12 @@ import { useMutation } from '@apollo/client';
 import { useQuery } from "@apollo/client";
 import { 
     ADD_GAME,  
-    ADD_GAME_TO_PLAYER, 
-    ADD_PLAYER_TO_GAME, 
-    REMOVE_PLAYER_FROM_GAME 
+    // ADD_GAME_TO_PLAYER, 
+    // ADD_PLAYER_TO_GAME, 
+    // REMOVE_PLAYER_FROM_GAME 
 } from "../utils/mutations";
 import { QUERY_GAMES } from "../utils/queries";
+import { QUERY_SINGLE_GAME } from "../utils/queries";
 import { useCasinoContext } from "../utils/GlobalState";
 import Gamelist from "./GameList";
 import  Auth  from "../utils/auth";
@@ -18,32 +19,19 @@ import { UPDATE_GAMES } from "../utils/actions";
 export default function JoinGame() {
 
   const [addGame] = useMutation(ADD_GAME);
-  const [addGameToPlayer] = useMutation(ADD_GAME_TO_PLAYER);
-  const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
-  const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
+  // const [addGameToPlayer] = useMutation(ADD_GAME_TO_PLAYER);
+  // const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
+  // const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
   
   const [showModal, setShowModal] = useState(false);
   const [showForum , setForum ] = useState(false);
-  const [getId , setId ] = useState('');  
+  const [showError, setError] = useState(false)
   const [nameState, setName] = useState('');
   const [state, dispatch] = useCasinoContext();
   const { currentGame } =state;
 
   const { loading, data } = useQuery(QUERY_GAMES);
   const games = data?.games || []
-
-  
-  // const {loading, error, data } = useQuery(QUERY_SINGLE_GAME,{
-  //     variables:{ gameId: "62a415b922f1ee3c9a606452"}
-  //   });
-    // const singleGame = data?.game || {}
-    
-    //  const  handelGame = getGame({
-    //     variables:{
-    //       gameId: "62a415b922f1ee3c9a606452"
-  
-    //     },
-    //   })
 
     useEffect(()=>{
       if(data){
@@ -54,58 +42,43 @@ export default function JoinGame() {
       }
     }, [data, dispatch]);
 
-    function showGames(){
-      if(!currentGame){
-        return state.games
-      };
-    };
-
     function showModals(){
       if(showModal === true){
         setShowModal(false);
         setForum(false)
       }else if(showModal === false){
         setShowModal(true);
+      }
     }
-  }
     const handleName = async (event)=>{
-        setName(event.target.value);
+      setName(event.target.value);
     
     }
-    
+        
     const handleAddGame = async () =>{
+      if(!nameState.length){
+        setError(true);
+      }
       try{
-       const { data }= await addGame({
+        const { data }= await addGame({
           variables:{
             gameName: nameState.trim(),
             // winner: 'test',
             playerLimit: 6,
             gameType: 'poker',
             playerId: Auth.getProfile().data._id
-          },
-          
+          },         
         });
         let gameId = data.addGame._id
         // eslint-disable-next-line no-restricted-globals
-        location.pathname =`/game/${gameId}`
-        // console.log(data.addGame._id);
-        // sessionStorage.setItem('gameId', data.addGame._id)       
-        // console.log(game.data.addGame._id)
-        // console.log(gameId)
-        // console.log(data)
-        if(!nameState.length){
-          ErrorText();
-          }
+        const path = location.pathname
+        // eslint-disable-next-line no-restricted-globals
+        location.replace(`${path}game/${gameId}`)
       }catch(error){
         console.log(error)
-      }
-      //  gameId = sessionStorage.getItem('gameId');
-    }
-
-    const handleId =  async (event) => {
-      setId(event.target.value);
-    }
-
+      };
+    };
+    
     function ErrorText(){
       return(
         <div>
@@ -137,6 +110,9 @@ export default function JoinGame() {
                   <h3 className="text-3xl font-semibold">
                     Join Table
                   </h3>
+            {showError ?(
+              <p className="text-red-500">Please enter a name</p>
+            ):null}
                 </div>
                 {/*body*/}
                 <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
@@ -147,19 +123,10 @@ export default function JoinGame() {
                       placeholder="Enter Game Name" 
                       
                 />
-                <div className="relative p-6 flex-auto">
-         
-                  <p className="text-red-500">Please enter a name</p>
-               
+                <div className="relative p-6 flex-auto">            
                   <button onClick={()=> handleAddGame()} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
                       Solo
-                  </button>
-                
-
-               
-                  
-
-                
+                  </button>                
                 <button onClick={() => setForum(true)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
                   Multiplayer
                 </button>
@@ -178,11 +145,11 @@ export default function JoinGame() {
                       </div>
                       <br/>
                       <div className="flex items-center" >
-                          <Link to= '/game/'>
+
                               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                                   Create Table
                               </button>
-                          </Link>
+                          
                       </div>
                     </form>
                   </>
