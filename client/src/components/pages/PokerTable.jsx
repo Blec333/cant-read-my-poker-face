@@ -33,7 +33,7 @@ export default function PokerTable() {
   let { roomId } = useParams();
   if (roomId === undefined) { roomId = "Main" }
   //USE PARAMS -----------------------------------------------------
-  console.log(roomId)
+  // console.log(roomId)
 
 
   //QUERIES ----------------------------------------------------
@@ -65,17 +65,24 @@ export default function PokerTable() {
   const [playerChipStack, setPlayerChipStack] = useState(0);
   const [computerChipStack, setComputerChipStack] = useState(0);
   const [playerAction, setPlayerAction] = useState(true);
-  const [previousBet, setPreviousBet] = useState(true);
-  const [currentBet, setCurrentBet] = useState(true);
-  const [callButtonValue, setCallButtonValue] = useState(0);
-  const [foldButtonVisibility, setfoldButtonVisibility] = useState("visible");
+  const [previousAmount, setPreviousAmount] = useState(0);
+  const [previousAction, setPreviousAction] = useState('');
+  const [foldButtonVisibility, setFoldButtonVisibility] = useState("visible");
   const [checkButtonVisibility, setCheckButtonVisibility] = useState("visible");
+  const [dealButtonVisibility, setDealButtonVisibility] = useState("visible");
   const [callButtonVisibility, setCallButtonVisibility] = useState("visible");
   const [betButtonVisibility, setBetButtonVisibility] = useState("visible");
   const [raiseButtonVisibility, setRaiseButtonVisibility] = useState("visible");
-  const [playButtonVisibility, setPlayButtonVisibility] = useState("visible");
+  const [player1CardImg1Visibility, setPlayer1CardImg1Visibility] = useState("visible");
+  const [player1CardImg2Visibility, setPlayer1CardImg2Visibility] = useState("visible");
+  const [player2CardImg1Visibility, setPlayer2CardImg1Visibility] = useState("visible");
+  const [player2CardImg2Visibility, setPlayer2CardImg2Visibility] = useState("visible");
 
   const [gameState, setGameState] = useState({
+    player1CardImg1: '',
+    player1CardImg2: '',
+    player2CardImg1: '',
+    player2CardImg2: '',
     riverDesc: facedownCard,
     riverImg: facedownCard,
     turnDesc: facedownCard,
@@ -105,38 +112,26 @@ export default function PokerTable() {
 
   //USE EFFECTS ----------------------------------------------------
   useEffect(() => {
-    console.log(roomId)
-    console.log(playerName)
-    console.log(gameData)
-  }, [gameData]);
-
-  useEffect(() => {
     updateGameDisplay();
-    if(gameRound >2){
-      setBetButtonVisibility()
-      setCallButtonVisibility()
-      setRaiseButtonVisibility()
-      setCheckButtonVisibility()
-      setfoldButtonVisibility()
-    }
+    console.log('game display triggered');
+    console.log(player1CardImg1Visibility);
+    console.log(player1CardImg2Visibility);
+    console.log(gameRound);
   }, [gameRound]);
   //USE EFFECTS ----------------------------------------------------
 
-
-  if (raiseCount === 2 || checkCount === 2 || callCount === 1) {
-    setRaiseCount(0)
-  }
 
 
   //PLAYER DECISION FUNCTIONS---------------------------------------
   const handleFold = () => {
     if (multiplayer === false) {
       if (playerAction === true) {
+        setPreviousAction('fold');
+        setPreviousAmount(0)
+
+        //progess game round
         setFoldTest(true);
-        setComputerChipStack(computerChipStack + potAmount);
-        setPotAmount(0);
         setDealerMessage(`${seatLabels.seat1Name} has folded their hand`);
-        setGameRound(gameRound + 3);
         setPlayerAction(false);
         computerAction();
       }
@@ -147,6 +142,9 @@ export default function PokerTable() {
       if (playerAction === true) {
         setCheckCount(checkCount + 1)
 
+        //progess game round
+        setPreviousAction('check');
+        setPreviousAmount(0);
         setPlayerAction(false);
         setDealerMessage(`${seatLabels.seat1Name} has checked over to ${seatLabels.seat2Name}`);
         computerAction();
@@ -156,101 +154,178 @@ export default function PokerTable() {
   const handleBet = () => {
     if (multiplayer === false) {
       if (playerAction === true) {
+        if (playerChipStack < currentAmount) {
+          setDealerMessage(`I'm afraid you do not have enough to place that bet please consider your holdings.`);
+        } else {
+          setPotAmount(potAmount + currentAmount);
+          setPlayerChipStack(playerChipStack - currentAmount);
 
-        setPotAmount(0);
-        setPlayerAction(false);
-        setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentBet}, action to ${seatLabels.seat2Name}`);
-        computerAction();
+          //progess game round
+          setPreviousAction('bet');
+          setPreviousAmount(currentAmount);
+          setPlayerAction(false);
+          setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentAmount}, action moves to ${seatLabels.seat2Name}`);
+          computerAction();
+        }
       }
     }
   }
-
-  // if(currentBet === true)
-
   const handleCall = () => {
     if (multiplayer === false) {
       if (playerAction === true) {
-        if (playerChipStack > previousBet) {
-          setPlayerChipStack(playerChipStack - previousBet);
-          setPotAmount(potAmount + previousBet);
+        if (playerChipStack > previousAmount) {
+          setPlayerChipStack(playerChipStack - previousAmount);
+          setPotAmount(potAmount + previousAmount);
           setCallCount(callCount + 1);
 
-          setPlayerAction(false);
+          //progess game round
+          setPreviousAction('call');
+          setPreviousAmount(currentAmount)
           setDealerMessage(`${seatLabels.seat1Name} has called ${seatLabels.seat2Name}`);
+          setPlayerAction(false);
+          setPreviousAmount()
           computerAction();
         } else {
           setDealerMessage(`I'm afraid you do not have enough to see your opponent, cards will now be revealed.`);
         }
-    }
+      }
     }
   }
-
   const handleRaise = () => {
     if (multiplayer === false) {
       if (playerAction === true) {
-        if (raiseCount === 2) {
+        if (raiseCount > 1) {
           setDealerMessage("You can no longer raise the pot, please match your opponent or fold.")
         } else {
-          if (currentAmount === 0) {
+          if (currentAmount <= previousAmount) {
+            setDealerMessage("If you wish to raise, your bet must be higher than you opponent's bet.")
+          } else {
+            if (currentAmount < playerChipStack) {
+              setDealerMessage("I'm afraid you cannot cover that amount with your remaining chip stack.")
+            } else {
+              setPlayerChipStack(playerChipStack - currentAmount);
+              setPotAmount(potAmount + currentAmount);
 
+              //progess game round
+              setDealerMessage(`${seatLabels.seat1Name} has raised the pot to ${potAmount} with a bet of $${currentAmount}, action moves to ${seatLabels.seat2Name}`)
+              setPreviousAction('raise');
+              setPreviousAmount(currentAmount)
+              setPlayerAction(false);
+              setRaiseCount(raiseCount + 1);
+              computerAction();
+            }
           }
-          setPreviousBet()
-          setRaiseCount(raiseCount + 1);
-          computerAction();
         }
       }
-      }
     }
-  
+  }
+
+
 
   //PLAYER DECISION FUNCTIONS---------------------------------------
 
   //COMPUTER DECISION LOGIC ----------------------------------------
-const computerAction = () => {
-  let decision = Math.floor(Math.random()*5);
-  if (decision === 'fold') {
-
-
-        //computer action here
-        setPlayerChipStack(playerChipStack + potAmount);
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
-        setGameRound(gameRound + 1);
-  } else if (decision === 'check') {
-
-
-        //computer action here
+  const computerAction = () => {
+    const delay = (Math.floor((Math.random() * 3) + 1) * 1000);
+    const decision = Math.floor((Math.random() * 5) + 1);
+    const computerBet = Math.random() * (playerChipStack - (currentAmount - (currentAmount / 5))) + (currentAmount - (currentAmount / 5));
+    if (computerBet === undefined) { computerBet = playerChipStack / 2 }
+    const computerRaise = Math.random() * (playerChipStack - currentAmount) + currentAmount;
+    const delayedGameProgression = () => {
+      setTimeout(() => {
         setGameRound(gameRound + 1);
         updateGameDisplay();
         setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} has checked over to ${seatLabels.seat1Name}`);
-  } else if (decision === 'bet') {
-
-
-        //computer action here
-        setComputerChipStack();
-        setGameRound(gameRound + 1);
+      }, delay)
+    }
+    const endOfGame = () => {
+      setTimeout(() => {
+        setGameRound(gameRound + 4);
         updateGameDisplay();
         setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} `);
-  } else if (decision === 'call') {
+      }, delay)
+    }
+    const momentOfConsideration = () => setTimeout(() => {}, 1000);
+    if (foldTest === false) {
+      if (playerAction === false) {
+        if (decision === 1) {
+          //fold
+          if (previousAction === 'check') {
+            computerAction();
+          } else {
+          //computer action here
+          setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
+          setPlayerChipStack(playerChipStack + potAmount);
+          setPreviousAmount(0)
+          setPotAmount(0);
+          momentOfConsideration();
+          endOfGame();
+          }
+        } else if (decision === 2) {
+          //check
+          if (previousAction !== 'check' && previousAction !== 'fold') {
+            computerAction();
+          } else {
+            //computer action here
+            setPreviousAmount(0);
+            delayedGameProgression();
+            setDealerMessage(`${seatLabels.seat2Name} has checked over to ${seatLabels.seat1Name}`);
+            momentOfConsideration();
+          }
+        } else if (decision === 3) {
+          //bet
+          if (previousAction === 'call') {
+            computerAction();
+          } else {
 
+          //computer action here
+          setComputerChipStack(computerChipStack - computerBet);
+          setPreviousAmount(computerBet);
+          setPotAmount(potAmount + computerBet);
+          delayedGameProgression();
+          setDealerMessage(`${seatLabels.seat2Name} has placed a bet of $${computerBet}`);
+          momentOfConsideration();
+          }
+        } else if (decision === 4) {
+          //call
+          if (previousAction !== 'bet' && previousAction !== 'raise') {
+            computerAction();
+          } else {
 
-        setComputerChipStack();
-        //computer action here
-        setGameRound(gameRound + 1);
-        updateGameDisplay();
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} `);
-  } else if (decision === 'raise') {
+            //computer action here
+            setComputerChipStack(computerChipStack - currentAmount);
+            setPotAmount(potAmount + currentAmount);
+            delayedGameProgression();
+            setDealerMessage(`${seatLabels.seat2Name} `);
+            momentOfConsideration();
+          }
+        } else if (decision === 5) {
+          //raise
+          if (raiseCount > 1) {
+            computerAction();
+          } else {
+            if (previousAction !== 'bet' && previousAction !== 'raise') {
+              computerAction();
+            } else {
 
-
-        setComputerChipStack();
-        setGameRound(gameRound + 1);
-        updateGameDisplay();
-        setPlayerAction(true);
-        setDealerMessage(`${seatLabels.seat2Name} `);
+            setRaiseCount(raiseCount + 1);
+            setComputerChipStack(computerChipStack - computerRaise);
+            setPreviousAmount(computerRaise);
+            setPotAmount(potAmount + computerRaise);
+            setDealerMessage(`${seatLabels.seat2Name} `);
+            momentOfConsideration();
+            setPlayerAction(true);
+            }
+          }
+        }
       }
+    } else {
+      //The player folded
+      setComputerChipStack(computerChipStack + potAmount);
+      setPotAmount(0);
+      setFoldTest(false);
+      setGameRound(gameRound + 4);
+    }
   }
 
 
@@ -280,6 +355,14 @@ const computerAction = () => {
   //USER ACTION FUNCTIONS FOR STATE ----------------------------
   function updateGameDisplay() {
     if (gameRound === 0) {
+      setDealButtonVisibility('visible');
+      setFoldButtonVisibility('hidden');
+      setCheckButtonVisibility('hidden');
+      setBetButtonVisibility('hidden');
+      setCallButtonVisibility('hidden');
+      setRaiseButtonVisibility('hidden');
+      setPlayer1CardImg1Visibility('hidden');
+      setPlayer1CardImg2Visibility('hidden');
       setGameState({
         ...gameState,
         riverDesc: facedownCard,
@@ -294,20 +377,17 @@ const computerAction = () => {
         flop1Img: facedownCard,
       })
     } else if (gameRound === 1) {
-        setGameState({
-          ...gameState,
-          flop3Desc: state.currentCommunityCardDescriptions[2],
-          flop3Img: state.currentCommunityCardImages[2],
-          flop2Desc: state.currentCommunityCardDescriptions[1],
-          flop2Img: state.currentCommunityCardImages[1],
-          flop1Desc: state.currentCommunityCardDescriptions[0],
-          flop1Img: state.currentCommunityCardImages[0],
-        });
+      setDealButtonVisibility('hidden');
+      setFoldButtonVisibility('visible');
+      setCheckButtonVisibility('visible');
+      setBetButtonVisibility('visible');
+      setCallButtonVisibility('visible');
+      setRaiseButtonVisibility('visible');
+      setPlayer1CardImg1Visibility('visible');
+      setPlayer1CardImg2Visibility('visible');
     } else if (gameRound === 2) {
       setGameState({
         ...gameState,
-        turnDesc: state.currentCommunityCardDescriptions[3],
-        turnImg: state.currentCommunityCardImages[3],
         flop3Desc: state.currentCommunityCardDescriptions[2],
         flop3Img: state.currentCommunityCardImages[2],
         flop2Desc: state.currentCommunityCardDescriptions[1],
@@ -315,25 +395,25 @@ const computerAction = () => {
         flop1Desc: state.currentCommunityCardDescriptions[0],
         flop1Img: state.currentCommunityCardImages[0],
       });
-    } else if (gameRound > 2) {
+    } else if (gameRound === 3) {
+      setGameState({
+        ...gameState,
+        turnDesc: state.currentCommunityCardDescriptions[3],
+        turnImg: state.currentCommunityCardImages[3],
+      });
+    } else if (gameRound > 3) {
+      setDealButtonVisibility('visible');
+      setFoldButtonVisibility('hidden');
+      setCheckButtonVisibility('hidden');
+      setBetButtonVisibility('hidden');
+      setCallButtonVisibility('hidden');
+      setRaiseButtonVisibility('hidden');
       setGameState({
         ...gameState,
         riverDesc: state.currentCommunityCardDescriptions[4],
         riverImg: state.currentCommunityCardImages[4],
-        turnDesc: state.currentCommunityCardDescriptions[3],
-        turnImg: state.currentCommunityCardImages[3],
-        flop3Desc: state.currentCommunityCardDescriptions[2],
-        flop3Img: state.currentCommunityCardImages[2],
-        flop2Desc: state.currentCommunityCardDescriptions[1],
-        flop2Img: state.currentCommunityCardImages[1],
-        flop1Desc: state.currentCommunityCardDescriptions[0],
-        flop1Img: state.currentCommunityCardImages[0],
       });
     }
-  }
-
-  function handleActionClick() {
-    setGameRound(gameRound + 1);
   }
   //USER ACTION FUNCTIONS FOR STATE ----------------------------
 
@@ -449,6 +529,7 @@ const computerAction = () => {
   }
 
   async function initiateGamePlay() {
+    setPlayerChipStack(state.wallet || 1000);
     getBackground();
     setGameRound(0);
     await shuffleDeck(deckCount, numberOfPlayers);
@@ -464,6 +545,8 @@ const computerAction = () => {
       currentWinnerResults: winnerResults,
     });
     updateGameDisplay();
+    setDealerMessage(`Table action to ${seatLabels.seat1Name}`);
+    setDealButtonVisibility('hidden')
   }
   //UPON PAGE LOAD GLOBAL STATE FUNCTIONS ----------------------
 
@@ -500,13 +583,13 @@ const computerAction = () => {
           <div id="grid12" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid13" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid14" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
-          <div id="grid15" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
-          <div id="dealer-message" 
-            className="border bg-white text-black text-center font-bold rounded-br-none rounded-tr-full rounded-tl-full rounded-bl-full" 
-            style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
-            >
-              {dealerMessage}
+          <div id="dealer-message"
+            className="border col-span-2 bg-white text-black text-center font-bold rounded-br-none rounded-tr-full rounded-tl-full rounded-bl-full p-2"
+            style={{ width: "18.2vw", height: "5.07vw", fontSize: "1vw" }}
+          >
+            {dealerMessage}
           </div>
+          {/* <div id="grid15" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
           {/* <div id="grid16" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
           <div id="" className="border flex justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}>
             <div
@@ -573,10 +656,10 @@ const computerAction = () => {
             className="border flex flex-row text-secondary-content justify-center items-center" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
           >
             <button
-              id="play-button"
+              id="deal-button"
               className="border btn btn-secondary text-secondary-content text-center font-bolder"
               style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
-              visibility={playButtonVisibility}
+              visibility={dealButtonVisibility}
               onClick={() => initiateGamePlay()}
             >
               DEAL!
@@ -659,7 +742,7 @@ const computerAction = () => {
           >
             <div id="pc1" className="border" style={{ width: "3.6vw", fontSize: "1vw" }}>
               <img
-                style={{ fontSize: "1vw" }}
+                style={{visibility: {player1CardImg1Visibility}, fontSize: "1vw" }}
                 title={state.currentPlayerCardDescriptions[0]}
                 alt={state.currentPlayerCardDescriptions[0]}
                 src={state.currentPlayerCardImages[0]}
@@ -667,7 +750,7 @@ const computerAction = () => {
             </div>
             <div id="pc2" className="border" style={{ width: "3.6vw", fontSize: "1vw" }}>
               <img
-                style={{ fontSize: "1vw" }}
+                style={{visibility: {player1CardImg2Visibility}, fontSize: "1vw" }}
                 title={state.currentPlayerCardDescriptions[1]}
                 alt={state.currentPlayerCardDescriptions[1]}
                 src={state.currentPlayerCardImages[1]}
@@ -745,6 +828,7 @@ const computerAction = () => {
               id="call-button"
               className="border btn btn-primary text-neutral-content text-center font-bolder"
               style={{ width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
+              visibility={callButtonVisibility}
               onClick={() => handleCall()}
             >
               CALL
@@ -850,17 +934,17 @@ const computerAction = () => {
             className="border flex text-neutral-content justify-center items-center" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
           >
             <ul>
-            <li className="w-full ">AMOUNT</li>
-            <input
-              id="bet-amount"
-              className="border bg-neutral text-neutral-content text-left font-bolder"
-              type='number'
-              style={{ width: "9vw", height: "2.25vw", fontSize: "1.25vw", padding: "0.1vw" }}
-              visibility={'visible'}
-              placeholder="$0.00"
-              onChange={(e) => setCurrentAmount(e.target.value)}
-            >
-            </input>
+              <li className="w-full ">AMOUNT</li>
+              <input
+                id="bet-amount"
+                className="border bg-neutral text-neutral-content text-left font-bolder"
+                type='number'
+                style={{ width: "9vw", height: "2.25vw", fontSize: "1.25vw", padding: "0.1vw" }}
+                visibility={'visible'}
+                placeholder="$0.00"
+                onChange={(e) => setCurrentAmount(e.target.value)}
+              >
+              </input>
             </ul>
           </div>
           <div id="grid120" className="border" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
@@ -870,6 +954,7 @@ const computerAction = () => {
     </div>
   );
 }
+
 
 //     {/* <div>
 //       <h1>Poker Table</h1>
