@@ -37,8 +37,8 @@ export default function PokerTable() {
   //GLOBAL VARIABLES -------------------------------------------
   let multiplayer = false;
   const firstUpdate = useRef(true);
-  let fallBackChipStack = 20000;
-  let defaultComputerChipStack = 20000;
+  let fallBackChipStack = 1000000;
+  let defaultComputerChipStack = 1000000;
   let numberOfPlayers = 2;
   let bgPoker = onePlayer;
   let deckCount = 1;
@@ -49,8 +49,10 @@ export default function PokerTable() {
   let deal;
   let communityCardCodes;
   let playerCardCodes = "";
-  let playerResults = [];
-  let winnerResults = [];
+  let varPlayerResults = [];
+  let varWinnerResults = [];
+  let winner;
+  let winnerString;
   let varGameRound
   let varCurrentAmount;
   let varPotAmount;
@@ -111,6 +113,7 @@ export default function PokerTable() {
   const [playerAction, setPlayerAction] = useState(true);
   const [previousAmount, setPreviousAmount] = useState(0);
   const [previousAction, setPreviousAction] = useState('');
+  const [winnerResults, setWinnerResults] = useState('');
 
 
   const [potVisibility, setPotVisibility] = useState("hidden");
@@ -163,16 +166,6 @@ export default function PokerTable() {
     console.log('gameRound change trigger to updateGameDisplay on useEffect');
     console.log('game round: ' + gameRound);
   }, [gameRound]);
-
-  // useEffect(() => {
-  //   if (firstUpdate.current) {
-  //     firstUpdate.current = false;
-  //     return;
-  //   } else {
-  //     computerAction();
-  //   }
-  //   console.log('computer action trigger on useEffect');
-  // }, [computerActionCallback]);
   //USE EFFECTS ----------------------------------------------------
 
 
@@ -190,9 +183,9 @@ export default function PokerTable() {
 
         //progess game round
         varFoldTest = true;
-        setDealerMessage(`${seatLabels.seat1Name} has folded their hand`);
         varPlayerAction = false;
-        computerAction();
+        // setWinnerResults(`${seatLabels.seat1Name} has folded, ${seatLabels.seat2Name} is our winner!`);
+        endOfGame();
       }
     }
   }
@@ -209,7 +202,7 @@ export default function PokerTable() {
         varPreviousAmount = 0;
         varCurrentAmount = 0;
         varPlayerAction = false;
-        setDealerMessage(`${seatLabels.seat1Name} has checked over to ${seatLabels.seat2Name}`);
+        // setDealerMessage(`${seatLabels.seat1Name} has checked over to ${seatLabels.seat2Name}`);
         computerAction();
       }
     }
@@ -219,11 +212,12 @@ export default function PokerTable() {
     varPlayerAction = playerAction;
     varPreviousAmount = previousAmount;
     varCurrentAmount = currentAmount;
-    console.log(currentAmount)
     if (multiplayer === false && gameRound < 4) {
       if (playerAction === true) {
         if (playerChipStack < currentAmount) {
           setDealerMessage(`I'm afraid you do not have enough to place that bet please consider your holdings.`);
+        } else if (currentAmount < previousAmount && previousAction === 'raise') {
+          setDealerMessage(`I'm afraid that won't be enought to match a raise of $${previousAmount}, I'll need you to reconsider your bet.`);
         } else if (currentAmount > 0) {
           varPotAmount = potAmount + currentAmount;
           setPlayerChipStack(playerChipStack - currentAmount);
@@ -233,7 +227,7 @@ export default function PokerTable() {
           varPreviousAction = 'bet';
           varPreviousAmount = currentAmount;
           varPlayerAction = false;
-          setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentAmount}, action moves to ${seatLabels.seat2Name}`);
+          // setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentAmount}, action moves to ${seatLabels.seat2Name}`);
           computerAction();
         }
       }
@@ -303,7 +297,7 @@ export default function PokerTable() {
                 varPreviousAction = 'raise';
                 varPreviousAmount = varCurrentAmount;
                 varPlayerAction = false;
-                setDealerMessage(`${seatLabels.seat1Name} has raised the pot to ${potAmount + varCurrentAmount} with a bet of $${varCurrentAmount}, action moves to ${seatLabels.seat2Name}`)
+                // setDealerMessage(`${seatLabels.seat1Name} has raised the pot to ${potAmount + varCurrentAmount} with a bet of $${varCurrentAmount}, action moves to ${seatLabels.seat2Name}`)
                 computerAction();
               }
             }
@@ -315,7 +309,17 @@ export default function PokerTable() {
 
 
   //PLAYER DECISION FUNCTIONS---------------------------------------
-
+    let delay = 2;
+    const endOfGame = () => {
+        console.log('endofGame triggered');
+        setPlayerAction(true);
+        dispatch({
+          type: UPDATE_CURRENT_PLAYERS_WALLET,
+          currentWallet: [playerChipStack],
+        });
+        setGameRound(gameRound + 4);
+        varGameRound = gameRound + 4;
+      }
   //COMPUTER DECISION LOGIC ----------------------------------------
   const computerAction = () => {
     console.log('computerAction function initiated');
@@ -334,31 +338,11 @@ export default function PokerTable() {
     let computerBet = Math.floor(Math.random() * (computersUpperLimit - varCurrentAmount) + varCurrentAmount);
     let computerRaise = Math.floor(Math.random() * (computersUpperLimit - varCurrentAmount) + varCurrentAmount);
     console.log('made it past the calcs');
-    const delayedGameProgression = () => setInterval(function () {
-      delay--;
-      if (delay === 0) {
-        clearInterval(delayedGameProgression);
-      } else if (delay === 1) {
+    const gameProgression = () => {
         setGameRound(gameRound + 1);
         setPlayerAction(true);
-        console.log('delay game progression triggered');
+        console.log('game progression triggered');
       }
-    }, 1);
-    const endOfGame = () => setInterval(function () {
-      delay--;
-      if (delay === 0) {
-        clearInterval(endOfGame);
-      } else if (delay === 1) {
-        console.log('endofGame triggered');
-        setGameRound(gameRound + 5);
-        varGameRound = gameRound + 5;
-        setPlayerAction(true);
-        dispatch({
-          type: UPDATE_CURRENT_PLAYERS_WALLET,
-          currentWallet: [playerChipStack],
-        });
-      }
-    }, 1);
     console.log('made it past the timers');
     if (varFoldTest === false) {
       console.log('passed the fold test');
@@ -374,10 +358,12 @@ export default function PokerTable() {
             computerAction();
           } else {
             //computer action here
+            console.log(seatLabels.seat1Name);
+            console.log(seatLabels.seat2Name);
+            setWinnerResults(`${seatLabels.seat2Name} has folded, ${seatLabels.seat1Name} is our winner!`);
             console.log('computer actually folded');
             setPlayerChipStack(playerChipStack + varPotAmount);
             endOfGame();
-            setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
           }
         } else if (decision === 2) {
           //check
@@ -387,11 +373,10 @@ export default function PokerTable() {
             // setComputerActionCallback(computerActionCallback + 1);
             computerAction();
           } else {
-
             //computer action here
             console.log('computer actually checked');
             setPreviousAmount(0);
-            delayedGameProgression();
+            gameProgression();
             setDealerMessage(`${seatLabels.seat2Name} has checked over to ${seatLabels.seat1Name}`);
           }
         } else if (decision === 3) {
@@ -402,13 +387,12 @@ export default function PokerTable() {
             // setComputerActionCallback(computerActionCallback + 1);
             computerAction();
           } else {
-
             //computer action here
             console.log('computer actually bet');
             setPreviousAmount(computerBet);
             setComputerChipStack(computerChipStack - computerBet);
             setPotAmount(+varPotAmount + computerBet);
-            delayedGameProgression();
+            gameProgression();
             setDealerMessage(`${seatLabels.seat2Name} has placed a bet of $${computerBet}`);
           }
         } else if (decision === 4) {
@@ -419,13 +403,12 @@ export default function PokerTable() {
             // setComputerActionCallback(computerActionCallback + 1);
             computerAction();
           } else {
-
             //computer action here
             console.log('computer actually called');
             setPreviousAmount(varCurrentAmount);
             setComputerChipStack(computerChipStack - varCurrentAmount);
             setPotAmount(+varPotAmount + varCurrentAmount);
-            delayedGameProgression();
+            gameProgression();
             setDealerMessage(`${seatLabels.seat2Name} calls ${seatLabels.seat1Name} at $${varCurrentAmount}.`);
           }
         } else if (decision === 5) {
@@ -441,9 +424,9 @@ export default function PokerTable() {
               // setComputerActionCallback(computerActionCallback + 1);
               computerAction();
             } else {
-
               console.log('computer actually raised');
               //computer action here
+              setPreviousAction('raise');
               setRaiseCount(varRaiseCount + 1);
               setComputerChipStack(computerChipStack - computerRaise);
               setPreviousAmount(computerRaise);
@@ -499,6 +482,7 @@ export default function PokerTable() {
         flop1Img: facedownCard,
       })
     } else if (gameRound === 1) {
+      setPreviousAction('');
       setGameState({
         ...gameState,
         riverDesc: facedownCard,
@@ -513,6 +497,7 @@ export default function PokerTable() {
         flop1Img: state.currentCommunityCardImages[0],
       });
     } else if (gameRound === 2) {
+      setPreviousAction('');
       setGameState({
         ...gameState,
         riverDesc: facedownCard,
@@ -527,6 +512,7 @@ export default function PokerTable() {
         flop1Img: state.currentCommunityCardImages[0],
       });
     } else if (gameRound === 3) {
+      setPreviousAction('');
       setGameState({
         ...gameState,
         riverDesc: state.currentCommunityCardDescriptions[4],
@@ -541,6 +527,8 @@ export default function PokerTable() {
         flop1Img: state.currentCommunityCardImages[0],
       });
     } else if (gameRound === 4) {
+      setDealerMessage(`${winnerResults}`);
+      setGameRound(5)
     }
   }
 
@@ -632,13 +620,20 @@ export default function PokerTable() {
   async function determineWinner(communityCardCodes, playerCardCodes) {
     let gameURL = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCardCodes}${playerCardCodes}`;
     await axios.get(gameURL).then(function (res) {
-      playerResults = Object.values(res.data.players).map(function (el) {
+      varPlayerResults = Object.values(res.data.players).map(function (el) {
         return el.result;
       });
-      winnerResults = Object.values(res.data.winners).map(function (el) {
+      varWinnerResults = Object.values(res.data.winners).map(function (el) {
         return el.result;
       });
       // console.log("Winner has been determined");
+      if (varWinnerResults[0] === varPlayerResults[0]) {
+        winner = seatLabels.seat1Name;
+      } else {
+        winner = seatLabels.seat2Name;
+      }
+      winnerString = `We have a winner, with ${varWinnerResults[0]}! Congratulations ${winner}`
+      setWinnerResults(winnerString);
       return res;
     });
   }
@@ -655,8 +650,8 @@ export default function PokerTable() {
       currentPlayerCardDescriptions: playerCardDescriptions,
       currentCommunityCardImages: communityCardImages,
       currentCommunityCardDescriptions: communityCardDescriptions,
-      currentPlayerResults: playerResults,
-      currentWinnerResults: winnerResults,
+      currentPlayerResults: varPlayerResults,
+      currentWinnerResults: varWinnerResults,
     });
     updateGameDisplay();
     setDealerMessage(`Table action to ${seatLabels.seat1Name}`);
