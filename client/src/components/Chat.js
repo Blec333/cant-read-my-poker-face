@@ -11,10 +11,10 @@
 // let playerName = props.playerName
 // let roomId = props.roomId
 
-//   const [statePlayerName, setName] = useState("");
-//   const [stateRoomId, setRoom] = useState("");
-//   const [message, setMessage] = useState("");
-//   const [messages, setMessages] = useState([]);
+  // const [statePlayerName, setName] = useState("");
+  // const [stateRoomId, setRoom] = useState("");
+  // const [message, setMessage] = useState("");
+  // const [messages, setMessages] = useState([]);
 
 //   // const ENDPOINT = "http://localhost:3001";
 //   // const socket = io(ENDPOINT);
@@ -24,40 +24,35 @@
 
 
 //   useEffect(() => {
-//     socket.on('time',function(toTimeString){
-//       console.log('worked') 
-//     })
-    
-    
-//     //      socket = io("http://localhost:3001/", {
-//     //   transports: ["websocket"]
-//     // });
-//     // socket = io("http://localhost:3001/",{
-//     //   withCredentials: true,
-//     //   transportOptions: {
-//     //     polling: {
-//     //       extraHeaders: {
-//     //         "my-custom-header": "abcde"
-//     //     }
-//     //   }
-//     // }
-//     // });
-//     setRoom(roomId);
-//     setName(playerName);
-//     socket.emit("join", {playerName, roomId});
-//     socket.on("time", () => {
-//       console.log("timed ping");
-//     });
-//   }, []);
+//      socket = io("http://localhost:3001/", {
+//   transports: ["websocket"]
+// });
+    // socket = io("http://localhost:3001/",{
+    //   withCredentials: true,
+    //   transportOptions: {
+    //     polling: {
+    //       extraHeaders: {
+    //         "my-custom-header": "abcde"
+    //     }
+    //   }
+    // }
+    // });
+    // setRoom(roomId);
+    // setName(playerName);
+  //   socket.emit("join", {playerName, roomId});
+  //   socket.on("time", () => {
+  //     console.log("timed ping");
+  //   });
+  // }, []);
 
-//   useEffect(() => {
-//     socket.on("message", (user, messages) => {
-//       setMessages(messages);
-//     });
-//   }, []);
+  // useEffect(() => {
+  //   socket.on("message", (user, messages) => {
+  //     setMessages(messages);
+  //   });
+  // }, []);
 
-//   useEffect(() => {
-//   }, []);
+  // useEffect(() => {
+  // }, []);
 
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
