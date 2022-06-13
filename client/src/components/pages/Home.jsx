@@ -1,4 +1,7 @@
 import React from "react";
+// import { motion } from "framer-motion";
+// import Loader from "../Loader";
+
 import { Link } from "react-router-dom";
 import Login from "./Login";
 import CasinoContainer from "../CasinoContainer";
@@ -6,29 +9,60 @@ import CasinoContainer from "../CasinoContainer";
 export default function Home({ currentPage, handlePageChange }) {
   const login = "Login";
 
+  // const loaderVariants = {
+  //   animationOne: {
+  //     x: [-20, 20],
+  //     y: [0, -30],
+  //     transition: {
+  //       x: {
+  //         yoyo: Infinity,
+  //         duration: 0.5,
+  //       },
+  //       y: {
+  //         yoyo: Infinity,
+  //         duration: 0.25,
+  //       },
+  //     },
+  //   },
+  // };
+
+  // const Loader = () => {
+  //   return (
+  //     <>
+  //       {/* <motion.div className="loader">
+  //         variants={loaderVariants}
+  //         animate="animationOne"
+  //       </motion.div> */}
+  //     </>
+  //   );
+  // };
+
   return (
-    <div
-      className="flex justify-center items-center w-screen m-0 p-0"
-      style={{ height: "60vw", aspectRatio: 2 / 1 }}
-    >
-      <img
-        className="absolute w-full h-auto -z-10"
-        src="https://t3.ftcdn.net/jpg/04/96/77/34/360_F_496773440_LB7PaykdXR2IuouiWzF0EfWfEJBHHXwz.jpg"
-        alt="casino"
-      />
+    <>
       <div
-        className="flex justify-center items-center glass bg-primary rounded-box text-primary-content z-20"
-        style={{ width: "20vw", height: "7.5vw" }}
+        className="flex justify-center items-center w-screen m-0 p-0"
+        style={{ height: "60vw", aspectRatio: 2 / 1 }}
       >
-        <a
-          style={{ fontSize: "3vw" }}
-          href="#login"
-          onClick={() => handlePageChange("Login")}
-          className={currentPage === "Login" ? "nav-link active" : "nav-link"}
+        <img
+          className="absolute w-full h-auto -z-10"
+          src="https://t3.ftcdn.net/jpg/04/96/77/34/360_F_496773440_LB7PaykdXR2IuouiWzF0EfWfEJBHHXwz.jpg"
+          alt="casino"
+        />
+        <div
+          className="flex justify-center items-center glass bg-primary rounded-box text-primary-content z-20"
+          style={{ width: "20vw", height: "7.5vw" }}
         >
-          Go to Casino
-        </a>
+          <a
+            style={{ fontSize: "3vw" }}
+            href="#login"
+            onClick={() => handlePageChange("Login")}
+            className={currentPage === "Login" ? "nav-link active" : "nav-link"}
+          >
+            Go to Casino
+          </a>
+          {/* <Loader /> */}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
