@@ -817,7 +817,7 @@ export default function PokerTable() {
           {/* <div id="grid65" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
           <div id="grid66" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid67" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
-          <div id="grid68" style={{fontSize: '1vw'}}></div>
+          <div id="grid68" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid69" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid70" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid71" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
@@ -846,7 +846,7 @@ export default function PokerTable() {
           <div id="grid73" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid74" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid75" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
-          <div id="grid76" style={{fontSize: '1vw'}}></div>
+          <div id="grid76" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid77" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid78" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid79" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
@@ -1034,7 +1034,7 @@ export default function PokerTable() {
               </input>
             </ul>
           </div>
-          <div id="grid120" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
+          {/* <div id="grid120" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div> */}
           <div id="grid121" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
         </div>
       </div>
