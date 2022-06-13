@@ -4,14 +4,14 @@ import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
 import CasinoContainer from "../CasinoContainer";
 import SignUp from "./SignUp";
-
 import Auth from "../../utils/auth";
+import PlayerBoard from "./PlayerBoard";
 
 // const Login = (props) =>
-export default function Login({ nowPage, nextChange }) {
+export default function Login({ currentPage, handlePageChange }) {
   const signup = "Signup";
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const [formState, setFormState] = useState({ playerName: "", password: "" });
   const [login, { error, data }] = useMutation(LOGIN_USER);
@@ -43,16 +43,19 @@ export default function Login({ nowPage, nextChange }) {
         variables: { ...formState },
       });
       Auth.login(data.login.token);
+      await handlePageChange("playerboard")
     } catch (e) {
       console.error(e);
     }
-
+    
     // clear form values
     setFormState({
       playerName: "",
       password: "",
     });
   };
+
+
 
   return (
     <>
@@ -65,13 +68,23 @@ export default function Login({ nowPage, nextChange }) {
           src="https://media.istockphoto.com/vectors/gamblers-arriving-to-casino-cartoon-vector-concept-vector-id1207089252?k=20&m=1207089252&s=612x612&w=0&h=0fbFHECroX5QFf1DL-v3f3U58SwjwWQzPnoARWRBOpM="
           alt="casino"
         />
-        <button
-          className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
-          type="button"
-          onClick={() => setShowModal(true)}
-        >
-          Enter Casino
-        </button>
+        {/* {Auth.loggedIn() ?(
+            <button
+            className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
+            type="button"
+            onClick={() => handlePageChange("playerBoard")}
+          >
+            Enter Casino
+          </button>
+        ):( */}
+          <button
+            className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
+            type="button"
+            onClick={() => setShowModal(true)}
+          >
+            Enter Casino
+          </button>
+        {/* )} */}
         {showModal ? (
           <>
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -80,15 +93,12 @@ export default function Login({ nowPage, nextChange }) {
                   <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                     <h2 className="text-3xl font-semibold">Login</h2>
                   </div>{" "}
-                  {data ? (
-                    <p>
-                      Success! You may now head{" "}
+                  {/* {data ? (
                       <p>
                         Success! You may now head{" "}
-                        <Link to="/">back to the homepage.</Link>
+                        <Link to="/login">back to the homepage.</Link>
                       </p>
-                    </p>
-                  ) : (
+                  ) : ( */}
                     <div className="relative p-6 flex-auto">
                       <form onSubmit={handleFormSubmit}>
                         <input
@@ -109,23 +119,24 @@ export default function Login({ nowPage, nextChange }) {
                         <button
                           className="btn btn-block btn-primary flex justify-center"
                           style={{ cursor: "pointer" }}
-                          type="submit"
+                          // onClick={()=> handlePageChange("playerBoard")}
+                          // type="submit"
                         >
                           Submit
                         </button>
                         <p className="text-sm font-semibold mt-2 pt-1 mb-0">
-                          Don't have an account?
+                          Don't have an account? 
                           <a
                             style={{ fontSize: "" }}
-                            href="#signup"
-                            onClick={() => nextChange("Signup")}
-                            className={
-                              nowPage === "Signup"
-                                ? "nav-link active"
-                                : "nav-link"
-                            }
+                            href="/signup"
+                            onClick={() => handleFormSubmit()}
+                            // className={
+                            //   nowPage === "Signup"
+                            //     ? "nav-link active"
+                            //     : "nav-link"
+                            // }
                           >
-                            Sign Up
+                             Sign Up
                           </a>
                         </p>
                         <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
@@ -139,9 +150,9 @@ export default function Login({ nowPage, nextChange }) {
                         </div>
                       </form>
                     </div>
-                  )}
+                  {/* )} */}
                   {error && (
-                    <div className="my-3 p-3 bg-danger text-white">
+                    <div className="my-3 p-3  text-danger">
                       {error.message}
                     </div>
                   )}

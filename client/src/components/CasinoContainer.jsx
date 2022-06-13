@@ -18,7 +18,7 @@ export default function CasinoContainer() {
       return <Home currentPage={currentPage} handlePageChange={handlePageChange} />;
     }
     if (currentPage === "Login") {
-      return <Login />;
+      return <Login currentPage={currentPage} handlePageChange={handlePageChange}/>;
     }
     if (currentPage === "SignUp") {
       return <SignUp />;

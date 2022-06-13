@@ -10,7 +10,7 @@ import { QUERY_GAMES } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 // const Signup = () =>
-export default function Signup() {
+export default function Signup(handlePageChange) {
   const [showModal, setShowModal] = React.useState(true);
 
   const [formState, setFormState] = useState({
@@ -102,6 +102,15 @@ export default function Signup() {
                           placeholder="******"
                           onChange={handlePasswordChange}
                         />
+                        {data ?(
+                         <button
+                          className="btn btn-block btn-primary"
+                          style={{ cursor: "pointer" }}
+                          type="submit"
+                        >
+                          Submit
+                        </button>
+                        ):(
                         <button
                           className="btn btn-block btn-primary"
                           style={{ cursor: "pointer" }}
@@ -109,6 +118,17 @@ export default function Signup() {
                         >
                           Submit
                         </button>
+
+                        )}
+                        <p className="text-sm font-semibold mt-2 pt-1 mb-0">
+                          already have an account? 
+                          <a
+                            style={{ fontSize: "" }}
+                            href="/login"
+                          >
+                             Sign In
+                          </a>
+                        </p>
                         <div className="relative p-6 flex-auto">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
                             Welcome to the Casino!
@@ -128,8 +148,8 @@ export default function Signup() {
                   )}
 
                   {error && (
-                    <div className="my-3 p-3 bg-danger text-white">
-                      {error.message}
+                    <div className="my-3 p-3 bg-danger text-danger">
+                      <p>Password must be at least 8 characters</p>
                     </div>
                   )}
                 </div>

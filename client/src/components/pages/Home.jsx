@@ -4,7 +4,6 @@ import Login from "./Login";
 import CasinoContainer from "../CasinoContainer";
 
 export default function Home({ currentPage, handlePageChange }) {
-  const login = "Login";
 
   return (
     <div
@@ -20,6 +19,7 @@ export default function Home({ currentPage, handlePageChange }) {
         className="flex justify-center items-center glass bg-primary rounded-box text-primary-content z-20"
         style={{ width: "20vw", height: "7.5vw" }}
       >
+
         <a
           style={{ fontSize: "3vw" }}
           href="#login"

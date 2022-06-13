@@ -52,7 +52,9 @@ export default function ATM(user) {
         console.log(err)
       }
     }
-    
+    useEffect(()=>{
+      console.log(state.currentWallet)
+    },[state])
 
   return (
     <>

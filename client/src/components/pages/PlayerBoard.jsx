@@ -33,12 +33,6 @@ export default function PlayerBoard() {
                 <JoinGame />
               </div>
             </div>
-            {/* <div className="py-12" />
-          <div className="py-12" />
-          <div className="py-12" />
-          <div className="py-12" />
-          <div className="py-12" />
-          <div className="py-11" /> */}
           </div>
         ) : (
           <h1>You need to be loggedIn to see this page</h1>
