@@ -19,7 +19,6 @@ import Login from "./components/pages/Login";
 import "./index.css";
 import HomeChat from "./components/HomeChat";
 import Chat from "./components/Chat";
-import Signup from "./components/pages/SignUp";
 
 import { io } from "socket.io-client";
 let socket;
@@ -88,6 +87,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
+
       {/* Wrap page elements in Router component to keep track of location state */}
       <Router>
         <CasinoProvider>
@@ -99,9 +99,8 @@ const App = () => {
                 {/* Define a route that will take in variable data */}
                 <Route path="/players/:playerId/" element={<PlayerProfile />} />
                 {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
-                <Route path="/game" element={<PokerTable />} />
+                <Route path="/game/:roomId" element={<PokerTable />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
                 {/* <Route path="/homeChat" exact component={HomeChat} />
                 <Route path="/chat" component={Chat} /> */}
               </Routes>
