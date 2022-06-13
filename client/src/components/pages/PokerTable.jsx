@@ -317,8 +317,8 @@ export default function PokerTable() {
           type: UPDATE_CURRENT_PLAYERS_WALLET,
           currentWallet: [playerChipStack],
         });
-        setGameRound(gameRound + 4);
-        varGameRound = gameRound + 4;
+        setGameRound(4);
+        varGameRound = 5;
       }
   //COMPUTER DECISION LOGIC ----------------------------------------
   const computerAction = () => {
@@ -482,6 +482,7 @@ export default function PokerTable() {
         flop1Img: facedownCard,
       })
     } else if (gameRound === 1) {
+      setCurrentAmount(0);
       setPreviousAction('');
       setGameState({
         ...gameState,
@@ -497,6 +498,7 @@ export default function PokerTable() {
         flop1Img: state.currentCommunityCardImages[0],
       });
     } else if (gameRound === 2) {
+      setCurrentAmount(0);
       setPreviousAction('');
       setGameState({
         ...gameState,
@@ -512,6 +514,7 @@ export default function PokerTable() {
         flop1Img: state.currentCommunityCardImages[0],
       });
     } else if (gameRound === 3) {
+      setCurrentAmount(0);
       setPreviousAction('');
       setGameState({
         ...gameState,
@@ -527,6 +530,7 @@ export default function PokerTable() {
         flop1Img: state.currentCommunityCardImages[0],
       });
     } else if (gameRound === 4) {
+      setCurrentAmount(0);
       setDealerMessage(`${winnerResults}`);
       setGameRound(5)
     }
