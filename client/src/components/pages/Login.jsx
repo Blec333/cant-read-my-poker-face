@@ -11,7 +11,7 @@ import PlayerBoard from "./PlayerBoard";
 export default function Login({ currentPage, handlePageChange }) {
   const signup = "Signup";
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = React.useState(false);
 
   const [formState, setFormState] = useState({ playerName: "", password: "" });
   const [login, { error, data }] = useMutation(LOGIN_USER);
@@ -43,11 +43,10 @@ export default function Login({ currentPage, handlePageChange }) {
         variables: { ...formState },
       });
       Auth.login(data.login.token);
-      await handlePageChange("playerboard")
     } catch (e) {
       console.error(e);
     }
-    
+
     // clear form values
     setFormState({
       playerName: "",
@@ -68,7 +67,7 @@ export default function Login({ currentPage, handlePageChange }) {
           src="https://media.istockphoto.com/vectors/gamblers-arriving-to-casino-cartoon-vector-concept-vector-id1207089252?k=20&m=1207089252&s=612x612&w=0&h=0fbFHECroX5QFf1DL-v3f3U58SwjwWQzPnoARWRBOpM="
           alt="casino"
         />
-        {/* {Auth.loggedIn() ?(
+        {Auth.loggedIn() ?(
             <button
             className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
             type="button"
@@ -76,7 +75,7 @@ export default function Login({ currentPage, handlePageChange }) {
           >
             Enter Casino
           </button>
-        ):( */}
+        ):(
           <button
             className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
             type="button"
@@ -84,7 +83,7 @@ export default function Login({ currentPage, handlePageChange }) {
           >
             Enter Casino
           </button>
-        {/* )} */}
+        )}
         {showModal ? (
           <>
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -93,12 +92,12 @@ export default function Login({ currentPage, handlePageChange }) {
                   <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                     <h2 className="text-3xl font-semibold">Login</h2>
                   </div>{" "}
-                  {/* {data ? (
+                  {data ? (
                       <p>
                         Success! You may now head{" "}
-                        <Link to="/login">back to the homepage.</Link>
+                        <Link to="/">back to the homepage.</Link>
                       </p>
-                  ) : ( */}
+                  ) : (
                     <div className="relative p-6 flex-auto">
                       <form onSubmit={handleFormSubmit}>
                         <input
@@ -120,7 +119,7 @@ export default function Login({ currentPage, handlePageChange }) {
                           className="btn btn-block btn-primary flex justify-center"
                           style={{ cursor: "pointer" }}
                           // onClick={()=> handlePageChange("playerBoard")}
-                          // type="submit"
+                          type="submit"
                         >
                           Submit
                         </button>
@@ -129,7 +128,7 @@ export default function Login({ currentPage, handlePageChange }) {
                           <a
                             style={{ fontSize: "" }}
                             href="/signup"
-                            onClick={() => handleFormSubmit()}
+                            // onClick={() => nextChange("Signup")}
                             // className={
                             //   nowPage === "Signup"
                             //     ? "nav-link active"
@@ -150,7 +149,7 @@ export default function Login({ currentPage, handlePageChange }) {
                         </div>
                       </form>
                     </div>
-                  {/* )} */}
+                  )}
                   {error && (
                     <div className="my-3 p-3  text-danger">
                       {error.message}
