@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
@@ -53,6 +54,10 @@ export default function Login({ currentPage, handlePageChange }) {
       password: "",
     });
   };
+
+  function linkSignup(){
+    location.replace("/signup")
+  }
 
 
 
@@ -125,9 +130,9 @@ export default function Login({ currentPage, handlePageChange }) {
                         </button>
                         <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                           Don't have an account? 
-                          <a
+                          <button
                             style={{ fontSize: "" }}
-                            href="/signup"
+                            onClick={()=> linkSignup()}
                             // onClick={() => nextChange("Signup")}
                             // className={
                             //   nowPage === "Signup"
@@ -136,7 +141,7 @@ export default function Login({ currentPage, handlePageChange }) {
                             // }
                           >
                              Sign Up
-                          </a>
+                          </button>
                         </p>
                         <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                           <button

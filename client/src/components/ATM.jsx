@@ -64,8 +64,7 @@ export default function ATM(user) {
         className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
         type="button"
         onClick={() => resetval()}
-      >
-        
+      >        
         ATM
       </button>
       {showModal ? (

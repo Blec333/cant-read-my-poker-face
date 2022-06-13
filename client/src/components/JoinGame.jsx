@@ -79,14 +79,6 @@ export default function JoinGame() {
       };
     };
     
-    function ErrorText(){
-      return(
-        <div>
-          <p className="text-red-500">Please enter a name</p>
-        </div>
-      )
-    }
-    
   return (
     <>
       <div className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20">
