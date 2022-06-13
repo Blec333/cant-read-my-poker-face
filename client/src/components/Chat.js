@@ -9,8 +9,8 @@ const Chat = (props) => {
 let playerName = props.playerName
 let roomId = props.roomId
 
-  const [statePlayerName, setName] = useState("");
-  const [stateRoomId, setRoom] = useState("");
+  // const [statePlayerName, setName] = useState("");
+  // const [stateRoomId, setRoom] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
@@ -21,10 +21,10 @@ let roomId = props.roomId
   // });
 
 
-  useEffect(() => {
-     socket = io("http://localhost:3001/", {
-  transports: ["websocket"]
-});
+//   useEffect(() => {
+//      socket = io("http://localhost:3001/", {
+//   transports: ["websocket"]
+// });
     // socket = io("http://localhost:3001/",{
     //   withCredentials: true,
     //   transportOptions: {
@@ -35,22 +35,22 @@ let roomId = props.roomId
     //   }
     // }
     // });
-    setRoom(roomId);
-    setName(playerName);
-    socket.emit("join", {playerName, roomId});
-    socket.on("time", () => {
-      console.log("timed ping");
-    });
-  }, []);
+    // setRoom(roomId);
+    // setName(playerName);
+  //   socket.emit("join", {playerName, roomId});
+  //   socket.on("time", () => {
+  //     console.log("timed ping");
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    socket.on("message", (user, messages) => {
-      setMessages(messages);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on("message", (user, messages) => {
+  //     setMessages(messages);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-  }, []);
+  // useEffect(() => {
+  // }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
