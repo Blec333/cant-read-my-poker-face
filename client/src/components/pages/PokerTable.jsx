@@ -147,7 +147,7 @@ export default function PokerTable() {
   const [seatLabels, setSeatState] = useState({
     seat0Name: "DEALER",
     seat1Name: Auth.getProfile().data.playerName || "Developer",
-    seat2Name: "Mr. Macintosh",
+    seat2Name: "Callan",
     seat3Name: "PLAYER 3",
     seat4Name: "PLAYER 4",
     seat5Name: "PLAYER 5",
