@@ -1,16 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useCasinoContext } from "../../utils/GlobalState";
-import { Link, useParams } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useParams } from "react-router-dom";
+// import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 
-import { REMOVE_PLAYER_FROM_GAME } from "../../utils/actions";
+import { UPDATE_CURRENT_PLAYERS_WALLET } from "../../utils/actions";
 import { UPDATE_CURRENT_GAME } from "../../utils/actions";
 import { QUERY_ME } from '../../utils/queries';
 import { QUERY_SINGLE_GAME } from "../../utils/queries";
 // import { ADD_PLAYER_TO_GAME } from "../../utils/mutations";
+
 import Auth from "../../utils/auth";
 import Chat from "../Chat";
+import Header from "../Header";
+import Footer from "../Footer";
 
 import onePlayer from "../../assets/img/one-player.jpg";
 import twoPlayers from "../../assets/img/two-players.jpg";
@@ -135,7 +138,7 @@ export default function PokerTable() {
     } else {
       computerAction();
     }
-  }, [computerActionCallback]);
+  }, [computerActionCallback, playerAction]);
   //USE EFFECTS ----------------------------------------------------
 
 
@@ -244,34 +247,39 @@ export default function PokerTable() {
 
   //COMPUTER DECISION LOGIC ----------------------------------------
   const computerAction = () => {
-    const delay = (Math.floor((Math.random() * 3) + 1) * 1000);
+    let delay = (Math.floor((Math.random() * 3) + 1) * 1000);
     console.log(delay);
     const decision = Math.floor((Math.random() * 5) + 1);
-    const computerBet = Math.random() * (playerChipStack - (currentAmount - (currentAmount / 5))) + (currentAmount - (currentAmount / 5));
-    if (computerBet === undefined) { computerBet = playerChipStack / 2 }
-    const computerRaise = Math.random() * (playerChipStack - currentAmount) + currentAmount;
-    const delayedGameProgression = () => {
-      setTimeout(function () {
+    let computerBet = Math.floor(Math.random() * (playerChipStack - (currentAmount - (currentAmount / 5))) + (currentAmount - (currentAmount / 5)));
+    if (computerBet === undefined) { computerBet = Math.floor(playerChipStack / 2) }
+    const computerRaise = Math.floor(Math.random() * (playerChipStack - currentAmount) + currentAmount);
+    const delayedGameProgression = () => setInterval(function () {
+      delay--;
+      if (delay === 0) {
+        clearInterval(delayedGameProgression);
+      } else if (delay === 1) {
         setGameRound(gameRound + 1);
         updateGameDisplay();
         setPlayerAction(true);
-        console.log('game progression triggered')
-        return;
-      }, delay)
-    }
-    const endOfGame = () => {
-      setTimeout(function () {
+        console.log('game progression triggered');
+      }
+    }, 1);
+    const endOfGame = () => setInterval(function () {
+      delay--;
+      if (delay === 0) {
+        clearInterval(endOfGame);
+      } else if (delay === 1) {
         setGameRound(gameRound + 4);
         updateGameDisplay();
         setPlayerAction(true);
-        console.log('endofGame triggered')
+        console.log('endofGame triggered');
         dispatch({
-          type: UPDATE_CURRENT_GAME,
+          type: UPDATE_CURRENT_PLAYERS_WALLET,
           currentWallet: [playerChipStack],
         });
-        return;
-      }, delay)
-    }
+      }
+    }, 1);
+
     const momentOfConsideration = () => setTimeout(() => { return; }, 1000);
     console.log(decision)
     console.log(foldTest)
@@ -592,6 +600,8 @@ export default function PokerTable() {
   //UPON PAGE LOAD GLOBAL STATE FUNCTIONS ----------------------
 
   return (
+    <>
+    <Header />
     <div
       id="poker-container"
       className="flex justify-center w-screen h-[screen-2rem]"
@@ -1039,20 +1049,9 @@ export default function PokerTable() {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
 
 
-//     {/* <div>
-//       <h1>Poker Table</h1>
-//       <div id='chat-window' className="overflow-hidden lg:overflow-auto scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 max-h-96 supports-scrollbars:pr-2 lg:max-h-96">
-//         <ul>
-//           <li>testing</li>
-//         </ul>
-//       </div>
-//       <textarea id='chat-input' className="textarea textarea-primary" placeholder="Message" onclick={emitText}></textarea>
-//       <button id='chat-button' onclick=''>Send</button>
-//       <p></p>
-//     </div> */}
-
-// {/* <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script> */ }
