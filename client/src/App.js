@@ -99,7 +99,7 @@ const App = () => {
                 {/* Define a route that will take in variable data */}
                 <Route path="/players/:playerId/" element={<PlayerProfile />} />
                 {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}
-                <Route path="/game/:roomId" element={<PokerTable />} />
+                <Route path="/game" element={<PokerTable />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 {/* <Route path="/homeChat" exact component={HomeChat} />

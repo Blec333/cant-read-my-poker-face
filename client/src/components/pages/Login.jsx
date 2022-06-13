@@ -132,8 +132,8 @@ export default function Login({ currentPage, handlePageChange }) {
                           Don't have an account? 
                           <button
                             style={{ fontSize: "" }}
-                            onClick={()=> linkSignup()}
-                            // onClick={() => nextChange("Signup")}
+                            // onClick={()=> linkSignup()}
+                            href= ''
                             // className={
                             //   nowPage === "Signup"
                             //     ? "nav-link active"
