@@ -32,10 +32,40 @@ const axios = require("axios");
 
 //BEGINNING OF PRIMARY FUNCTION ==============================================================================
 export default function PokerTable() {
+
+
+  //GLOBAL VARIABLES -------------------------------------------
   let multiplayer = false;
   const firstUpdate = useRef(true);
   let fallBackChipStack = 20000;
   let defaultComputerChipStack = 20000;
+  let numberOfPlayers = 2;
+  let bgPoker = onePlayer;
+  let deckCount = 1;
+  let communityCardImages = [];
+  let communityCardDescriptions = [];
+  let playerCardImages = [];
+  let playerCardDescriptions = [];
+  let deal;
+  let communityCardCodes;
+  let playerCardCodes = "";
+  let playerResults = [];
+  let winnerResults = [];
+  let varCurrentAmount;
+  let varPotAmount;
+  let varRaiseCount;
+  let varCallCount;
+  let varCheckCount;
+  let varFoldTest;
+  let varPlayerChipStack;
+  let varComputerChipStack;
+  let varPlayerAction;
+  let varPreviousAmount;
+  let varPreviousAction;
+  //GLOBAL VARIABLES -------------------------------------------
+
+
+
   //USE PARAMS -----------------------------------------------------
   let { roomId } = useParams();
   if (roomId === undefined) { roomId = "Main" }
@@ -61,20 +91,27 @@ export default function PokerTable() {
 
 
   //USE STATE ------------------------------------------------------
+  const [computerActionCallback, setComputerActionCallback] = useState(0);
+  const [foldTest, setFoldTest] = useState(false);
+
+
+
+
+
   const [dealerMessage, setDealerMessage] = useState('');
   const [gameRound, setGameRound] = useState(0);
-  const [computerActionCallback, setComputerActionCallback] = useState(0);
   const [currentAmount, setCurrentAmount] = useState(0);
   const [potAmount, setPotAmount] = useState(0);
   const [raiseCount, setRaiseCount] = useState(0);
   const [callCount, setCallCount] = useState(0);
   const [checkCount, setCheckCount] = useState(0);
-  const [foldTest, setFoldTest] = useState(false);
   const [playerChipStack, setPlayerChipStack] = useState(state.currentWallet[0] || fallBackChipStack);
   const [computerChipStack, setComputerChipStack] = useState(defaultComputerChipStack);
   const [playerAction, setPlayerAction] = useState(true);
   const [previousAmount, setPreviousAmount] = useState(0);
   const [previousAction, setPreviousAction] = useState('');
+
+
   const [potVisibility, setPotVisibility] = useState("hidden");
   const [foldButtonVisibility, setFoldButtonVisibility] = useState("visible");
   const [checkButtonVisibility, setCheckButtonVisibility] = useState("visible");
@@ -122,13 +159,8 @@ export default function PokerTable() {
   //USE EFFECTS ----------------------------------------------------
   useEffect(() => {
     updateGameDisplay();
-    console.log('game round change trigger');
-    console.log(player1CardImg1Visibility);
-    console.log(player1CardImg2Visibility);
-    console.log(gameRound);
-    console.log(state.currentWallet[0]);
-    console.log(dealButtonVisibility);
-    console.log(potVisibility);
+    console.log('gameRound change trigger to updateGameDisplay on useEffect');
+    console.log('game round: ' + gameRound);
   }, [gameRound]);
 
   useEffect(() => {
@@ -138,7 +170,8 @@ export default function PokerTable() {
     } else {
       computerAction();
     }
-  }, [computerActionCallback, playerAction]);
+    console.log('computer action trigger on useEffect');
+  }, [computerActionCallback]);
   //USE EFFECTS ----------------------------------------------------
 
 
@@ -147,13 +180,13 @@ export default function PokerTable() {
   const handleFold = () => {
     if (multiplayer === false) {
       if (playerAction === true) {
-        setPreviousAction('fold');
-        setPreviousAmount(0)
+        varPreviousAction = 'fold';
+        varPreviousAmount = 0;
 
         //progess game round
-        setFoldTest(true);
+        varFoldTest = true;
         setDealerMessage(`${seatLabels.seat1Name} has folded their hand`);
-        setPlayerAction(false);
+        varPlayerAction = false;
         computerAction();
       }
     }
@@ -162,11 +195,12 @@ export default function PokerTable() {
     if (multiplayer === false) {
       if (playerAction === true) {
         setCheckCount(checkCount + 1)
+        varCheckCount = checkCount + 1;
 
         //progess game round
-        setPreviousAction('check');
-        setPreviousAmount(0);
-        setPlayerAction(false);
+        varPreviousAction = 'check';
+        varPreviousAmount = 0;
+        varPlayerAction = false;
         setDealerMessage(`${seatLabels.seat1Name} has checked over to ${seatLabels.seat2Name}`);
         computerAction();
       }
@@ -179,12 +213,15 @@ export default function PokerTable() {
           setDealerMessage(`I'm afraid you do not have enough to place that bet please consider your holdings.`);
         } else {
           setPotAmount(potAmount + currentAmount);
+          varPotAmount = potAmount + currentAmount;
           setPlayerChipStack(playerChipStack - currentAmount);
+          varPlayerChipStack = playerChipStack - currentAmount;
 
           //progess game round
-          setPreviousAction('bet');
+          varPreviousAction = 'bet';
           setPreviousAmount(currentAmount);
-          setPlayerAction(false);
+          varPreviousAmount = currentAmount;
+          varPlayerAction = false;
           setDealerMessage(`${seatLabels.seat1Name} has placed a bet of ${currentAmount}, action moves to ${seatLabels.seat2Name}`);
           computerAction();
         }
@@ -195,16 +232,19 @@ export default function PokerTable() {
     if (multiplayer === false) {
       if (playerAction === true) {
         if (playerChipStack > previousAmount) {
-          setPlayerChipStack(playerChipStack - previousAmount);
           setPotAmount(potAmount + previousAmount);
-          setCallCount(callCount + 1);
-
+          varPotAmount = potAmount + previousAmount;
+          setPlayerChipStack(playerChipStack - previousAmount);
+          varPlayerChipStack = playerChipStack - previousAmount;
+          
           //progess game round
-          setPreviousAction('call');
-          setPreviousAmount(currentAmount)
+          setCallCount(callCount + 1);
+          varCallCount = callCount + 1;
+          varPreviousAction = 'call';
+          setPreviousAmount(currentAmount);
+          varPreviousAmount = currentAmount;
           setDealerMessage(`${seatLabels.seat1Name} has called ${seatLabels.seat2Name}`);
-          setPlayerAction(false);
-          setPreviousAmount()
+          varPlayerAction = false;
           computerAction();
         } else {
           setDealerMessage(`I'm afraid you do not have enough to see your opponent, cards will now be revealed.`);
@@ -221,18 +261,22 @@ export default function PokerTable() {
           if (currentAmount <= previousAmount) {
             setDealerMessage("If you wish to raise, your bet must be higher than you opponent's bet.")
           } else {
-            if (currentAmount < playerChipStack) {
+            if (currentAmount > playerChipStack) {
               setDealerMessage("I'm afraid you cannot cover that amount with your remaining chip stack.")
             } else {
-              setPlayerChipStack(playerChipStack - currentAmount);
               setPotAmount(potAmount + currentAmount);
+              varPotAmount = potAmount + currentAmount;
+              setPlayerChipStack(playerChipStack - currentAmount);
+              varPlayerChipStack = playerChipStack - currentAmount;
 
               //progess game round
-              setDealerMessage(`${seatLabels.seat1Name} has raised the pot to ${potAmount} with a bet of $${currentAmount}, action moves to ${seatLabels.seat2Name}`)
-              setPreviousAction('raise');
-              setPreviousAmount(currentAmount)
-              setPlayerAction(false);
               setRaiseCount(raiseCount + 1);
+              varRaiseCount = raiseCount + 1;
+              varPreviousAction = 'raise';
+              setPreviousAmount(currentAmount)
+              varPreviousAmount = currentAmount;
+              varPlayerAction = false;
+              setDealerMessage(`${seatLabels.seat1Name} has raised the pot to ${potAmount + currentAmount} with a bet of $${currentAmount}, action moves to ${seatLabels.seat2Name}`)
               computerAction();
             }
           }
@@ -247,12 +291,20 @@ export default function PokerTable() {
 
   //COMPUTER DECISION LOGIC ----------------------------------------
   const computerAction = () => {
-    let delay = (Math.floor((Math.random() * 3) + 1) * 1000);
-    console.log(delay);
+    console.log('computerAction function initiated');
+    let delay = (Math.floor((Math.random() * 4) + 1) * 1000);
     const decision = Math.floor((Math.random() * 5) + 1);
-    let computerBet = Math.floor(Math.random() * (playerChipStack - (currentAmount - (currentAmount / 5))) + (currentAmount - (currentAmount / 5)));
-    if (computerBet === undefined) { computerBet = Math.floor(playerChipStack / 2) }
-    const computerRaise = Math.floor(Math.random() * (playerChipStack - currentAmount) + currentAmount);
+    console.log('computers decision number: ' + decision);
+    let computersUpperLimit = 1;
+    if (playerChipStack > computerChipStack) {
+      computersUpperLimit = computerChipStack / 5;
+    } else {
+      computersUpperLimit = playerChipStack / 5;
+    }
+    let computerBet = Math.floor(Math.random() * (computersUpperLimit - ((currentAmount / 5) - (currentAmount / 20))) + ((currentAmount / 5) - (currentAmount / 20)));
+    if (computerBet === undefined) { computerBet = Math.floor(computersUpperLimit / 2) }
+    const computerRaise = Math.floor(Math.random() * (computersUpperLimit - currentAmount) + currentAmount);
+    console.log('made it past the calcs');
     const delayedGameProgression = () => setInterval(function () {
       delay--;
       if (delay === 0) {
@@ -261,7 +313,7 @@ export default function PokerTable() {
         setGameRound(gameRound + 1);
         updateGameDisplay();
         setPlayerAction(true);
-        console.log('game progression triggered');
+        console.log('delay game progression triggered');
       }
     }, 1);
     const endOfGame = () => setInterval(function () {
@@ -279,53 +331,61 @@ export default function PokerTable() {
         });
       }
     }, 1);
-
-    const momentOfConsideration = () => setTimeout(() => { return; }, 1000);
-    console.log(decision)
-    console.log(foldTest)
-    console.log(playerAction)
+    const momentOfConsideration = () => setInterval(function () {
+      let timer = 2;
+      timer--;
+      if (timer === 0) {
+        clearInterval(momentOfConsideration);
+      }
+    }, 1);
+    console.log('made it past the timers');
     if (foldTest === false) {
+      console.log('passed the fold test');
       if (playerAction === false) {
+        console.log('passed the player action test');
+        console.log('computer is actually considering its decision number');
         if (decision === 1) {
           //fold
-          console.log('1 test hit');
+          console.log('computer fold hit');
           if (previousAction === 'check') {
+            console.log('computer action callback hit on fold');
             setComputerActionCallback(computerActionCallback + 1);
-            console.log('computer action callback hit');
           } else {
             //computer action here
+              console.log('computer actually folded');
             setDealerMessage(`${seatLabels.seat2Name} has folded their hand`);
             setPlayerChipStack(playerChipStack + potAmount);
-            setPreviousAmount(0)
+            varPreviousAmount = 0;
             setPotAmount(0);
             endOfGame();
             momentOfConsideration();
           }
         } else if (decision === 2) {
           //check
-          console.log('2 test hit');
+          console.log('computer check hit');
           if (previousAction !== 'check' && previousAction !== 'fold') {
+            console.log('computer action callback hit on check');
             setComputerActionCallback(computerActionCallback + 1);
-            console.log('computer action callback hit');
           } else {
+
             //computer action here
-            setPreviousAmount(0);
+            console.log('computer actually checked');
+            varPreviousAmount = 0;;
             delayedGameProgression();
             setDealerMessage(`${seatLabels.seat2Name} has checked over to ${seatLabels.seat1Name}`);
             momentOfConsideration();
           }
         } else if (decision === 3) {
           //bet
-          console.log('3 test hit');
+          console.log('computer bet hit');
           if (previousAction === 'call') {
+            console.log('computer action callback hit on bet');
             setComputerActionCallback(computerActionCallback + 1);
-            console.log('computer action callback hit');
           } else {
 
             //computer action here
-
+            console.log('computer actually bet');
             delayedGameProgression();
-
             setComputerChipStack(computerChipStack - computerBet);
             setPreviousAmount(computerBet);
             setPotAmount(potAmount + computerBet);
@@ -334,13 +394,14 @@ export default function PokerTable() {
           }
         } else if (decision === 4) {
           //call
-          console.log('4 test hit');
+          console.log('computer call hit');
           if (previousAction !== 'bet' && previousAction !== 'raise') {
+            console.log('computer action callback hit on call');
             setComputerActionCallback(computerActionCallback + 1);
-            console.log('computer action callback hit');
           } else {
 
             //computer action here
+              console.log('computer actually called');
             setComputerChipStack(computerChipStack - currentAmount);
             setPotAmount(potAmount + currentAmount);
             delayedGameProgression();
@@ -349,22 +410,23 @@ export default function PokerTable() {
           }
         } else if (decision === 5) {
           //raise
-          console.log('5 test hit');
+          console.log('computer raise hit');
           if (raiseCount > 1) {
+            console.log('computer action callback hit on raise (raiseCount > 1)');
             setComputerActionCallback(computerActionCallback + 1);
-            console.log('computer action callback hit');
           } else {
             if (previousAction !== 'bet' && previousAction !== 'raise') {
+              console.log('computer action callback hit on raise (no bet or raise found)');
               setComputerActionCallback(computerActionCallback + 1);
-              console.log('computer action callback hit');
             } else {
 
+              console.log('computer actually raised');
               //computer action here
               setRaiseCount(raiseCount + 1);
               setComputerChipStack(computerChipStack - computerRaise);
               setPreviousAmount(computerRaise);
               setPotAmount(potAmount + computerRaise);
-              setDealerMessage(`${seatLabels.seat2Name} raises the pot by $${computerRaise} to ${potAmount}`);
+              setDealerMessage(`${seatLabels.seat2Name} raises the pot by $${computerRaise} to ${potAmount + computerRaise}`);
               momentOfConsideration();
               setPlayerAction(true);
             }
@@ -401,7 +463,7 @@ export default function PokerTable() {
       setCheckCount(0);
       setFoldTest(false);
       setPlayerAction(true);
-      setPreviousAmount(0);
+      varPreviousAmount = 0;;
       setPreviousAction('');
       setPotVisibility('hidden')
       setDealButtonVisibility('visible');
@@ -468,20 +530,6 @@ export default function PokerTable() {
   }
   //USER ACTION FUNCTIONS FOR STATE ----------------------------
 
-  //GLOBAL VARIABLES -------------------------------------------
-  let numberOfPlayers = 2;
-  let bgPoker = onePlayer;
-  let deckCount = 1;
-  let communityCardImages = [];
-  let communityCardDescriptions = [];
-  let playerCardImages = [];
-  let playerCardDescriptions = [];
-  let deal;
-  let communityCardCodes;
-  let playerCardCodes = "";
-  let playerResults = [];
-  let winnerResults = [];
-  //GLOBAL VARIABLES -------------------------------------------
 
   //UPON PAGE LOAD GLOBAL STATE FUNCTIONS ----------------------
   function getBackground() {
@@ -885,12 +933,12 @@ export default function PokerTable() {
           <div id="grid85" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div id="grid86" className="borderMeNot" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}></div>
           <div
-            id="call-button-container"
+            id="bet-button-container"
             className="borderMeNot flex flex-row text-neutral-content justify-center items-end" style={{ width: "9.1vw", height: "5.07vw", fontSize: "1vw" }}
           >
             <button
-              id="call-button"
-              className="borderMeNot btn btn-primary text-neutral-content text-center font-bolder" hidden='true'
+              id="bet-button"
+              className="borderMeNot btn btn-primary text-neutral-content text-center font-bolder"
               style={{visibility: {betButtonVisibility}, width: "7vw", height: "2.25vw", fontSize: "1.75vw", padding: "0.1vw" }}
               onClick={() => handleBet()}
             >
