@@ -26,6 +26,7 @@ export default function ATM(user) {
     }
 
     const handleIncrease = (num) =>{
+      console.log(amount)
       setAmount(amount + num)
     };
 
@@ -60,7 +61,7 @@ export default function ATM(user) {
     <>
 
       <button
-        className="bg-pink-500 items-end text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box text-primary-content z-20"
         type="button"
         onClick={() => resetval()}
       >
@@ -104,19 +105,17 @@ export default function ATM(user) {
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span className="text-gray-500 sm:text-sm">$</span>
+                          <span className="text-gray-500 sm:text-sm">$</span>
                         </div>
                         <input
-                        type="number"
+                        type="text"
                         name="price"
-                        id="price"
                         readOnly
-                        step='20'
                         className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                        value= {amount}
+                        placeholder= {amount}
                         />
                     </div>
-                
+
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                 <div className="grid grid-cols-4 gap-4">
