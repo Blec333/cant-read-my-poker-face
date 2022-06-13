@@ -1,4 +1,5 @@
 import React from "react";
+import { Buffer } from "buffer";
 import {
   ApolloClient,
   InMemoryCache,
@@ -24,6 +25,7 @@ import Signup from "./components/pages/SignUp";
 import { io } from "socket.io-client";
 let socket;
 
+global.Buffer = Buffer;
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
