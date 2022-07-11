@@ -35,8 +35,14 @@ const resolvers = {
 
   // 🔑 We call the signToken() function in the resolvers where we want to transmit data securely to generate a signed token:
   Mutation: {
+    addPlayer: async (parent, args) => {
+      console.log('addPlayer resolver hit')
+      const player = await Player.create(args);
+      const token = signToken(player);
+      return { token, player };
+    },
     login: async (parent, { playerName, password }) => {
-      const player = await Player.findOne({ playerName: playerName });
+      const player = await Player.findOne({ playerName });
       if (!player) {
         throw new AuthenticationError("No player with this name found!");
       }
@@ -48,12 +54,6 @@ const resolvers = {
       return { token, player };
     },
 
-    addPlayer: async (parent, { playerName, password }) => {
-      const player = await Player.create({ playerName, password });
-      const token = signToken(player);
-      console.log({ token, player });
-      return { token, player };
-    },
     removePlayer: async (parent, { playerId }) => {
       return Player.findOneAndDelete({ _id: playerId });
     },

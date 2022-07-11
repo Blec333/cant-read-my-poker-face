@@ -41,17 +41,17 @@ const playerSchema = new Schema(
   }
 );
 
-playerSchema
-  .virtual("friendCount")
-  // Getter
-  .get(function () {
-    return this.friends.length;
-  })
-  // Setter to set the playername
-  .set(function (virtual) {
-    const playername = virtual;
-    this.set({ playername });
-  });
+// playerSchema
+//   .virtual("friendCount")
+//   // Getter
+//   .get(function () {
+//     return this.friends.length;
+//   })
+//   // Setter to set the playername
+//   .set(function (virtual) {
+//     const playername = virtual;
+//     this.set({ playername });
+//   });
 
 playerSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {

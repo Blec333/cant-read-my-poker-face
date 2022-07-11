@@ -6,48 +6,42 @@ var cors = require("cors");
 let socket;
 
 const Chat = (props) => {
-let playerName = props.playerName
-let roomId = props.roomId
+  let playerName = props.playerName
+  let roomId = props.roomId
 
-  // const [statePlayerName, setName] = useState("");
-  // const [stateRoomId, setRoom] = useState("");
+  const [statePlayerName, setName] = useState("");
+  const [stateRoomId, setRoom] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  // const ENDPOINT = "http://localhost:3001";
+  const ENDPOINT = "http://localhost:3001";
   // const socket = io(ENDPOINT);
   // socket.on("connect_error",(e:any)=>{
   //   console.log(e);
   // });
+    socket = io(ENDPOINT, {
+      forceNew: true,
+      reconnectionAttempts: "Infinity",
+      timeout: 10000,
+      transports: ["websocket"],
+    });
 
 
-//   useEffect(() => {
-//      socket = io("http://localhost:3001/", {
-//   transports: ["websocket"]
-// });
-    // socket = io("http://localhost:3001/",{
-    //   withCredentials: true,
-    //   transportOptions: {
-    //     polling: {
-    //       extraHeaders: {
-    //         "my-custom-header": "abcde"
-    //     }
-    //   }
-    // }
-    // });
-    // setRoom(roomId);
-    // setName(playerName);
-  //   socket.emit("join", {playerName, roomId});
-  //   socket.on("time", () => {
-  //     console.log("timed ping");
-  //   });
-  // }, []);
+  useEffect(() => {
+    setRoom(roomId);
+    setName(playerName);
+    socket.emit("join", { playerName, roomId });
+    console.log("attempted emit of: " + playerName + " & " + roomId)
+    socket.on("time", () => {
+      console.log("timed ping");
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   socket.on("message", (user, messages) => {
-  //     setMessages(messages);
-  //   });
-  // }, []);
+  useEffect(() => {
+    socket.on("welcome", (user, messages) => {
+      setMessages(messages);
+    });
+  }, []);
 
   // useEffect(() => {
   // }, []);
@@ -66,22 +60,22 @@ let roomId = props.roomId
       setMessages(messageArray);
       setMessage("");
     }
-      socket.emit("sendMessage", { playerName, roomId, messages });
+    socket.emit("sendMessage", { playerName, roomId, messages });
   };
 
   return (
-    <div className="flex flex-col justify-end border m-0 p-0" style={{height: '25.2755vw'}}>
+    <div className="flex flex-col justify-end border m-0 p-0" style={{ height: '25.2755vw' }}>
       <ul className="scroll-smooth hover:scroll-auto m-0 p-0">
-      {messages.map((iMessage) => {
-        return (
-          <li>
-            {iMessage}
-          </li>
-        );
-      })}
+        {messages.map((iMessage, i) => {
+          return (
+            <li key={i}>
+              {iMessage}
+            </li>
+          );
+        })}
       </ul>
       <form className="flex border m-0 p-0" action="" onSubmit={handleSubmit}>
-        <input className="border bg-neutral text-neutral-content h-full items-end" style={{width: '15vw'}}
+        <input className="border bg-neutral text-neutral-content h-full items-end" style={{ width: '15vw' }}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}

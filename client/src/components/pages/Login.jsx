@@ -48,10 +48,10 @@ export default function Login({ nowPage, nextChange }) {
     }
 
     // clear form values
-    setFormState({
-      playerName: "",
-      password: "",
-    });
+    // setFormState({
+    //   playerName: "",
+    //   password: "",
+    // });
   };
 
   return (

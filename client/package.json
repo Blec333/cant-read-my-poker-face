@@ -1,8 +1,8 @@
 {
   "name": "casino-client",
   "version": "0.1.0",
-  "proxy": "http://localhost:3001/",
   "private": true,
+  "proxy": "http://localhost:3001/",
   "dependencies": {
     "@apollo/client": "^3.5.8",
     "@babel/polyfill": "^7.12.1",
