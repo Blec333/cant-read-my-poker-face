@@ -10,24 +10,24 @@ import { QUERY_GAMES } from "../../utils/queries";
 import Auth from "../../utils/auth";
 
 // const Signup = () =>
-export default function Signup() {
-  const [showModal, setShowModal] = React.useState(true);
+export default function Signup({ currentPage, handlePageChange }) {
 
-  const [formState, setFormState] = useState({
-    playerName: "",
-    password: "",
-  });
+
+  const [showModal, setShowModal] = useState(true);
+  const [formState, setFormState] = useState({ playerName: "", password: "" });
+
+
   const [addPlayer, { error, data }] = useMutation(ADD_PLAYER);
 
-  // update state based on form input changes
 
+
+  // update state based on form input changes
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormState({
       ...formState,
       [name]: value,
     });
-    console.log(value);
   };
 
   // submit form

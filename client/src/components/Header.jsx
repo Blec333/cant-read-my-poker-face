@@ -39,9 +39,9 @@ function Header({ currentPage, handlePageChange }) {
                     <li className="px-2 mx-2">
                       <a
                         href="#playerboard"
-                        onClick={() => handlePageChange("PlayerBoard")}
+                        onClick={() => handlePageChange("Playerboard")}
                         className={
-                          currentPage === "PlayerBoard"
+                          currentPage === "Playerboard"
                             ? "nav-link active"
                             : "nav-link"
                         }
@@ -51,7 +51,7 @@ function Header({ currentPage, handlePageChange }) {
                     </li>
                     <li className="text-lg text-color-primary px-2 mx-2">
                       <a
-                        href="#landingpage"
+                        href="/"
                         onClick={() => handlePageChange("Home")}
                         className={
                           currentPage === "Home"

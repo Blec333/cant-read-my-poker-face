@@ -1,16 +1,20 @@
 import React, { useState } from "react";
+import { useCasinoContext } from "../utils/GlobalState";
+
+import Auth from "../utils/auth";
+
 import Header from "./Header";
 import Footer from "./Footer";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import PlayerBoard from "./pages/PlayerBoard";
 import SignUp from "./pages/SignUp";
-import { useCasinoContext } from "../utils/GlobalState";
+
+
 
 export default function CasinoContainer() {
   const [currentPage, setCurrentPage] = useState("Home");
   const [state, dispatch] = useCasinoContext();
-
 
 
   const renderPage = () => {
@@ -18,12 +22,15 @@ export default function CasinoContainer() {
       return <Home currentPage={currentPage} handlePageChange={handlePageChange} />;
     }
     if (currentPage === "Login") {
-      return <Login />;
+      return <Login currentPage={currentPage} handlePageChange={handlePageChange} />;
     }
     if (currentPage === "SignUp") {
-      return <SignUp />;
+      return <SignUp currentPage={currentPage} handlePageChange={handlePageChange} />;
     }
-    return <PlayerBoard />;
+    if (currentPage === "Playerboard") {
+      return <PlayerBoard />;
+    }
+    return <Home currentPage={currentPage} handlePageChange={handlePageChange} />;
   };
 
   const handlePageChange = (page) => setCurrentPage(page);
