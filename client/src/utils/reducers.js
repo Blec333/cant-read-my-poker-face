@@ -17,7 +17,7 @@ export const reducer = (state, action) => {
     case UPDATE_CURRENT_PLAYERS_WALLET:
       return {
         ...state,
-        currentWallet: [...action.currentWallet],
+        currentWallet: action.currentWallet,
       };
 
     case UPDATE_GAMES:

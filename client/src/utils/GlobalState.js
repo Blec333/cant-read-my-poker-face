@@ -15,7 +15,7 @@ const CasinoProvider = ({ value = [], ...props }) => {
     currentCommunityCardDescriptions: [],
     playerResults: [],
     winnerResults: [],
-    currentWallet: [],
+    currentWallet: 0,
   });
 
   return <Provider value={[state, dispatch]} {...props} />;

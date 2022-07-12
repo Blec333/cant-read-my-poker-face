@@ -25,9 +25,8 @@ const resolvers = {
       return Location.findOne({ _id: locationId });
     },
     me: async (parent, args, context) => {
-      console.log(context.user);
-      if (context.user) {
-        return Player.findOne({ _id: context.user._id });
+      if (context.player) {
+        return Player.findOne({ _id: context.player._id });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -36,7 +35,6 @@ const resolvers = {
   // 🔑 We call the signToken() function in the resolvers where we want to transmit data securely to generate a signed token:
   Mutation: {
     addPlayer: async (parent, args) => {
-      console.log('addPlayer resolver hit')
       const player = await Player.create(args);
       const token = signToken(player);
       return { token, player };
@@ -53,7 +51,17 @@ const resolvers = {
       const token = signToken(player);
       return { token, player };
     },
-
+    updatePlayer: async (parent, args, context) => {
+      try {
+        if(context.player._id) {
+          return await Player.findOneAndUpdate(context.player._id, args, { new: true });
+        }else{
+          console.log(args)
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
     removePlayer: async (parent, { playerId }) => {
       return Player.findOneAndDelete({ _id: playerId });
     },
@@ -91,27 +99,6 @@ const resolvers = {
           runValidators: true,
         }
       );
-    },
-    updatePlayer: async (parent, args, context) => {
-      
-      try{
-        if(context.user._id) {
-          return await Player.findOneAndUpdate(
-            context.user._id, args,
-          { new: true }
-        );
-        }else{
-          console.log(args)
-        }
-
-      }catch(err){
-        console.log("user" );
-        console.log(context.user.id)
-        console.log("args")
-        console.log(args)
-
-        console.log(err)
-      }
     },
     removePlayerFromGame: async (parent, { gameId, playerId }) => {
       return Game.findOneAndUpdate(

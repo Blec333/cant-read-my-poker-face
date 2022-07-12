@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Login from "./Login";
-import CasinoContainer from "../CasinoContainer";
 
 
 import Auth from "../../utils/auth";
@@ -9,7 +7,6 @@ import Auth from "../../utils/auth";
 
 
 export default function Home({ currentPage, handlePageChange }) {
-  const login = "Login";
 
 
 
@@ -28,7 +25,7 @@ export default function Home({ currentPage, handlePageChange }) {
         className="flex justify-center items-center glass bg-primary rounded-box text-primary-content z-20"
         style={{ width: "20vw", height: "7.5vw" }}
       >
-        {Auth.loggedIn ?
+        {Auth.loggedIn() ?
         (<a
           style={{ fontSize: "3vw" }}
           href="#playerboard"

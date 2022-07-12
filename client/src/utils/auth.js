@@ -35,7 +35,6 @@ class AuthService {
   }
 
   login(idToken) {
-    console.log('login hit')
     localStorage.setItem("id_token", idToken);
     window.location.assign("/#playerboard");
   }

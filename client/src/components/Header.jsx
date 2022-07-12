@@ -2,13 +2,12 @@ import React from "react";
 import Auth from "../utils/auth";
 import { Link } from "react-router-dom";
 
+
+
 function Header({ currentPage, handlePageChange }) {
-  // <li className="mx-1">
-  //           {/* this is not using the Link component to logout or user and then refresh the application to the start */}
-  //           <a href="/" onClick={() => Auth.logout()}>
-  //             Logout
-  //           </a>
-  //         </li>
+
+
+
 
   function showNavigation() {
     if (Auth.loggedIn()) {
@@ -23,7 +22,7 @@ function Header({ currentPage, handlePageChange }) {
             <div className="flex-none">
               <ul className="menu menu-horizontal rounded-box glass p-0">
                 <li className="" tabIndex="0">
-                  <a href="#aboutme">
+                  <a href="/">
                     Pages
                     <svg
                       className="fill-current"
@@ -62,20 +61,6 @@ function Header({ currentPage, handlePageChange }) {
                         Home
                       </a>
                     </li>
-                    {/* 
-                    <li className="px-2 mx-2">
-                      <a
-                        href="#playerboard"
-                        onClick={() => handlePageChange("PlayerBoard")}
-                        className={
-                          currentPage === "PlayerBoard"
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                      >
-                        Player Board
-                      </a>
-                    </li> */}
                   </ul>
                 </li>
                 <li tabIndex="0">
@@ -104,7 +89,7 @@ function Header({ currentPage, handlePageChange }) {
                   style={{ marginRight: "2vw" }}
                 >
                   <li tabIndex="0">
-                    <a href="#aboutme">
+                    <a href="/">
                       Pages
                       <svg
                         className="fill-current"

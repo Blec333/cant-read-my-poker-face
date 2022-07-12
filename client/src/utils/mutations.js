@@ -7,15 +7,18 @@ export const ADD_PLAYER = gql`
       player {
         _id
         playerName
+        account
+        wallet
       }
     }
   }
 `;
 
 export const UPDATE_PLAYER = gql`
-  mutation updatePlayer( $account: Int ){
-    updatePlayer( account: $account){
+  mutation updatePlayer($account: Int, $wallet: Int){
+    updatePlayer(account: $account, wallet: $wallet){
       account
+      wallet
     }
   }
 `;
@@ -28,7 +31,7 @@ export const REMOVE_PLAYER = gql`
   }
 `;
 
-export const LOGIN_USER = gql`
+export const LOGIN_PLAYER = gql`
   mutation login($playerName: String!, $password: String!) {
     login(playerName: $playerName, password: $password) {
       token
