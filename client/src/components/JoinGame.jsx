@@ -100,15 +100,15 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
-        // eslint-disable-next-line no-restricted-globals
-        window.location.replace(`${location.origin}/game/${createdGameId}`);
+        window.location.replace(`${window.location.origin}/game/${createdGameId}`);
       } catch (error) {
         console.log(error)
       }
     }
   };
 // console.log(window.location.origin);
-  const handleJoinExistingGame = async () => {
+  const handleJoinExistingGame = async (event) => {
+    event.preventDefault();
     if (!selectedGameId) {
       setShowNoGameSelectedError(true);
     } else if (selectedPlayerCount >= selectedPlayerLimit) {
@@ -127,14 +127,12 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
-        // eslint-disable-next-line no-restricted-globals
-        window.location.replace(`${location.origin}/game/${selectedGameId}`);
+        window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
       } catch (error) {
         console.log(error)
       }
     } else {
-      // eslint-disable-next-line no-restricted-globals
-      window.location.replace(`${location.origin}/game/${selectedGameId}`);
+      window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
     }
   }
 
