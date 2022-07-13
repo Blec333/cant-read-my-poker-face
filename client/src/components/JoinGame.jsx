@@ -28,7 +28,6 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
   const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
   // const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
 
-  const [trackRoute, setTrackRoute] = useState(window.location.href);
   const [showModal, setShowModal] = useState(false);
   const [multiplayerGame, setMultiplayerGame] = useState(false);
   const [soloGame, setSoloGame] = useState(false);
@@ -102,9 +101,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
-        // setTrackRoute(`${window.location.origin}/game/${createdGameId}`);
-        // window.location.replace(`${window.location.origin}/game/${createdGameId}`);
-        redirectPath = `${window.location.origin}/game/${createdGameId}`;
+        redirectPath = `/game/${createdGameId}`;
       } catch (error) {
         console.log(error)
       }
@@ -130,16 +127,12 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
-        // setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
-        // window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
-        redirectPath = `${window.location.origin}/game/${selectedGameId}`;
+        redirectPath = `/game/${selectedGameId}`;
       } catch (error) {
         console.log(error)
       }
     } else {
-      // setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
-      // window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
-        redirectPath = `${window.location.origin}/game/${selectedGameId}`;
+        redirectPath = `/game/${selectedGameId}`;
     }
   }
 
@@ -200,15 +193,14 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
                     <p className="text-left text-sm text-gray-700 w-full p-1">ID: {selectedGameId !== '' ? selectedGameId : "Select above..."}</p>
                   </div>
                   {selectedGameId ?
-                    <Link className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" to={`/game/${selectedGameId}`} onClick={handleJoinExistingGame}>JOIN ROOM</Link>
-                    // <Link to={`/game/${selectedGameId}`} className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" >JOIN ROOM</Link>
+                    <Link className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" to={redirectPath} onClick={handleJoinExistingGame}>JOIN ROOM</Link>
                     : null}
                 </div>
                 <div className="flex flex-col w-full">
                   <h3 className="text-2xl text-center font-bold w-full">CREATE</h3>
                   <input className="placeholder:whitespace-pre-line border border-gray rounded text-center text-gray-700 w-auto h-full p-3 m-2" id="name" type="name" name="name" onChange={handleCreateNewGameName} placeholder="Choose a name for your game! (ID is generated automatically)" />
                   {showCreateNewGameNameError ? (<p className="text-error">Please enter a name</p>) : null}
-                  <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={handleCreateNewGame}>CREATE ROOM</button>
+                  <Link className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" to={redirectPath} onClick={handleCreateNewGame}>CREATE ROOM</Link>
                 </div>
               </div>
             </form>
