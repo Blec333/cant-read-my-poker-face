@@ -8,7 +8,7 @@ import Auth from "../../utils/auth";
 import JoinGame from "../JoinGame";
 import ATM from "../ATM";
 
-export default function PlayerBoard() {
+export default function PlayerBoard({ currentPage, handlePageChange }) {
 
 
   const [state, dispatch] = useCasinoContext();
@@ -18,7 +18,6 @@ export default function PlayerBoard() {
   const player = data?.me || [];
 
 
-console.log(state)
 
   return (
     <>
@@ -34,7 +33,7 @@ console.log(state)
         {Auth.loggedIn() ? (
           <div className="flex justify-center items-center">
               <ATM key={player._id} account={player.account} _id={player._id} />
-              <JoinGame />
+              <JoinGame currentPage={currentPage} handlePageChange={handlePageChange} _id={player._id} />
           </div>
         ) : (
           <h1 className="text-bold text-white">You need to be loggedIn to see this page</h1>

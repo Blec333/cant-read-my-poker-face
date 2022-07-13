@@ -14,6 +14,7 @@ import Auth from "../../utils/auth";
 import Chat from "../Chat";
 import Header from "../Header";
 import Footer from "../Footer";
+// import { currentPage, handlePageChange } from "../CasinoContainer";
 
 import onePlayer from "../../assets/img/one-player.jpg";
 import twoPlayers from "../../assets/img/two-players.jpg";
@@ -31,7 +32,7 @@ import { ADD_PLAYER_TO_GAME } from "../../utils/mutations";
 const axios = require("axios");
 
 //BEGINNING OF PRIMARY FUNCTION ==============================================================================
-export default function PokerTable() {
+export default function PokerTable({ currentPage, handlePageChange }) {
 
 
   //GLOBAL VARIABLES -------------------------------------------
@@ -664,12 +665,8 @@ export default function PokerTable() {
 
   return (
     <>
-      <Header />
-      <div
-        id="poker-container"
-        className="flex justify-center w-screen h-[screen-2rem]"
-      >
-        {/* <div className="bg-cover bg-center bg-no-repeat bg-fixed w-full h-full" style={{ backgroundImage: `url(${bgPoker})` }} > */}
+      <Header currentPage={currentPage} handlePageChange={handlePageChange} />
+      <div id="poker-container" className="flex justify-center w-screen h-[screen-2rem]">
         <div style={{ fontSize: "1vw" }}>
           <img
             className="absolute -z-10 w-full h-auto"

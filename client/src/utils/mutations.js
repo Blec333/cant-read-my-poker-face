@@ -66,34 +66,25 @@ export const REMOVE_GAME = gql`
 `;
 
 export const ADD_PLAYER_TO_GAME = gql`
-  mutation addPlayerToGame($_id: ID!, $playerId: String!) {
-    addPlayerToGame(_id: $gameId, playerId: $playerId) {
+  mutation addPlayerToGame($gameId: ID!, $playerId: String!) {
+    addPlayerToGame(gameId: $gameId, playerId: $playerId) {
       _id
-      name
+      gameName
       playerLimit
-      type
-      players {
-        playerId
-        playerName
-        password
-        account
-      }
+      gameType
+      players
     }
   }
 `;
 
 export const ADD_GAME_TO_PLAYER = gql`
-  mutation addGameToPlayer($_id: ID!, $gameId: String!) {
-    addGameToPlayer(_id: $playerId, gameId: $gameId) {
+  mutation addGameToPlayer($playerId: ID!, $gameId: String!) {
+    addGameToPlayer(playerId: $playerId, gameId: $gameId) {
       _id
       playerName
-      password
       account
       games {
-        gameId
-        name
-        playerLimit
-        type
+        _id
       }
     }
   }
@@ -102,10 +93,10 @@ export const ADD_GAME_TO_PLAYER = gql`
 export const REMOVE_PLAYER_FROM_GAME = gql`
   mutation removePlayerFromGame($_id: ID!, $gameId: String!) {
     removePlayerFromGame(_id: $playerId, gameId: $gameId) {
-      gameId
-      name
+      _id
+      gameName
       playerLimit
-      type
+      gameType
       players {
         _id
         playerName

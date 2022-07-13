@@ -89,10 +89,22 @@ const resolvers = {
     },
 
     addPlayerToGame: async (parent, { gameId, playerId }) => {
-      return await Game.findOneAndUpdate(
-        { _id: gameId },
+      return await Game.findByIdAndUpdate(
+        gameId,
         {
           $addToSet: { players: playerId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    },
+    addGameToPlayer: async (parent, { playerId, gameId }) => {
+      return await Player.findByIdAndUpdate(
+        playerId,
+        {
+          $addToSet: { games: gameId },
         },
         {
           new: true,
@@ -108,18 +120,6 @@ const resolvers = {
       );
     },
 
-    addGameToPlayer: async (parent, { playerId, gameId }) => {
-      return await Player.findOneAndUpdate(
-        { _id: playerId },
-        {
-          $addToSet: { games: gameId },
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-    },
     removeGameFromPlayer: async (parent, { playerId, gameId }) => {
       return Player.findOneAndUpdate(
         { _id: playerId },

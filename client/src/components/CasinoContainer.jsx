@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCasinoContext } from "../utils/GlobalState";
 
 import Auth from "../utils/auth";
@@ -13,7 +13,16 @@ import SignUp from "./pages/SignUp";
 
 
 export default function CasinoContainer() {
-  const [currentPage, setCurrentPage] = useState("Home");
+
+
+  const [currentPage, setCurrentPage] = useState("");
+
+
+  useEffect(() => {
+
+  },[])
+  
+  
   const [state, dispatch] = useCasinoContext();
 
 
@@ -28,9 +37,15 @@ export default function CasinoContainer() {
       return <SignUp currentPage={currentPage} handlePageChange={handlePageChange} />;
     }
     if (currentPage === "Playerboard") {
-      return <PlayerBoard />;
+      return <PlayerBoard currentPage={currentPage} handlePageChange={handlePageChange} />;
     }
-    return <Home currentPage={currentPage} handlePageChange={handlePageChange} />;
+    if (Auth.loggedIn()) {
+      setCurrentPage("Playerboard");
+      return <PlayerBoard currentPage={currentPage} handlePageChange={handlePageChange} />;
+    } else {
+      setCurrentPage("Home");
+      return <Home currentPage={currentPage} handlePageChange={handlePageChange} />;
+    }
   };
 
   const handlePageChange = (page) => setCurrentPage(page);
