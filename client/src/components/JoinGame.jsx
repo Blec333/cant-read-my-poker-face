@@ -193,7 +193,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
                     <p className="text-left text-sm text-gray-700 w-full p-1">ID: {selectedGameId !== '' ? selectedGameId : "Select above..."}</p>
                   </div>
                   {selectedGameId ?
-                    <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={() => handleJoinExistingGame()}>JOIN ROOM</button>
+                    <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={handleJoinExistingGame}>JOIN ROOM</button>
                     // <Link to={`/game/${selectedGameId}`} className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" >JOIN ROOM</Link>
                     : null}
                 </div>
@@ -201,7 +201,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
                   <h3 className="text-2xl text-center font-bold w-full">CREATE</h3>
                   <input className="placeholder:whitespace-pre-line border border-gray rounded text-center text-gray-700 w-auto h-full p-3 m-2" id="name" type="name" name="name" onChange={handleCreateNewGameName} placeholder="Choose a name for your game! (ID is generated automatically)" />
                   {showCreateNewGameNameError ? (<p className="text-error">Please enter a name</p>) : null}
-                  <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={() => handleCreateNewGame()}>CREATE ROOM</button>
+                  <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={handleCreateNewGame}>CREATE ROOM</button>
                 </div>
               </div>
             </form>
