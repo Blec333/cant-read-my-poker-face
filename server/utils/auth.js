@@ -1,13 +1,3 @@
-// const auth = (req, res, next) => {
-//   // If the player is not logged in, redirect the request to the login route
-//   if (!req.session.logged_in) {
-//     res.redirect("/login");
-//   } else {
-//     next();
-//   }
-// };
-
-// module.exports = auth;
 
 const jwt = require('jsonwebtoken');
 
@@ -31,7 +21,7 @@ module.exports = {
     // if token can be verified, add the decoded user's data to the request so it can be accessed in the resolver
     try {
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
-      req.user = data;
+      req.player = data;
     } catch {
       console.log('Invalid token');
     }

@@ -17,6 +17,9 @@ const gameSchema = new Schema(
     gameType: {
       type: String,
     },
+    location: {
+      type: String,
+    },
     // createdAt:{
     //   type: Date,
     //   default: Date.now,

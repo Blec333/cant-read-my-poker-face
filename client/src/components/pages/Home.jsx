@@ -1,10 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Login from "./Login";
-import CasinoContainer from "../CasinoContainer";
+
+
+import Auth from "../../utils/auth";
+
+
 
 export default function Home({ currentPage, handlePageChange }) {
-  const login = "Login";
+
+
+
 
   return (
     <div
@@ -20,14 +25,25 @@ export default function Home({ currentPage, handlePageChange }) {
         className="flex justify-center items-center glass bg-primary rounded-box text-primary-content z-20"
         style={{ width: "20vw", height: "7.5vw" }}
       >
-        <a
+        {Auth.loggedIn() ?
+        (<a
+          style={{ fontSize: "3vw" }}
+          href="#playerboard"
+          onClick={() => handlePageChange("Playerboard")}
+          className={currentPage === "Playerboard" ? "nav-link active" : "nav-link"}
+        >
+          Go to Casino
+        </a>)
+        :
+        (<a
           style={{ fontSize: "3vw" }}
           href="#login"
           onClick={() => handlePageChange("Login")}
           className={currentPage === "Login" ? "nav-link active" : "nav-link"}
         >
           Go to Casino
-        </a>
+        </a>)
+      }
       </div>
     </div>
   );

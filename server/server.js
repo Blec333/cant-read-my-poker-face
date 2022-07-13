@@ -1,53 +1,19 @@
-const path = require("path");
+
 const express = require("express");
-const { authMiddleware } = require("./utils/auth");
 const { ApolloServer } = require("apollo-server-express");
+const path = require("path");
+const { authMiddleware } = require("./utils/auth");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
-var cors = require("cors");
+// var cors = require("cors");
+// const socketIo = require("socket.io")
+// const http = require("http");
 // import { io } from 'socket.io-client'
 // const routes = require('./routes');// this is for restful api
 
 const cwd = process.cwd();
 const PORT = process.env.PORT || 3001;
 const app = express();
-
-// const http = require("http");
-// const serverIo = http.createServer(app);
-// const socketIo = require("socket.io")
-// const io = socketIo(serverIo)
-// //   , {
-// //   cors: {
-// //     handlePreflightRequest: (req, res) => {
-// //       res.writeHead(200, {
-// //       "Access-Control-Allow-Origin": "http://localhost:3000",
-// //       "Access-Control-Allow-Methods": ["GET", "POST"],
-// //       "Access-Control-Allow-Headers": ["my-custom-header"],
-// //       "Access-Control-Allow-Credentials": true,
-// //       });
-// //       res.end();
-// //     }
-// //   }
-// // })
-
-
-
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT ,DELETE");
-//   res.header(
-//       "Access-Control-Allow-Headers",
-//       "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
-
-// const socket = require("socket.io-client")("ws://echo.websocket.org");
-
-// // socket.on("connect_error", (err) => {
-// //   console.log(`connect_error due to ${err.message}`);
-// // });
-
 
 
 
@@ -74,9 +40,7 @@ const activity = cwd.includes("01-Activities")
   ? cwd.split("/01-Activities/")[1]
   : cwd;
 
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+  // app.use(cors());
 // app.use(routes);// this is for restful api
 
 const startApolloServer = async (typeDefs, resolvers) => {
@@ -93,6 +57,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
   });
 };
 
+startApolloServer(typeDefs, resolvers);
 
 
 
@@ -101,7 +66,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
 // const addUser = ({ id, playerName, roomId }) => {
 //   if (!playerName || !roomId)
 //   {
-//   let playerName = "Dev";
+//     let playerName = "Dev";
 //   let roomId = "Main"
 //   }
 //   // return { error: "name and room required." };
@@ -115,6 +80,8 @@ const startApolloServer = async (typeDefs, resolvers) => {
 //   return users[index];
 // };
 
+// const serverIo = http.createServer(app);
+// const io = socketIo(serverIo)
 
 // io.on("connection", (socket) => {
 //   console.log("a user connected");
@@ -131,7 +98,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
 //     socket.broadcast
 //       .to(user.roomId)
-//       .emit("message", { user: "Admin", text: `${user.playerName} has joined!` });
+//       .emit("welcome", { user: "Admin", text: `${user.playerName} has joined!` });
 //     callBack(null);
 
 //     socket.on("sendMessage", ({ playerName, roomId, messages }) => {
@@ -142,9 +109,9 @@ const startApolloServer = async (typeDefs, resolvers) => {
 //     });
 
 
-//     // socket.on("time",
-//     //   setInterval(() => io.emit('time', new Date().toTimeString()), 1000)
-//     //   );
+//     socket.on("time",
+//       setInterval(() => io.emit('time', new Date().toTimeString()), 1000)
+//       );
     
 //     // socket.on("sendMessage", ({ message }) => {
 //     //   io.to(user.roomId).emit("message", {
@@ -179,4 +146,3 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
 
 
-startApolloServer(typeDefs, resolvers);

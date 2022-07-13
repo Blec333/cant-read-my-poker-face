@@ -2,178 +2,215 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { useQuery } from "@apollo/client";
-import { 
-    ADD_GAME,  
-    // ADD_GAME_TO_PLAYER, 
-    // ADD_PLAYER_TO_GAME, 
-    // REMOVE_PLAYER_FROM_GAME 
+import {
+  ADD_GAME,
+  ADD_GAME_TO_PLAYER,
+  ADD_PLAYER_TO_GAME,
+  // REMOVE_PLAYER_FROM_GAME
 } from "../utils/mutations";
 import { QUERY_GAMES } from "../utils/queries";
 import { QUERY_SINGLE_GAME } from "../utils/queries";
 import { useCasinoContext } from "../utils/GlobalState";
 import Gamelist from "./GameList";
-import  Auth  from "../utils/auth";
+import Auth from "../utils/auth";
 import { UPDATE_GAMES } from "../utils/actions";
 
 
-export default function JoinGame() {
 
-  const [addGame] = useMutation(ADD_GAME);
-  // const [addGameToPlayer] = useMutation(ADD_GAME_TO_PLAYER);
-  // const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
+export default function JoinGame({ currentPage, handlePageChange, _id }) {
+
+
+
+
+
+  const [addGame, addGameData] = useMutation(ADD_GAME);
+  const [addGameToPlayer] = useMutation(ADD_GAME_TO_PLAYER);
+  const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
   // const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
-  
+
   const [showModal, setShowModal] = useState(false);
-  const [showForum , setForum ] = useState(false);
-  const [showError, setError] = useState(false)
-  const [nameState, setName] = useState('');
+  const [multiplayerGame, setMultiplayerGame] = useState(false);
+  const [soloGame, setSoloGame] = useState(false);
+  const [showCreateNewGameNameError, setCreateNewGameNameError] = useState(false)
+  const [showPlayerCountError, setShowPlayerCountError] = useState(false)
+  const [showNoGameSelectedError, setShowNoGameSelectedError] = useState(false)
+  const [selectedGameId, setSelectedGameId] = useState('');
+  const [selectedGameName, setSelectedGameName] = useState('');
+  const [selectedPlayerCount, setSelectedPlayerCount] = useState('');
+  const [selectedPlayerLimit, setSelectedPlayerLimit] = useState('');
+  const [createNewGameName, setCreateNewGameName] = useState('');
+  const [createNewGameLocation, setCreateNewGameLocation] = useState('');
+  const [multiplayerGameList, setMultiplayerGameList] = useState([]);
+  const [soloGameList, setSoloGameList] = useState([]);
+
+
   const [state, dispatch] = useCasinoContext();
-  // const { currentGame } =state;
 
-  const { data } = useQuery(QUERY_GAMES);
-  const games = data?.games || []
+  const gameData = useQuery(QUERY_GAMES);
 
-    useEffect(()=>{
-      if(data){
-        dispatch({
-          type: UPDATE_GAMES,
-          games: data.games
-        });
-      }
-    }, [data, dispatch]);
 
-    function showModals(){
-      if(showModal === true){
-        setShowModal(false);
-        setForum(false)
-      }else if(showModal === false){
-        setShowModal(true);
-      }
+  useEffect(() => {
+    if (gameData) {
+      setMultiplayerGameList(gameData?.data?.games?.filter((game) => game.gameType === 'Multiplayer'));
+      setSoloGameList(gameData?.data?.games?.filter((game) => { return (game.gameType === 'Solo' && game.players.map((playerId) => playerId === _id)) }))
+      dispatch({
+        type: UPDATE_GAMES,
+        games: gameData?.data?.games
+      });
     }
-    const handleName = async (event)=>{
-      setName(event.target.value);
-    
-    }
-        
-    const handleAddGame = async () =>{
-      if(!nameState.length){
-        setError(true);
+  }, [gameData, dispatch]);
+
+  const handleCreateNewGameName = async (event) => {
+    setCreateNewGameName(event.target.value);
+  }
+  const handleCreateNewGameLocation = async (event) => {
+    setCreateNewGameLocation(event.target.value);
+  }
+
+  const gameIdSelection = (event) => {
+    event.preventDefault();
+    const { playerlimit, playercount, name, value } = event.target;
+    setSelectedGameId(value);
+    setSelectedGameName(name);
+    setSelectedPlayerCount(playercount);
+    setSelectedPlayerLimit(playerlimit);
+    setShowNoGameSelectedError(false);
+  }
+
+  const handleCreateNewGame = async () => {
+    let gameType;
+    let playerLimit;
+    if (!createNewGameName.length) {
+      setCreateNewGameNameError(true);
+    } else {
+      if (multiplayerGame) {
+        gameType = 'Multiplayer';
+        playerLimit = 8;
+      } else {
+        gameType = 'Solo';
+        playerLimit = 1;
       }
-      try{
-        const { data }= await addGame({
-          variables:{
-            gameName: nameState.trim(),
-            // winner: 'test',
-            playerLimit: 6,
-            gameType: 'poker',
+      try {
+        const addGameResponse = await addGame({
+          variables: {
+            gameName: createNewGameName.trim(),
+            playerLimit: playerLimit,
+            gameType: gameType,
             playerId: Auth.getProfile().data._id
-          },         
+          },
         });
-        let gameId = data.addGame._id
-        // eslint-disable-next-line no-restricted-globals
-        const path = location.pathname
-        // eslint-disable-next-line no-restricted-globals
-        location.replace(`${path}game/${gameId}`)
-      }catch(error){
+        const createdGameId = addGameResponse.data.addGame._id;
+        window.location.replace(`/game/${createdGameId}`);
+      } catch (error) {
         console.log(error)
-      };
-    };
-    
-    function ErrorText(){
-      return(
-        <div>
-          <p className="text-red-500">Please enter a name</p>
-        </div>
-      )
+      }
     }
-    
+  };
+
+  const handleJoinExistingGame = async () => {
+    if (!selectedGameId) {
+      setShowNoGameSelectedError(true);
+    } else if (selectedPlayerCount >= selectedPlayerLimit) {
+      setShowPlayerCountError(true);
+    } else if (multiplayerGame) {
+      try {
+        const addPlayerToGameResponse = await addPlayerToGame({
+          variables: {
+            gameId: selectedGameId,
+            playerId: Auth.getProfile().data._id
+          },
+        });
+        const addGameToPlayerResponse = await addGameToPlayer({
+          variables: {
+            playerId: Auth.getProfile().data._id,
+            gameId: selectedGameId
+          },
+        });
+        window.location.replace(`/game/${selectedGameId}`);
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      window.location.replace(`/game/${selectedGameId}`);
+    }
+  }
+
+
+
   return (
     <>
-      <div className="flex justify-center items-center bg-primary h-[4rem] w-[8rem] rounded-box bg-white opacity-75 z-20 font-black">
-      <button
-        className="text-white hover:opacity-25 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button"
-        onClick={() => showModals(true)}
-      >
-        Join Table
-      </button>
-     
+      {showModal ? (
+        null
+      ) : (
+        <button className="flex justify-center items-center rounded-box bg-primary text-primary-content font-bold h-[4rem] w-[8rem] m-32 hover:shadow-lg hover:bg-success hover:text-success-content" type="button" onClick={() => { setShowModal(true); setMultiplayerGame(true) }}>JOIN TABLE</button>
+      )}
       {showModal ? (
         <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
-            <div className="relative  w-auto my-6 mx-auto max-w-sm">
-              {/*content*/}
-              <div className="border-0 items-center rounded-lg shadow-lg relative flex flex-col bg-white w-full outline-none focus:outline-none">
-                {/*header*/}               
-                <div className=" p-5 border-b text-black rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Join Table
-                  </h3>
-            {showError ?(
-              <p className="text-red-500">Please enter a name</p>
-            ):null}
+          <div className="flex flex-col justify-center items-center text-center w-11/12 bg-white rounded-box z-50">
+            <div className="flex w-full gap-4">
+              <button className="rounded-box bg-primary text-primary-content font-bold w-full m-3 p-4 hover:bg-secondary focus:bg-secondary" onClick={() => { setMultiplayerGame(true); setSoloGame(false) }}>Multiplayer</button>
+              <button className="rounded-box bg-primary text-primary-content font-bold w-full m-3 p-4 hover:bg-secondary focus:bg-secondary" onClick={() => { setMultiplayerGame(false); setSoloGame(true) }}>Solo</button>
+            </div>
+            <div className="grid grid-cols-3 w-full gap-2">
+              <div>NAME</div>
+              <div>PLAYERS</div>
+              <div>GAME ID</div>
+            </div>
+            <form className="bg-white shadow-md rounded w-full p-3">
+              {multiplayerGame && multiplayerGameList ?
+                <div className="grid grid-cols-3 w-full gap-2 overflow-y-auto h-72">
+                  {multiplayerGameList?.map((game) => (
+                    <div className="flex col-span-3 rounded justify-center text-sm w-full border-b cursor-pointer select-text-none m-0 p-0" key={game._id} >
+                      <button className="w-full" name={game.gameName} value={game._id} playercount={game.players.length} playerlimit={game.playerLimit} onClick={gameIdSelection}>{game.gameName}</button>
+                      <button className="w-full" name={game.gameName} value={game._id} playercount={game.players.length} playerlimit={game.playerLimit} onClick={gameIdSelection}>{game.players.length}/{game.playerLimit}</button>
+                      <button className="w-full" name={game.gameName} value={game._id} playercount={game.players.length} playerlimit={game.playerLimit} onClick={gameIdSelection}>{game._id}</button>
+                    </div>
+                  ))}
                 </div>
-                {/*body*/}
-                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                      id="name" 
-                      type="name" 
-                      name= "name"
-                      onChange ={handleName}
-                      placeholder="Enter Game Name" 
-                      
-                />
-                <div className="relative p-6 flex-auto">            
-                  <button onClick={()=> handleAddGame()} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
-                      Solo
-                  </button>                
-                <button onClick={() => setForum(true)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
-                  Multiplayer
-                </button>
-                {showForum ?(
-                  <>
-                    <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                      <div className="overflow-y-auto h-32 relative max-w-sm mx-auto bg-white dark:bg-slate-800 dark:highlight-white/5 shadow-lg ring-black/5 rounded-xl flex flex-col divide-y dark:divide-slate-200/5">
-                          <Gamelist 
-                          games = {games}
-                          />
+                : (
+                  <div className="grid grid-cols-3 w-full gap-2 overflow-y-auto h-72">
+                    {soloGameList?.map((game) => (
+                      <div className="flex col-span-3 rounded justify-center text-sm w-full border-b cursor-pointer select-text-none m-0 p-0" key={game._id} >
+                        <button className="w-full" name={game.gameName} value={game._id} playercount={game.players.length} playerlimit={game.playerLimit} onClick={gameIdSelection}>{game.gameName}</button>
+                        <button className="w-full" name={game.gameName} value={game._id} playercount={game.players.length} playerlimit={game.playerLimit} onClick={gameIdSelection}>{game.players.length}/{game.playerLimit}</button>
+                        <button className="w-full" name={game.gameName} value={game._id} playercount={game.players.length} playerlimit={game.playerLimit} onClick={gameIdSelection}>{game._id}</button>
                       </div>
-                      <div className="flex items-center">
-                        <p>Join Game</p>
-                          {/* <button onClick={()=> handleAddGame()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                            Join Table
-                        </button> */}
-                      </div>
-                      <br/>
-                      <div className="flex items-center" >
-
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                            Create Table
-                          </button>
-                          
-                      </div>
-                    </form>
-                  </>
-                ): null}
+                    ))}
+                  </div>
+                )}
+              <div className="flex items-between w-full pt-4 gap-4">
+                <div className="flex flex-col w-full">
+                  <h3 className="text-2xl text-center font-bold w-full">JOIN</h3>
+                  <div className="border border-gray rounded w-auto h-full p-3 m-2">
+                    {
+                      showNoGameSelectedError ? <p className="text-center text-error w-full p-1">In order to join a room, you must first select a room</p> :
+                        showPlayerCountError ? <p className="text-center text-error w-full p-1">It looks like you've chosen a full room, please try another</p> :
+                          selectedGameId ? <p className="text-center text-gray-700 w-full p-1">SELECTED ROOM</p> :
+                            <p className="text-center text-gray-700 w-full p-1">To join an existing game, select a room from the list.</p>
+                    }
+                    <p className="text-left text-sm text-gray-700 w-full p-1">Name: {selectedGameName !== '' ? selectedGameName : "Select above..."}</p>
+                    <p className="text-left text-sm text-gray-700 w-full p-1">ID: {selectedGameId !== '' ? selectedGameId : "Select above..."}</p>
+                  </div>
+                  {selectedGameId ?
+                    <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={() => handleJoinExistingGame()}>JOIN ROOM</button>
+                    // <Link to={`/game/${selectedGameId}`} className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" >JOIN ROOM</Link>
+                    : null}
                 </div>
-                {/*footer*/}
-                <div>
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => showModals(false)}
-                  >
-                    Exit
-                  </button>
+                <div className="flex flex-col w-full">
+                  <h3 className="text-2xl text-center font-bold w-full">CREATE</h3>
+                  <input className="placeholder:whitespace-pre-line border border-gray rounded text-center text-gray-700 w-auto h-full p-3 m-2" id="name" type="name" name="name" onChange={handleCreateNewGameName} placeholder="Choose a name for your game! (ID is generated automatically)" />
+                  {showCreateNewGameNameError ? (<p className="text-error">Please enter a name</p>) : null}
+                  <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={() => handleCreateNewGame()}>CREATE ROOM</button>
                 </div>
               </div>
+            </form>
+            <div>
+              <button className="text-error font-bold p-6" type="button" onClick={() => setShowModal(false)}>EXIT</button>
             </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
-      </div>
     </>
   );
 }

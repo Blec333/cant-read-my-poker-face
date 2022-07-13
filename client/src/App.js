@@ -98,6 +98,7 @@ const App = () => {
               <Routes>
                 {/* Define routes to render different page components at different paths */}
                 <Route path="/" element={<CasinoContainer />} />
+                <Route path="/#playerboard" element={<CasinoContainer />} />
                 {/* Define a route that will take in variable data */}
                 <Route path="/players/:playerId/" element={<PlayerProfile />} />
                 {/* <Route path="/game/:gameId/" element={<GameContainer />} /> */}

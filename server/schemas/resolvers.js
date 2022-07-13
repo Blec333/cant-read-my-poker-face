@@ -25,9 +25,8 @@ const resolvers = {
       return Location.findOne({ _id: locationId });
     },
     me: async (parent, args, context) => {
-      console.log(context.user);
-      if (context.user) {
-        return Player.findOne({ _id: context.user._id });
+      if (context.player) {
+        return Player.findOne({ _id: context.player._id });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -35,8 +34,13 @@ const resolvers = {
 
   // 🔑 We call the signToken() function in the resolvers where we want to transmit data securely to generate a signed token:
   Mutation: {
+    addPlayer: async (parent, args) => {
+      const player = await Player.create(args);
+      const token = signToken(player);
+      return { token, player };
+    },
     login: async (parent, { playerName, password }) => {
-      const player = await Player.findOne({ playerName: playerName });
+      const player = await Player.findOne({ playerName });
       if (!player) {
         throw new AuthenticationError("No player with this name found!");
       }
@@ -47,12 +51,16 @@ const resolvers = {
       const token = signToken(player);
       return { token, player };
     },
-
-    addPlayer: async (parent, { playerName, password }) => {
-      const player = await Player.create({ playerName, password });
-      const token = signToken(player);
-      console.log({ token, player });
-      return { token, player };
+    updatePlayer: async (parent, args, context) => {
+      try {
+        if(context.player._id) {
+          return await Player.findOneAndUpdate(context.player._id, args, { new: true });
+        }else{
+          console.log(args)
+        }
+      } catch (err) {
+        console.log(err)
+      }
     },
     removePlayer: async (parent, { playerId }) => {
       return Player.findOneAndDelete({ _id: playerId });
@@ -81,8 +89,8 @@ const resolvers = {
     },
 
     addPlayerToGame: async (parent, { gameId, playerId }) => {
-      return await Game.findOneAndUpdate(
-        { _id: gameId },
+      return await Game.findByIdAndUpdate(
+        gameId,
         {
           $addToSet: { players: playerId },
         },
@@ -92,38 +100,9 @@ const resolvers = {
         }
       );
     },
-    updatePlayer: async (parent, args, context) => {
-      
-      try{
-        if(context.user._id) {
-          return await Player.findOneAndUpdate(
-            context.user._id, args,
-          { new: true }
-        );
-        }else{
-          console.log(args)
-        }
-
-      }catch(err){
-        console.log("user" );
-        console.log(context.user.id)
-        console.log("args")
-        console.log(args)
-
-        console.log(err)
-      }
-    },
-    removePlayerFromGame: async (parent, { gameId, playerId }) => {
-      return Game.findOneAndUpdate(
-        { _id: gameId },
-        { $pull: { players: playerId } },
-        { new: true }
-      );
-    },
-
     addGameToPlayer: async (parent, { playerId, gameId }) => {
-      return await Player.findOneAndUpdate(
-        { _id: playerId },
+      return await Player.findByIdAndUpdate(
+        playerId,
         {
           $addToSet: { games: gameId },
         },
@@ -133,6 +112,14 @@ const resolvers = {
         }
       );
     },
+    removePlayerFromGame: async (parent, { gameId, playerId }) => {
+      return Game.findOneAndUpdate(
+        { _id: gameId },
+        { $pull: { players: playerId } },
+        { new: true }
+      );
+    },
+
     removeGameFromPlayer: async (parent, { playerId, gameId }) => {
       return Player.findOneAndUpdate(
         { _id: playerId },
