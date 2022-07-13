@@ -28,6 +28,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
   const [addPlayerToGame] = useMutation(ADD_PLAYER_TO_GAME);
   // const [removePlayerFromGame] = useMutation(REMOVE_PLAYER_FROM_GAME);
 
+  const [trackRoute, setTrackRoute] = useState(window.location.href);
   const [showModal, setShowModal] = useState(false);
   const [multiplayerGame, setMultiplayerGame] = useState(false);
   const [soloGame, setSoloGame] = useState(false);
@@ -100,6 +101,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
+        setTrackRoute(`${window.location.origin}/game/${createdGameId}`);
         window.location.replace(`${window.location.origin}/game/${createdGameId}`);
       } catch (error) {
         console.log(error)
@@ -127,11 +129,13 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
+        setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
         window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
       } catch (error) {
         console.log(error)
       }
     } else {
+      setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
       window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
     }
   }
