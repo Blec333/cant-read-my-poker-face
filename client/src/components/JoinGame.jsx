@@ -109,8 +109,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
     }
   };
 // console.log(window.location.origin);
-  const handleJoinExistingGame = async (event) => {
-    event.preventDefault();
+  const handleJoinExistingGame = async () => {
     if (!selectedGameId) {
       setShowNoGameSelectedError(true);
     } else if (selectedPlayerCount >= selectedPlayerLimit) {

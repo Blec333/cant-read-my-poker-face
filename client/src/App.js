@@ -1,5 +1,4 @@
-import React from "react";
-import { Buffer } from "buffer";
+import React, { useState, useEffect } from "react";
 import {
   ApolloClient,
   InMemoryCache,
@@ -25,7 +24,6 @@ import Signup from "./components/pages/SignUp";
 import { io } from "socket.io-client";
 let socket;
 
-global.Buffer = Buffer;
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
@@ -48,6 +46,12 @@ const client = new ApolloClient({
 });
 
 const App = () => {
+
+  const [trackRoute, setTrackRoute] = useState(window.location.href);
+  useEffect(() => {
+    setTrackRoute(window.location.href);
+  },[])
+
   // <Router>
   //   <Route path="/" exact component={Home} />
   //   <Route path="/chat" component={Chat} />
@@ -87,6 +91,8 @@ const App = () => {
   //   console.log(message);
   //   setMessage.innerText(message);
   // }
+
+
 
   return (
     <ApolloProvider client={client}>
