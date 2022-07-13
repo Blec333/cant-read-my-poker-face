@@ -14,34 +14,34 @@ const Chat = (props) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const ENDPOINT = "http://localhost:3001";
-  // const socket = io(ENDPOINT);
-  // socket.on("connect_error",(e:any)=>{
-  //   console.log(e);
-  // });
-    socket = io(ENDPOINT, {
-      forceNew: true,
-      reconnectionAttempts: "Infinity",
-      timeout: 10000,
-      transports: ["websocket"],
-    });
+  // const ENDPOINT = "http://localhost:3001";
+  // // const socket = io(ENDPOINT);
+  // // socket.on("connect_error",(e:any)=>{
+  // //   console.log(e);
+  // // });
+  //   socket = io(ENDPOINT, {
+  //     forceNew: true,
+  //     reconnectionAttempts: "Infinity",
+  //     timeout: 10000,
+  //     transports: ["websocket"],
+  //   });
 
 
-  useEffect(() => {
-    setRoom(roomId);
-    setName(playerName);
-    socket.emit("join", { playerName, roomId });
-    console.log("attempted emit of: " + playerName + " & " + roomId)
-    socket.on("time", () => {
-      console.log("timed ping");
-    });
-  }, []);
+  // useEffect(() => {
+  //   setRoom(roomId);
+  //   setName(playerName);
+  //   socket.emit("join", { playerName, roomId });
+  //   console.log("attempted emit of: " + playerName + " & " + roomId)
+  //   socket.on("time", () => {
+  //     console.log("timed ping");
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    socket.on("welcome", (user, messages) => {
-      setMessages(messages);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on("welcome", (user, messages) => {
+  //     setMessages(messages);
+  //   });
+  // }, []);
 
   // useEffect(() => {
   // }, []);
