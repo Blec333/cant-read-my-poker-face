@@ -83,8 +83,7 @@ export const QUERY_SINGLE_GAME = gql`
       gameName
       winner
       playerLimit
-      gameType
-      players
+      gameType    
     }
   }
 `;

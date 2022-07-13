@@ -1,8 +1,8 @@
 {
   "name": "casino-client",
   "version": "0.1.0",
-  "proxy": "http://localhost:3001/",
   "private": true,
+  "proxy": "http://localhost:3001/",
   "dependencies": {
     "@apollo/client": "^3.5.8",
     "@babel/polyfill": "^7.12.1",
@@ -13,10 +13,13 @@
     "daisyui": "^2.15.2",
     "dotenv": "^10.0.0",
     "graphql": "^15.4.0",
+    "inquirer": "^8.2.4",
     "jws": "^4.0.0",
     "jwt-decode": "^3.1.2",
+    "ora": "^6.1.0",
     "query-string": "^7.1.1",
     "react": "^18.1.0",
+    "react-animations": "^1.0.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
@@ -25,6 +28,7 @@
     "stream": "^0.0.2",
     "tailwind": "^4.0.0",
     "tailwindcss": "^3.0.24",
+    "tty-browserify": "^0.0.1",
     "web-vitals": "^2.1.4",
     "ws": "^7.4.1"
   },

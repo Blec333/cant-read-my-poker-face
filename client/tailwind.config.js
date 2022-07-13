@@ -4,7 +4,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         "hero-pattern":
-          "url('https://prodimages.everythingneon.com/giant/l100-0657-casino-led-sign.gif')",
+          "url('https://t3.ftcdn.net/jpg/04/96/77/34/360_F_496773440_LB7PaykdXR2IuouiWzF0EfWfEJBHHXwz.jpg')",
       },
     },
   },

@@ -19,6 +19,10 @@ const playerSchema = new Schema(
       type: Number,
       default: 1000000,
     },
+    wallet: {
+      type: Number,
+      default: 0,
+    },
     games: [
       {
         type: Schema.Types.ObjectId,
