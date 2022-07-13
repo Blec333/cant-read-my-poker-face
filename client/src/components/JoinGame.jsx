@@ -78,6 +78,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
     setShowNoGameSelectedError(false);
   }
 
+  let redirectPath;
   const handleCreateNewGame = async () => {
     let gameType;
     let playerLimit;
@@ -101,14 +102,15 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
-        setTrackRoute(`${window.location.origin}/game/${createdGameId}`);
-        window.location.replace(`${window.location.origin}/game/${createdGameId}`);
+        // setTrackRoute(`${window.location.origin}/game/${createdGameId}`);
+        // window.location.replace(`${window.location.origin}/game/${createdGameId}`);
+        redirectPath = `${window.location.origin}/game/${createdGameId}`;
       } catch (error) {
         console.log(error)
       }
     }
   };
-// console.log(window.location.origin);
+  
   const handleJoinExistingGame = async () => {
     if (!selectedGameId) {
       setShowNoGameSelectedError(true);
@@ -128,14 +130,16 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
-        setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
-        window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
+        // setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
+        // window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
+        redirectPath = `${window.location.origin}/game/${selectedGameId}`;
       } catch (error) {
         console.log(error)
       }
     } else {
-      setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
-      window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
+      // setTrackRoute(`${window.location.origin}/game/${selectedGameId}`);
+      // window.location.replace(`${window.location.origin}/game/${selectedGameId}`);
+        redirectPath = `${window.location.origin}/game/${selectedGameId}`;
     }
   }
 
@@ -196,7 +200,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
                     <p className="text-left text-sm text-gray-700 w-full p-1">ID: {selectedGameId !== '' ? selectedGameId : "Select above..."}</p>
                   </div>
                   {selectedGameId ?
-                    <button className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" onClick={handleJoinExistingGame}>JOIN ROOM</button>
+                    <a className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" href={`${window.location.origin}/game/${selectedGameId}`} onClick={handleJoinExistingGame}>JOIN ROOM</a>
                     // <Link to={`/game/${selectedGameId}`} className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" >JOIN ROOM</Link>
                     : null}
                 </div>
