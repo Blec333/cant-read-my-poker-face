@@ -200,7 +200,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
                     <p className="text-left text-sm text-gray-700 w-full p-1">ID: {selectedGameId !== '' ? selectedGameId : "Select above..."}</p>
                   </div>
                   {selectedGameId ?
-                    <a className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" href={`${window.location.origin}/game/${selectedGameId}`} onClick={handleJoinExistingGame}>JOIN ROOM</a>
+                    <Link className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" type="button" to={`/game/${selectedGameId}`} onClick={handleJoinExistingGame}>JOIN ROOM</Link>
                     // <Link to={`/game/${selectedGameId}`} className="rounded-box bg-primary text-primary-content font-bold w-full p-4 hover:bg-secondary hover:text-secondary-content" >JOIN ROOM</Link>
                     : null}
                 </div>
