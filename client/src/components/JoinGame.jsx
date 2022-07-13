@@ -100,7 +100,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
-        window.location.replace(`/game/${createdGameId}`);
+        window.location.assign(`/game/${createdGameId}`);
       } catch (error) {
         console.log(error)
       }
@@ -126,12 +126,12 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
-        window.location.replace(`/game/${selectedGameId}`);
+        window.location.assign(`/game/${selectedGameId}`);
       } catch (error) {
         console.log(error)
       }
     } else {
-      window.location.replace(`/game/${selectedGameId}`);
+      window.location.assign(`/game/${selectedGameId}`);
     }
   }
 
