@@ -13,7 +13,6 @@
     "dev": "concurrently \"npm run server\" \"cd client && npm start\""
   },
   "dependencies": {
-    "@inquirer/password": "^0.0.19-alpha.0",
     "apollo-server-express": "^3.6.2",
     "bcrypt": "^5.0.0",
     "dayjs": "^1.11.2",
