@@ -100,7 +100,8 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
-        window.location.assign(`/game/${createdGameId}`);
+        // eslint-disable-next-line no-restricted-globals
+        location.replace(`${location.pathname}/game/${createdGameId}`);
       } catch (error) {
         console.log(error)
       }
@@ -126,12 +127,14 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
-        window.location.assign(`/game/${selectedGameId}`);
+        // eslint-disable-next-line no-restricted-globals
+        location.replace(`${location.pathname}/game/${selectedGameId}`);
       } catch (error) {
         console.log(error)
       }
     } else {
-      window.location.assign(`/game/${selectedGameId}`);
+      // eslint-disable-next-line no-restricted-globals
+      location.replace(`${location.pathname}/game/${selectedGameId}`);
     }
   }
 
