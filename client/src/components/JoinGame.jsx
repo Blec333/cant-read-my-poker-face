@@ -42,6 +42,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
   const [createNewGameLocation, setCreateNewGameLocation] = useState('');
   const [multiplayerGameList, setMultiplayerGameList] = useState([]);
   const [soloGameList, setSoloGameList] = useState([]);
+  const [redirectPath, setRedirectPath] = useState([]);
 
 
   const [state, dispatch] = useCasinoContext();
@@ -77,7 +78,6 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
     setShowNoGameSelectedError(false);
   }
 
-  let redirectPath;
   const handleCreateNewGame = async () => {
     let gameType;
     let playerLimit;
@@ -101,7 +101,7 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
           },
         });
         const createdGameId = addGameResponse.data.addGame._id;
-        redirectPath = `/game/${createdGameId}`;
+        setRedirectPath(`/game/${createdGameId}`);
       } catch (error) {
         console.log(error)
       }
@@ -127,12 +127,12 @@ export default function JoinGame({ currentPage, handlePageChange, _id }) {
             gameId: selectedGameId
           },
         });
-        redirectPath = `/game/${selectedGameId}`;
+        setRedirectPath(`/game/${selectedGameId}`);
       } catch (error) {
         console.log(error)
       }
     } else {
-        redirectPath = `/game/${selectedGameId}`;
+        setRedirectPath(`/game/${selectedGameId}`);
     }
   }
 
